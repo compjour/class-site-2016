@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head>
+    <title><%= meta_title %></title>
+    <%= partial "/layouts/partials/site/seo_meta" %>
+    <%= partial "/layouts/partials/site/og_meta" %>
+
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <%= stylesheet_link_tag :all %>
+    <%= javascript_include_tag 'vendor/asciinema-player' %>
+
+    <%= partial "/layouts/partials/site/head_services" %>
+</head>

@@ -1,0 +1,73 @@
+---
+title: Computational Journalism Challenges
+---
+
+<p>
+  Kind of like last year's <a href="https://github.com/compjour/search-script-scrape">Search-Script-Scrape</a>, except more open-ended and more demanding...but, with more context. The main purpose of these challenges is to not just continue honing your programming skills, but to acquaint you with the many datasets, and their many possibilities and limitations.
+</p>
+
+
+<p>
+I'll add more context to this page, but basically, every week, you'll have to pick several problems to work on. You can work on them with a partner. However, do not team up as a class. And do not pick the same topics, over and over. Your ignorance of data is going to be the main limitation of your project work.
+</p>
+
+<h4>Tentative schedule</h4>
+
+|        | Tier 1 | Tier 2 | Tier 3+ |
+|--------|--------|--------|---------|
+| Week 2 |      2 |        |         |
+| Week 3 |      3 |        |         |
+| Week 4 |        |      1 |         |
+| Week 5 |      2 |      1 |         |
+| Week 6 |      1 |      1 |         |
+| Week 7 |        |        |       1 |
+{:.table.table-condensed.table-striped}
+
+
+Note: You can choose to do a single __Tier 2__ exercise rather than 2 __Tier 1__ exercises. Or a single __Tier 3__ exercise just for the fun of it. You don't get extra credit though. And you can't trade downwards, i.e. doing 2 T1 exercises instead of a single T2.
+
+### Tier challenge levels
+
+#### Tier 1
+
+These are meant to be one-off exercises that can generally be done in a single script. And the dataset to fetch and analyze is generally pretty small so that you don't have to worry too much about memory or disk space or bandwidth constraints. The output may be a chart or a few lines of text.
+
+#### Tier 2
+
+Think of it as a Tier 1 task, except made scalable. Instead of counting the number of crimes per precinct in a given year, you have to fetch a decade's worth of data, collate and wrangle it, and create 10 charts instead of just 1 -- or at least, design a chart that can convey 10 times the data. You might also have to work with multiple datasets and APIs and find something interesting in their intersection.
+
+
+#### Tier 3
+
+These aren't harder than Tier 2 in a software engineering sense. But the answers are more open-ended and involve more explanation and thoughtfulness on your part. You'll have to be confident in being able to compartmentalize and organize your information...because you might have a _lot_ of it in some of these challenges. Some of these challenges are also an opportunity to try more advanced tools and libraries, such as for statistical learning, that we don't really focus on for the core curriculum. 
+
+
+
+#### Tier 4
+
+I don't know if all of these are necessarily harder than Tier 3 challenges. It's just that I generally have a good idea of how to efficiently solve all of the Tier 3 challenges. But the Tier 4 challenges have various [unknown unknowns](https://en.wikipedia.org/wiki/There_are_known_knowns) -- or at least some kind of quantification that cannot be solved through math alone. So you might end up doing as much research and reporting as actual programming to figure out the right heuristics. Most of these probably aren't (satisfactorily) doable in a week.
+
+
+
+<% [1, 2, 3, 4].each do |tiernum| %>
+  <% challenges = data.challenges.select{ |d| d.tier == tiernum.to_s} %>
+  <section class="sec">
+    <h2>Tier <%=tiernum%></h2>
+
+    <ul class="list list">
+        <% challenges.each do |c| %>
+            <li><%=c.title %>
+              <% if c.urls.present? %>
+                  <ul>
+                    <% c.urls.split("\n").each do |u| %>
+                        <li><%=link_to u, u%></li>
+                    <% end %>
+                  </ul>
+              <% end %>
+
+
+            </li>
+        <% end %>
+    </ul>
+  </section>
+<% end %>

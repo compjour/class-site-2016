@@ -1,0 +1,1017 @@
+[
+  {
+    "title": "List U.S. states in order of median age of their Congressional represenatives",
+    "tier": "1",
+    "urls": "https://sunlightlabs.github.io/congress/index.html#legislator-spreadsheet"
+  },
+  {
+    "title": "List U.S. states that currently do not have a woman in its Congressional delegation",
+    "tier": "1",
+    "urls": "https://sunlightlabs.github.io/congress/index.html#legislator-spreadsheet"
+  },
+  {
+    "title": "List the 5 most popular baby names for each U.S. state for the year 2014",
+    "tier": "1",
+    "urls": "https://www.ssa.gov/oact/babynames/limits.html"
+  },
+  {
+    "title": "Map all California kindergarteners in which 15 percent of the class have personal belief exemptions against being vaccinated",
+    "tier": "1",
+    "urls": "https://www.cdph.ca.gov/programs/immunize/Pages/ImmunizationLevels.aspx"
+  },
+  {
+    "title": "The 50 most common words in Shakespeare not found in the 50 most common words in the King James Bible",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "Before Justice Antonin Scalia's death, the last time that Justice Clarence Thomas spoke during oral arguments.",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "The 20 most common trigrams between Shakespeare and the King James Bible",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "List the number of Congressmembers who have not filed their most recent annual personal financial disclosure form electronically",
+    "tier": "1",
+    "urls": "https://efdsearch.senate.gov/search/home/\nhttp://clerk.house.gov/public_disc/financial-search.aspx"
+  },
+  {
+    "title": "List all current Congressmembers who have yet to turn in last year's personal financial disclosure form",
+    "tier": "1",
+    "urls": "https://efdsearch.senate.gov/search/home/\nhttp://clerk.house.gov/public_disc/financial-search.aspx"
+  },
+  {
+    "title": "Computationally determine the real Donald Trump campaign committees among the FEC data",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "How much have independent expenditure-only committees spent to fight Trump versus Cruz?",
+    "tier": "1",
+    "urls": "http://www.fec.gov/data/IndependentExpenditure.do"
+  },
+  {
+    "title": "Create a monthly time-series chart showing the amount of independent expenditures spent for/vs Hilary Clinton",
+    "tier": "1",
+    "urls": "http://www.fec.gov/data/IndependentExpenditure.do"
+  },
+  {
+    "title": "List/map the 10 biggest earthquakes worldwide for each year in the past 10 years",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "List/map every CAT3+ Hurricane in the last 10 years",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "Count the number of road accidents in the U.K. that are suspected to have been influenced by alcohol",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "Count the number of fixed red-light cameras currently operating in Chicago",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "Graph a time-series showing the diversity of baby names by year for the United States",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "Which U.S. states are the least diverse when it comes to diversity of baby names?",
+    "tier": "1",
+    "urls": "https://www.ssa.gov/oact/babynames/limits.html"
+  },
+  {
+    "title": "Which U.S. states are the least diverse ethnically according to U.S. Census numbers?",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "Chart a time-series of NYPD stop-and-frisk activity by month and year",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "Chart a time-series of NYPD reported felonies by month and year",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "Chart the annual number of U.S. police officers who have been killed in the line of duty since 1950",
+    "tier": "1",
+    "urls": "http://www.nleomf.org/facts/officer-fatalities-data/year.html"
+  },
+  {
+    "title": "Chart the annual number of officer-involved shootings for the Dallas Police Department",
+    "tier": "1",
+    "urls": "http://www.dallaspolice.net/ois/ois.html\nhttp://www.dallasnews.com/opinion/latest-columns/20140814-openness-restraint-were-key-after-dallas-police-shooting-chief-brown-says.ece"
+  },
+  {
+    "title": "List the most active U.S. State Department Twitter accounts",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "List the most popular Instagram accounts operated by a federal U.S. agency",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "Number of Clinton emails that have yet to be fully declassified",
+    "tier": "1",
+    "urls": "https://github.com/wsjdata/clinton-email-cruncher"
+  },
+  {
+    "title": "The lowest-level of education you can have and still be a U.S. astronaut",
+    "tier": "1",
+    "urls": "http://www.jsc.nasa.gov/Bios/astrobio.html"
+  },
+  {
+    "title": "The number of astronauts who have military experience",
+    "tier": "1",
+    "urls": "http://www.jsc.nasa.gov/Bios/astrobio.html"
+  },
+  {
+    "title": "List U.S. senators by percentage of votes missed",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "The average health inspection rating for the most popular restaurant franchies in San Francisco",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "The nursing homes with the most accumulated federal penalties and fines in the latest year",
+    "tier": "1",
+    "urls": "https://data.medicare.gov/data/nursing-home-compare"
+  },
+  {
+    "title": "A list of motor accidents in New York with at least one fatality",
+    "tier": "1",
+    "urls": "https://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95"
+  },
+  {
+    "title": "Highest paid job titles in the White House",
+    "tier": "1",
+    "urls": "https://www.whitehouse.gov/21stcenturygov/tools/salaries"
+  },
+  {
+    "title": "Collect all FOIA requests filed with the city of Chicago",
+    "tier": "1",
+    "urls": "http://www.cityofchicago.org/city/en/dataset/foia_request_logs_by_dept.html"
+  },
+  {
+    "title": "Calculate in-custody deaths by year at California's largest jails",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "Map all known U.S. public and private prisons",
+    "tier": "1",
+    "urls": "http://www.wired.com/2015/01/josh-begley-prison-map/"
+  },
+  {
+    "title": "Late-filed amendments to Congressional personal finance reports",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "Most commented federal rules that are up for commenting",
+    "tier": "1",
+    "urls": "https://www.regulations.gov/#!searchResults;rpp=25;po=0;cs=3;dct=N%252BFR%252BPR"
+  },
+  {
+    "title": "All cancer trials that are currently recruiting for patients in California",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "Everyone who who works at Goldman Sachs who has donated $200+ in a federal campaign this cycle",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "How many days until the next execution in Texas?",
+    "tier": "1",
+    "urls": "http://www.tdcj.state.tx.us/death_row/dr_scheduled_executions.html"
+  },
+  {
+    "title": "The month in which the most inmates were executed nationwide in modern U.S. history",
+    "tier": "1",
+    "urls": "http://www.deathpenaltyinfo.org/views-executions"
+  },
+  {
+    "title": "Amount of general credit card spending in Congressional quarterly reports",
+    "tier": "1",
+    "urls": "http://sunlightfoundation.com/blog/2015/04/02/travel-in-the-shadows-house-reports-omit-key-spending-details/"
+  },
+  {
+    "title": "How many federal websites are currently down/broken?",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "Which NYPD stop-and-frisk report corresponds to Giancarlo Esposito's experience",
+    "tier": "1",
+    "urls": "http://nymag.com/daily/intelligencer/2012/06/giancarlo-esposito-stop-and-frisk-at-gunpoint.html"
+  },
+  {
+    "title": "The most far-flung places visited by former Congressmember Aaron Schock",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "The 20 artists most similar to Beyoncé in perceived musical style",
+    "tier": "1",
+    "urls": "https://developer.spotify.com/web-api/get-related-artists/"
+  },
+  {
+    "title": "Map the mass layoffs in the state of California",
+    "tier": "1",
+    "urls": "http://www.edd.ca.gov/jobs_and_training/Layoff_Services_WARN.htm"
+  },
+  {
+    "title": "List all finished U.S. clinical trials that have not yet released their results",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "The nearest asteroid to us, right now",
+    "tier": "1",
+    "urls": "http://neo.jpl.nasa.gov/ca/"
+  },
+  {
+    "title": "Number of recalls on products that have killed children",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "Number of Donald Trump-related tweets in 10 minutes",
+    "tier": "1",
+    "urls": "https://dev.twitter.com/streaming/overview"
+  },
+  {
+    "title": "How many Dallas police officers have been involved in multiple shooting incidents?",
+    "tier": "1",
+    "urls": "http://www.dallaspolice.net/ois/ois.html"
+  },
+  {
+    "title": "Is the L Train fucked?",
+    "tier": "1",
+    "urls": "http://www.istheltrainfucked.com/"
+  },
+  {
+    "title": "For a given river point, how good is the flow compared to a year ago?",
+    "tier": "1",
+    "urls": "http://waterwatch.usgs.gov/"
+  },
+  {
+    "title": "Total number of people whose health care information may have been compromised in a mass leak",
+    "tier": "1",
+    "urls": "https://ocrportal.hhs.gov/ocr/breach/breach_report.jsf"
+  },
+  {
+    "title": "Number of times ISIS/ISIL/Al-Qaeda has been referred to, by year-month, in a White House press conference",
+    "tier": "2",
+    "urls": "http://www.npr.org/2014/12/30/373738692/the-fleeting-obsessions-of-the-white-house-press-corps"
+  },
+  {
+    "title": "All New York restaurants that have at least one rodent-related health-inspection violation in the last year",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Calculate percentatge of Senate votes missed based on month and releative time distance from general election",
+    "tier": "2",
+    "urls": "https://www.govtrack.us/congress/votes/presidential-candidates"
+  },
+  {
+    "title": "The alma maters of every current congressmember",
+    "tier": "2",
+    "urls": "http://bioguide.congress.gov/biosearch/biosearch.asp"
+  },
+  {
+    "title": "List all Dallas PD officer-involved-shootings in which the officer had 2 or fewer years of experience",
+    "tier": "2",
+    "urls": "http://www.dallaspolice.net/ois/ois.html"
+  },
+  {
+    "title": "Collect and collate all earthquakes that have occurred within Oklahoma's borders or impacted its cities since 2008",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Graph how diversity in baby names correlates to ethnic diversity (as the latter is measured by the Census)",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "List the most important U.S. product recalls",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "List/map every CAT3+ hurricane that was CAT3+ when it made landfall",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "List U.S. states that have never been represented by a female Congressmember",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "List U.S. states in order of their Congressional delegation's average number of years served",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Which Congressmembers are most likely to write their own tweets?",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "How many current Congressmembers were not born in the United States?",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "How many current Congressmembers represent a state that they were not born in?",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "For each state, list the top 10 most popular baby names in 2014 that are not among the top 50 baby names in any other state",
+    "tier": "2",
+    "urls": "https://www.ssa.gov/oact/babynames/limits.html"
+  },
+  {
+    "title": "For the past 10 years, find the 10 most deadly earthquakes in terms potential human casualties, worldwide",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "List all former Congressmembers and senior congressional staff that are currently eligible to be lobbyists",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Collect and wrangle all of the White House visitor records into one database",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "The biggest reward currently offered by the FBI for wanted bank robbers",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "The most active/popular Twitter account among NYPD precincts",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "List the 10 musical artists most like Johnny Cash but whose careers began after his ended",
+    "tier": "2",
+    "urls": "http://developer.echonest.com/docs/v4/artist.html#similar"
+  },
+  {
+    "title": "List the baby names common to the U.S. and the U.K. that have the greatest gender difference (e.g. Robin)",
+    "tier": "2",
+    "urls": "https://www.ssa.gov/oact/babynames/limits.html\nhttp://www.babynames.co.uk/"
+  },
+  {
+    "title": "Collect and collate the meetings FDA officials have had with persons external to the executive branch",
+    "tier": "2",
+    "urls": "http://www.fda.gov/NewsEvents/MeetingsConferencesWorkshops/PastMeetingsWithFDAOfficials/"
+  },
+  {
+    "title": "California kindergartens that have changed the most in immunization rates and personal belief exemptions",
+    "tier": "2",
+    "urls": "https://www.cdph.ca.gov/programs/immunize/Pages/ImmunizationLevels.aspx"
+  },
+  {
+    "title": "Chart the correlation between change in stop-and-frisk activity and reported felonies, by NYPD precinct, for the years 2011 and 2014",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Chart the ratio of NYPD stop-and-frisks that resulted in an arrest, by racial group, by year",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Computationally determine the Twitter accounts for all currently active New York Times reporters",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Collect and collate the FBI Uniform Crime Report spreadsheets for each city",
+    "tier": "2",
+    "urls": "https://www.fbi.gov/about-us/cjis/ucr/crime-in-the-u.s/2014/crime-in-the-u.s.-2014"
+  },
+  {
+    "title": "Count the number of cities that have reported a drop in burglaries but not in vehicle thefts",
+    "tier": "2",
+    "urls": "https://www.fbi.gov/about-us/cjis/ucr/crime-in-the-u.s/2014/crime-in-the-u.s.-2014"
+  },
+  {
+    "title": "Which news publication has grown in popularity, according to paid Congressional subscriptions?",
+    "tier": "2",
+    "urls": "https://sunlightfoundation.com/tools/expenditures/"
+  },
+  {
+    "title": "The biggest police departments to have reported the fewest hate crimes in 2014",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "The ratio of businesses penalized for major workplace safety infractions over the years",
+    "tier": "2",
+    "urls": "http://www.citizen.org/Page.aspx?pid=2376"
+  },
+  {
+    "title": "Airline routes that exist at San Jose airport in March 2016 that did not exist in March 2009",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Workplace accidents involving non-fatal falls of 5+ stories",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Funniest Supreme Court justices, ranked in order of number of times people laughed while a Supreme Court Justice spoke during oral argument, ",
+    "tier": "2",
+    "urls": "http://www.nytimes.com/2011/01/25/us/25bar.html"
+  },
+  {
+    "title": "September Elevenths, ranked in least amont of front page space in New York Times, by year since 2011",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "New York Times feature obituaries by gender, since 2010",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Nursing homes with severe violations in consecutive inspections",
+    "tier": "2",
+    "urls": "https://data.medicare.gov/Nursing-Home-Compare/Deficiencies/r5ix-sfxw"
+  },
+  {
+    "title": "A list of intersections and street sections that have had multiple fatalities in New York",
+    "tier": "2",
+    "urls": "https://data.cityofnewyork.us/Public-Safety/NYPD-Motor-Vehicle-Collisions/h9gi-nx95"
+  },
+  {
+    "title": "Average time, in half-hour increments, that it takes to get from Wall Street to JFK on weekdays",
+    "tier": "2",
+    "urls": "http://www.nyc.gov/html/tlc/html/about/trip_record_data.shtml"
+  },
+  {
+    "title": "All counties that switched from Republican to Democrat or vice versa in terms of voting for president, 2012 vs 2008",
+    "tier": "2",
+    "urls": "https://catalog.data.gov/dataset?tags=presidential+elections"
+  },
+  {
+    "title": "Every vehicular motor crash that occurred on a Friday or Saturday night",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "The largest datasets in terms of rows x columns for a given city's open data aportal ",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Creatiing a U.S. census crosswalk between redrawn Congressional districts between 2000-2010 and 2010-2016",
+    "tier": "2",
+    "urls": "https://www.census.gov/geo/maps-data/data/relationship.html"
+  },
+  {
+    "title": "The most gentrified part of San Francisco, according to change in crime patterns",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "The most gentrified part of San Francisco, according to change in income measures by Census",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Find all FOIA requests filed for Chicago in which the requester is a journalist",
+    "tier": "2",
+    "urls": "http://www.cityofchicago.org/city/en/dataset/foia_request_logs_by_dept.html"
+  },
+  {
+    "title": "Calculate the number of days it took for the Washington Post to complete information for each police shooting victim",
+    "tier": "2",
+    "urls": "https://github.com/washingtonpost/data-police-shootings"
+  },
+  {
+    "title": "Find all the police shooting victims mentioned in the Guardian's count not mentioned in the WP's, and vice versa",
+    "tier": "2",
+    "urls": "https://github.com/washingtonpost/data-police-shootings\nhttp://www.theguardian.com/us-news/ng-interactive/2015/jun/01/the-counted-police-killings-us-database"
+  },
+  {
+    "title": "Collect and collate all the bulk detailed data sets from FEC",
+    "tier": "2",
+    "urls": "http://www.fec.gov/finance/disclosure/ftpdet.shtml"
+  },
+  {
+    "title": "Every inmate executed by Texas who did not mention God or religion in any fashion in their last words.",
+    "tier": "2",
+    "urls": "http://www.tdcj.state.tx.us/death_row/dr_executed_offenders.html"
+  },
+  {
+    "title": "BuzzFeed's favorite animals",
+    "tier": "2",
+    "urls": "http://www.buzzfeed.com/archive"
+  },
+  {
+    "title": "Types of crime categories with biggest change in reports over time",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "How many URLs as cited by the Supreme Court are currently down/broken?",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "List all photos in the Flickr White House feed consisting of a group of 15 or more people",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "List the most recent Instagram selfie for each Congressmember",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Computationally determine the most competitive Congressional races using FEC data",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Collect and wrangle all of the New York Police Department stop-and-frisk records into one database",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "The most interesting words or phrases in each of President Obama's State of the Union addresses",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "List the departments by biggest change, positive and negative, in terms of number of sworn officers between 2008 and 2014",
+    "tier": "2",
+    "urls": "https://www.fbi.gov/about-us/cjis/ucr/crime-in-the-u.s/2014/crime-in-the-u.s.-2014/police-employee-data/main"
+  },
+  {
+    "title": "Which U.S. healthcare companies have the best record in reporting their clinical trial results?",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Aggregate the number of health care data breaches related to paper vs. onsite computers vs remote hacks",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Most followed non-political Twitter celebrities in terms of bipartisan Congressional followers",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Most partisan celebrities, as determined by partisanship of foillowers who are Congressmembers",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Richest congressmember who represents poorest distrct (or vice versa)",
+    "tier": "2",
+    "urls": "https://www.opensecrets.org/pfds/"
+  },
+  {
+    "title": "Find all free lunches being served at Stanford events",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Rank Stanford calendar events by level of general interest",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Which Congressional races are receiving a majority of their funding from outside the state?",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Political ad spending on Google/Twitter/Facebook by election cycle",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Most popular categories of federal jobs that are being hired for",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Rate of tweeting per Congressmember",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Best workout songs on the Billboard Top 100",
+    "tier": "2",
+    "urls": "http://developer.echonest.com/docs/v4/track.html"
+  },
+  {
+    "title": "For a given Congressmember, all votes in which they voted against their own party",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Time series of Wikipedia page views for each presidential candidate",
+    "tier": "2",
+    "urls": "http://blog.wikimedia.org/2015/12/14/pageview-data-easily-accessible/"
+  },
+  {
+    "title": "Rank the most popular New York subway stations by turnstile traffic",
+    "tier": "2",
+    "urls": "http://web.mta.info/developers/turnstile.html"
+  },
+  {
+    "title": "Find all congressional votes that happened late at night or over the weekend",
+    "tier": "2",
+    "urls": "https://www.govtrack.us/congress/votes"
+  },
+  {
+    "title": "The 10 most popular medical specialties",
+    "tier": "2",
+    "urls": "https://npiregistry.cms.hhs.gov/"
+  },
+  {
+    "title": "Map every city in the world with at least 15,000 people",
+    "tier": "2",
+    "urls": "http://download.geonames.org/export/dump/"
+  },
+  {
+    "title": "The poshest New York restaurants to have ever received a C grade or lower from the health inspection department",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "Which least black Congressional districts are currently represented by a black Congressmember?",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "Chart the correlation between change in white-nonwhite population, and Republican vs. Democratic share of vote in 2004 vs 2014",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "List all former Congressmembers and senior congressional staff that are currently eligible to be lobbyists but have never registered as lobbyists",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "List all photos in the the White House Flickr stream that do not show President Obama's face",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "Computationally create a list of every official police department-operated Twitter",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "The most interesting datasets on data.gov",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "The power of Congressional committees as determined by campaign finance records and tenure",
+    "tier": "3",
+    "urls": "http://stanford.edu/~jgrimmer/exile.pdf\nhttp://www.thisamericanlife.org/radio-archives/episode/461/take-the-money-and-run-for-office"
+  },
+  {
+    "title": "The most astroturfed federal regulations",
+    "tier": "3",
+    "urls": "http://arstechnica.com/tech-policy/2014/08/nfl-astroturfing-convinces-10000-fans-to-support-tv-blackouts/"
+  },
+  {
+    "title": "The most popular alma maters among all U.S. Congressmembers",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "Number of memorable quotes as given by gender of character",
+    "tier": "3",
+    "urls": "http://www.imdb.com/interfaces"
+  },
+  {
+    "title": "Most scene-stealing actors",
+    "tier": "3",
+    "urls": "http://www.imdb.com/interfaces"
+  },
+  {
+    "title": "Number of pieces reported by BuzzFeed staff versus BuzzFeed community",
+    "tier": "3",
+    "urls": "http://www.buzzfeed.com/archive"
+  },
+  {
+    "title": "Analysis of printed word count by section over the years for the New York Times",
+    "tier": "3",
+    "urls": "http://developer.nytimes.com/docs/read/article_search_api_v2"
+  },
+  {
+    "title": "Analysis of what makes a book more successful on NPR's bestsellers list compared to NYT's",
+    "tier": "3",
+    "urls": "http://developer.nytimes.com/docs/books_api/\nhttp://www.npr.org/books/bestsellers/"
+  },
+  {
+    "title": "Which new doctors did Eli Lilly hire as speakers/consultants in 2014 compared to 2011?",
+    "tier": "3",
+    "urls": "http://www.lillyphysicianpaymentregistry.com/Payments-to-Physicians/Archives"
+  },
+  {
+    "title": "Average education level of the Texas death row inmate",
+    "tier": "3",
+    "urls": "http://www.tdcj.state.tx.us/death_row/"
+  },
+  {
+    "title": "Analysis of city-level misdemenaor and low-level drug arrests after marijuana legalization laws passed",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "Highest poverty schools with the highest 5-year improvement in federal testing benchmarks",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "Ethnic/racial demographics of U.S. Congress, historically",
+    "tier": "4",
+    "urls": ""
+  },
+  {
+    "title": "All Congressmembers who have served in the military",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "Partisanship measure for news media, based on partisanship of Twitter followers ane engagement",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "Counting number and kinds of NYT stories that have at least one anonymous source",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "Who among the Guardian's columnists writes most like a New York Times columnist?",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "Map Starbucks locations with median income of U.S. census block",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "Rank and correlate gentrification of New York neighborhoods by Census demographics and Zillow price data",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "Is there a correlation between wealth of a neighborhood and response time when it comes to 311 reports, when type of report/agency is accounted for?",
+    "tier": "3",
+    "urls": "https://data.sfgov.org/City-Infrastructure/Case-Data-from-San-Francisco-311-SF311-/vw6y-z8j6"
+  },
+  {
+    "title": "Simplify taxonomy of Jeopardy categories",
+    "tier": "3",
+    "urls": "https://www.reddit.com/r/datasets/comments/1uyd0t/200000_jeopardy_questions_in_a_json_file"
+  },
+  {
+    "title": "Public schools near environmental hazards",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "Rate of press releases per Congressmember",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "The most important Congressional votes",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "Do disciplined Chicago police follow the bad apples theory?",
+    "tier": "3",
+    "urls": "http://fivethirtyeight.com/features/how-to-predict-which-chicago-cops-will-commit-misconduct/"
+  },
+  {
+    "title": "Which California cities and universities reserve the highest portions of their payroll for administrators?",
+    "tier": "3",
+    "urls": "http://transparentcalifornia.com/"
+  },
+  {
+    "title": "Analysis of Wikipedia page size/number of edits/editors by gender of subject (e.g. authors, actors, scientists, movie characters)",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "Media coverage (NYT/NPR) of the major presidential candidates",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "Scrape and parse and collate historical expenditures on endangered species",
+    "tier": "3",
+    "urls": "http://www.fws.gov/Endangered/esa-library/index.html"
+  },
+  {
+    "title": "Most expensive drugs and which medical specialties handle them",
+    "tier": "3",
+    "urls": "https://www.cms.gov/Research-Statistics-Data-and-Systems/Statistics-Trends-and-Reports/Medicare-Provider-Charge-Data/Part-D-Prescriber.html"
+  },
+  {
+    "title": "Analysis of home financing data and Census demographics",
+    "tier": "3",
+    "urls": "http://www.consumerfinance.gov/hmda/"
+  },
+  {
+    "title": "Comparison of pollutant levels at individual sensor levels",
+    "tier": "3",
+    "urls": "https://www3.epa.gov/airdata/ad_data.html"
+  },
+  {
+    "title": "Find unique, useful adverse event reports from the FDA FAERS",
+    "tier": "3",
+    "urls": "http://www.fda.gov/Drugs/GuidanceComplianceRegulatoryInformation/Surveillance/AdverseDrugEffects/ucm082193.htm"
+  },
+  {
+    "title": "Where are the stationary traffic cameras in New York?",
+    "tier": "3",
+    "urls": "https://data.cityofnewyork.us/City-Government/Parking-Violations-Issued-Fiscal-Year-2016/kiv2-tbus"
+  },
+  {
+    "title": "The most interesting ways language has changed between press releases authored by the Bush and Obama era Justice Departments",
+    "tier": "4",
+    "urls": ""
+  },
+  {
+    "title": "Congressional issue lobbying that seemed to have the least effect",
+    "tier": "4",
+    "urls": "https://www.regulations.gov/#!searchResults;rpp=25;po=0;cs=3;dct=N%252BFR%252BPR"
+  },
+  {
+    "title": "Which fields of medicine are Eli Lilly and Pfizer most interested in?",
+    "tier": "4",
+    "urls": ""
+  },
+  {
+    "title": "Analysis of recidivism based on Florida inmate data",
+    "tier": "4",
+    "urls": "http://www.dc.state.fl.us/pub/obis_request.html"
+  },
+  {
+    "title": "Suspicious car defects and complaints that haven't yet resulted in an investigation or recall",
+    "tier": "4",
+    "urls": "http://www-odi.nhtsa.dot.gov/downloads/"
+  },
+  {
+    "title": "How has OSHA changed the way it inspects for potentially fatal health hazards?",
+    "tier": "4",
+    "urls": "http://www.nytimes.com/2013/03/31/us/osha-emphasizes-safety-health-risks-fester.html?ref=ianurbina&_r=0"
+  },
+  {
+    "title": "Detection of particularly dangerous consumer products according to hospital injury data",
+    "tier": "4",
+    "urls": "http://www.cpsc.gov/Research--Statistics/NEISS-Injury-Data/"
+  },
+  {
+    "title": "Possible conflicts of interest between Supreme Court members' personal finances and cases they preside over",
+    "tier": "4",
+    "urls": "http://abovethelaw.com/2015/07/the-scotus-financial-disclosure-forms-they-really-hope-you-dont-read/"
+  },
+  {
+    "title": "DrudgeReport's favorite news sources, over the years",
+    "tier": "3",
+    "urls": "http://www.drudgereportarchives.com/"
+  },
+  {
+    "title": "Every reported missing child in the U.K. in the last six months",
+    "tier": "1",
+    "urls": "http://missingpersons.police.uk/"
+  },
+  {
+    "title": "Is this the least productive Congress?",
+    "tier": "2",
+    "urls": "http://www.politico.com/story/2016/03/congress-supreme-court-budget-do-nothing-221057"
+  },
+  {
+    "title": "Find every official UK Police Twitter account",
+    "tier": "2",
+    "urls": "https://data.police.uk/docs/method/senior-officers/"
+  },
+  {
+    "title": "Diversity of police department compared to diversity of jurisdiction",
+    "tier": "3",
+    "urls": "https://data.police.uk/data/"
+  },
+  {
+    "title": "For every school in America, find the nearest M3.0+ earthquake that took place during school hours.",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "Chart the history of Stanford's tuition hikes and include inflation",
+    "tier": "2",
+    "urls": "https://github.com/compjour/compjour-class-site/blob/master/source/notebooks/Stanford%20Tuition.ipynb"
+  },
+  {
+    "title": "About how many Instagram-using tourists were on Stanford's campus yesterday",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "Every federal campaign contribution by someone who has worked in Hollywood and is somewhat famous",
+    "tier": "3",
+    "urls": "http://graphics.latimes.com/2016-election-entertainment-donors/"
+  },
+  {
+    "title": "Replicate OpenSecrets' \"Sex, Money, and Power\" Analysis for 2014",
+    "tier": "3",
+    "urls": "https://www.opensecrets.org/news/2013/09/sex-money-and-power-new-report-on-w/"
+  },
+  {
+    "title": "How many people are using Internet Explorer to view a federal government website right now?",
+    "tier": "1",
+    "urls": "https://analytics.usa.gov/"
+  },
+  {
+    "title": "Winners of Nobel Prizes, sorted from youngest to oldest, relative to when they received the prize.",
+    "tier": "2",
+    "urls": "http://www.nobelprize.org/nobel_organizations/nobelmedia/nobelprize_org/developer/"
+  },
+  {
+    "title": "List the biggest Congressional upsets for each federal election cycle",
+    "tier": "3",
+    "urls": ""
+  },
+  {
+    "title": "The most active 18F Github repositories",
+    "tier": "1",
+    "urls": "https://github.com/18f"
+  },
+  {
+    "title": "Commits made to goverment open-source repos during the weekend or during off-hours",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "From @realDonaldTrump's tweet stream, separate the retweets from his actual tweets",
+    "tier": "1",
+    "urls": ""
+  },
+  {
+    "title": "When did the official White House photographer get a new camera?",
+    "tier": "1",
+    "urls": "https://www.flickr.com/services/api/flickr.photos.getExif.html"
+  },
+  {
+    "title": "Longest applause during President Obama's States of the Union",
+    "tier": "2",
+    "urls": ""
+  },
+  {
+    "title": "Given a photo of a prescription pill, list its generics",
+    "tier": "3",
+    "urls": "http://pillbox.nlm.nih.gov/developer.html"
+  },
+  {
+    "title": "The U.S. county with the most Starucks per capita",
+    "tier": "2",
+    "urls": ""
+  }
+]

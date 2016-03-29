@@ -1,0 +1,14 @@
+<div class="snippet brief content-piece">
+  <div>
+    <span class="title"><%=snippet.title%></span>
+    <span class="description"><%=markdownify snippet.description%></span>
+  </div>
+
+  <% if snippet.repl? %>
+    <pre class="highlight repl"><%- snippet.repl.each do |line| %><span class="<%=line.lang%>"><%- code(line.lang, wrap: false) do %><%=line.text %><%- end %></span><%- end %></pre>
+  <% else %>
+    <%- code(snippet.lang) do -%><%= snippet.code %><%- end -%>
+  <%- end -%>
+
+
+</div>

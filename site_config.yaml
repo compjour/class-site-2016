@@ -1,0 +1,11 @@
+title: "Computational Journalism, Spring 2016"
+description: |
+  Computational Journalism at Stanford University
+author: Dan Nguyen
+image_url: /assets/images/logo.png
+baseurl: "http://www.compjour.org"
+
+
+services:
+  google_analytics:
+    id: UA-61452895-1

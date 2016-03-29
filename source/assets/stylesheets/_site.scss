@@ -1,0 +1,8 @@
+.sec{
+  margin-top: 2.5em;
+
+  &:first-child{
+    margin-top: 0;
+    margin-bottom: 2.5em;
+  }
+}

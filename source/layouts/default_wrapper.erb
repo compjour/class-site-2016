@@ -1,0 +1,8 @@
+<!-- bare minimum, with header and footer -->
+<% wrap_layout :layout do %>
+  <%= partial "/layouts/site/partials/header" %>
+
+    <%= yield %>
+
+  <%= partial "/layouts/site/partials/footer" %>
+<% end %>

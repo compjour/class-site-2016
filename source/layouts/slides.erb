@@ -1,0 +1,43 @@
+<%= partial "/layouts/partials/site/head" %>
+
+
+<body class="<%= page_classes %> <%=page_class%> <%= page_has_header_class %>">
+
+  <link rel="stylesheet" href="/assets/stylesheets/slides.css">
+    <section class="reveal">
+        <div class="slides">
+
+
+
+          <section class="slide">
+            <h1><%=page_title%></h1>
+          </section>
+
+
+
+          <section class="slide">
+            <div class="h3"><%=page_description%></div>
+          </section>
+          <%= yield %>
+
+
+
+        </div>
+    </section>
+
+
+
+
+
+
+        <script src="/assets/javascripts/vendor/reveal.js"></script>
+        <script>
+            Reveal.initialize(
+                { history: true,
+                  center: true,
+                  slideNumber: true});
+        </script>
+
+
+
+<%= partial "/layouts/partials/site/foot" %>

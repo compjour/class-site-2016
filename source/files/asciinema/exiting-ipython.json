@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "width": 80,
+  "height": 23,
+  "duration": 12.080948,
+  "command": "/bin/bash",
+  "title": "",
+  "env": {
+    "TERM": "xterm-256color",
+    "SHELL": "/bin/bash"
+  },
+  "stdout": [
+    [
+      0.007150,
+      "\u001b[?1034h"
+    ],
+    [
+      0.000007,
+      "bash-3.2$ "
+    ],
+    [
+      1.228628,
+      "i"
+    ],
+    [
+      0.168364,
+      "p"
+    ],
+    [
+      0.191403,
+      "y"
+    ],
+    [
+      0.089892,
+      "t"
+    ],
+    [
+      0.101225,
+      "h"
+    ],
+    [
+      0.056162,
+      "o"
+    ],
+    [
+      0.123746,
+      "n"
+    ],
+    [
+      0.123833,
+      "\r\n"
+    ],
+    [
+      0.538936,
+      "Python 3.5.1 |Anaconda 2.5.0 (x86_64)| (default, Dec  7 2015, 11:24:55) \r\nType \"copyright\", \"credits\" or \"license\" for more information.\r\n\r\nIPython 4.0.3 -- An enhanced Interactive Python.\r\n?         -\u003e Introduction and overview of IPython's features.\r\n%quickref -\u003e Quick reference.\r\nhelp      -\u003e Python's own help system.\r\nobject?   -\u003e Details about 'object', use 'object??' for extra details.\r\n"
+    ],
+    [
+      0.001881,
+      "\u001b[?1034h"
+    ],
+    [
+      0.000008,
+      "\r\n"
+    ],
+    [
+      0.000020,
+      "\u001b[0;34mIn [\u001b[1;34m1\u001b[0;34m]: \u001b[0m"
+    ],
+    [
+      2.744522,
+      "1"
+    ],
+    [
+      0.101004,
+      " "
+    ],
+    [
+      0.157612,
+      "+"
+    ],
+    [
+      0.123664,
+      " "
+    ],
+    [
+      0.112532,
+      "2"
+    ],
+    [
+      0.269789,
+      "\r\n"
+    ],
+    [
+      0.008344,
+      "\u001b[0;31mOut[\u001b[1;31m1\u001b[0;31m]: \u001b[0m3\r\n"
+    ],
+    [
+      0.000271,
+      "\r\n\u001b[0;34mIn [\u001b[1;34m2\u001b[0;34m]: \u001b[0m"
+    ],
+    [
+      1.510241,
+      "e"
+    ],
+    [
+      0.269996,
+      "x"
+    ],
+    [
+      0.146255,
+      "i"
+    ],
+    [
+      0.078806,
+      "t"
+    ],
+    [
+      0.224842,
+      "("
+    ],
+    [
+      0.067634,
+      ")"
+    ],
+    [
+      0.213787,
+      "\r\n"
+    ],
+    [
+      0.266594,
+      "bash-3.2$ "
+    ]
+  ]
+}

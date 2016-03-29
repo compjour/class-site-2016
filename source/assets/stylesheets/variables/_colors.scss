@@ -1,0 +1,38 @@
+$brand-primary:             black !default;
+// $brand-primary:             #0275d8 !default;
+$brand-success:             #5cb85c !default;
+$brand-info:                #7090b0 !default;
+$brand-warning:             #f0ad4e !default;
+$brand-danger:              #d9534f !default;
+$brand-light:               #999999 !default;
+
+
+$gray-dark:                 #373a3c !default;
+$gray:                      #55595c !default;
+$gray-light:                #818a91 !default;
+$gray-lighter:              #eceeef !default;
+$gray-lightest:             #f7f7f9 !default;
+
+$body-bg:                    #fff !default;
+$body-color:                 $gray-dark !default;
+$body-color-lighter:         lighten($body-color, 20%) !default;
+
+$code-color:                 #300 !default;
+$code-bg-color:              #FEF5FF;
+
+$link-color:                 #33C !default;
+$link-decoration:            none !default;
+$link-hover-color:           darken($link-color, 15%) !default;
+$link-hover-decoration:      underline !default;
+
+$link-color-inverse:         invert($link-color) !default;
+
+
+$blockquote-small-color:      $gray-light !default;
+$blockquote-border-color:     $gray-lighter !default;
+
+$abbr-border-color:           $gray-light !default;
+$headings-color:              inherit !default;
+$hr-border-color:             rgba(0,0,0,.1) !default;
+$table-border-color:          $gray-light !default;
+$text-muted:                  $gray-light !default;

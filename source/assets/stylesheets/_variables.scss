@@ -1,0 +1,9 @@
+@import "variables/grid";
+@import "variables/colors";
+@import "variables/typography";
+
+// Custom variables not found in bootstrap
+
+$border-color:        $gray-light;
+$header-height:       2.2rem;
+$tk-color:            green;

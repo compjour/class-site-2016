@@ -1,0 +1,31 @@
+<% wrap_layout :default_wrapper do %>
+  <section id="the-page-meta">
+    <div class="container">
+      <h1 class="title page-title"><%=page_title%></h1>
+      <% if page_description.present? %>
+        <div class="description page-description">
+          <%= page_description %>
+        </div>
+      <% end %>
+
+      <% if page_summary.present? %>
+        <section class="summary">
+            <h4 class="section-title">Summary</h4>
+            <%= markdownify page_summary %>
+        </section>
+      <% end %>
+    </div>
+  </section>
+
+
+
+  <section id="the-page-content">
+    <div class="container">
+      <%= yield %>
+    </div>
+  </section>
+
+
+  <section id="the-page-footcontent">
+  </section>
+<% end %>

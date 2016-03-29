@@ -1,0 +1,229 @@
+---
+title: Compjour Day 1
+description: An introduction to Computational Journalism and its methods
+layout: /layouts/slides
+---
+
+
+<section class="slide">
+
+  <blockquote>
+    Scraping websites, cleaning data, and querying Excel-breaking data sets are enormously useful ways to get great stories. If you don’t know how to write software to help you acquire and analyze data, there will always be a limit to the size of stories you can get by yourself. And that’s a limit that somebody who competes with you won’t have.
+  </blockquote>
+
+  <a href="http://www.niemanlab.org/2013/12/scooped-by-code/">Scooped by code - Scott Klein</a>
+</section>
+
+
+<section class="slide">
+  <h2>It doesn't take much to have a breakthrough</h2>
+</section>
+
+<section class="slide">
+
+  <a href="https://ire.org/blog/on-the-road/2011/12/20/behind-story-tracking-police/">Behind the Story: Tracking problem police officers in Florida</a>
+
+  <blockquote>
+    This was a case where the government had this wonderful, informative dataset and they weren’t using it at all except to compile the information.
+  </blockquote>
+
+</section>
+
+<section class="slide">
+
+<blockquote>I remember talking to one person at an office and saying: “How could you guys not know some of this? In five minutes of (SQL) queries you know everything about these officers?” They basically said it wasn't their job. That left a huge opportunity for us.</blockquote>
+
+</section>
+
+
+
+<section class="slide">
+
+  <h2>Why are News/Data Applications effective?</h2>
+</section>
+
+
+<section class="slide">
+  <h5><a href="http://www.thecrimson.com/article/2004/6/10/mark-e-zuckerberg-06-the-whiz/?page=single">Mark E. Zuckerberg ’06: The whiz behind thefacebook.com</a></h5>
+
+  <blockquote>
+    I’m going on the theory that like, I’m in college just like everyone else, so stuff that’s applicable to me is probably applicable and useful to everyone else, as well
+  </blockquote>
+</section>
+
+
+
+<section class="slide">
+  <a href="http://projects.nytimes.com/interactive/sports/worldcup/spot-the-ball/2014/06/17">Spot the Ball</a>
+<img src="intro-slides/files/images/nyt-spot-the-ball.jpg" alt="nyt-spot-the-ball.jpg">
+
+
+</section>
+
+
+<section class="slide">
+  <a href="http://spotthedrowningchild.com/">Spot the Drowning Child</a>
+<img src="files/images/spot-drowning-child.jpg" alt="spot-drowning-child.jpg">
+
+</section>
+
+
+<section class="slide">
+
+
+
+  <img src="files/images/propublica-firewall.png" alt="propublica-firewall.png">
+
+  <a href="https://projects.propublica.org/firewall/">
+    Inside the Firewall: Tracking the News That China Blocks
+  </a>
+
+  <p>When you've automated something routine and boring, the end result/big picture can be very enlightening</p>
+</section>
+
+
+<section class="slide">
+  <h2>Every second counts</h2>
+
+  <p>If Google users will abort a Google search for every <em>tenth</em> second delay...think about how soon they'll quit your infographic/app given any bit of delay. </p>
+</section>
+
+
+<section class="slide">
+  <h3><a href="https://lostandfound.revealnews.org/">Lost and Found</a></h3>
+  <img src="files/images/cir-living-dead-reveal-screenshot.jpg" alt="cir-living-dead-reveal-screenshot.jpg">
+</section>
+
+
+<section class="slide">
+  <p>via <a href="https://www.findthemissing.org/en">NamUS</a></p>
+  <img src="intro-slides/files/images/namus-inspector.png" alt="namus-inspector.png">
+</section>
+
+
+<section class="slide">
+  <blockquote>
+    You, using a pen and paper, can do anything a computer can; you just can’t do those things billions of times per second. And those billions of tiny operations add up.
+  </blockquote>
+
+  <p>- <a href="http://www.bloomberg.com/graphics/2015-paul-ford-what-is-code/">Paul Ford, What is Code</a></p>
+</section>
+
+
+<section class="slide">
+  <h2>It takes a long time to write a program to do something <em>once</em>...</h2>
+</section>
+
+
+<section class="slide">
+  <h3>
+    How to take a screenshot of a page with Selenium
+  </h3>
+
+  <p><a href="https://gist.github.com/dannguyen/61af3c7cbdef9d04a5fe">gist.github.com/dannguyen/61af3c7cbdef9d04a5fe</a></p>
+  <p>i.e. how to take a screenshot of YouTube's front page...</p>
+</section>
+
+<section class="slide">
+  <h4>Have to read boring documentation...</h4>
+  <img src="<%=url_for 'intro-slides/files/images/selenium-docs-example.png', relative: true %>" alt="selenium-docs-example.png">
+</section>
+
+
+<section class="slide">
+<h4>All the code to just open a webbrowser</h4>
+
+<% code 'python' do %>
+from selenium import webdriver
+driver = webdriver.Firefox()
+websitename = 'www.youtube.com'
+driver.get("https://" + websitename)
+<% end %>
+</section>
+
+<section class="slide">
+<h4>Then the code to take a screenshot</h4>
+
+
+<% code 'python' do %>
+imgfname = websitename + ".jpg"
+print("Screenshotting...", imgfname)
+driver.save_screenshot(imgfname)
+driver.close()
+<% end %>
+</section>
+
+
+<section class="slide">
+  <h4>Once it works <em>once</em>...</h4>
+
+  <p>...then it's easy to repeat and reuse</p>
+</section>
+
+
+<section class="slide">
+
+<% code 'python' do %>
+from selenium import webdriver
+WEBSITELIST = ['www.nytimes.com', 'www.washingtonpost.com', 'www.npr.org']
+for websitename in WEBSITELIST:
+    driver = webdriver.Firefox()
+    print("Getting:", websitename)
+    driver.get("https://" + websitename)
+
+    imgfname = websitename + ".jpg"
+    print("Screenshotting...", imgfname)
+    driver.save_screenshot(imgfname)
+    driver.close()
+<% end %>
+
+</section>
+
+
+<section class="slide">
+  <p>(or adapt for completely other use-cases: <a href="https://gist.github.com/dannguyen/8a6fa49253c1d6a0eb92">https://gist.github.com/dannguyen/8a6fa49253c1d6a0eb92</a></p>
+</section>
+
+
+<section class="slide">
+<h2>Benford's Law</h2>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Rozklad_benforda.svg/512px-Rozklad_benforda.svg.png" alt="">
+
+<p>
+<a href="https://en.wikipedia.org/wiki/Benford%27s_law">Benford's law</a>,also called the first-digit law...The law states that in many naturally occurring collections of numbers the small digits occur disproportionately often as leading significant digits.
+</p>
+<a href="http://election.princeton.edu/2009/06/18/flash-statistical-evidence-for-iranian-election-fraud/">
+</a>
+
+</section>
+
+
+<section class="slide">
+  <h2>Class interruption</h2>
+
+  <p>Let's setup:</p>
+<ul>
+  <li><a href="https://docs.continuum.io/anaconda/install">Python 3.5, via Anaconda</a></li>
+  <li><a href="https://www.sublimetext.com/3"></a> or <a href="https://atom.io/">Atom</a></li>
+  <li>
+    <a href="https://github.com">Github.com account</a>
+  </li>
+  <li>
+    A new repo named <strong>cj-2016</strong>
+  </li>
+
+</ul>
+</section>
+
+<section class="slide">
+  <p>Practice Benford on the 2012 Election data</p>
+
+  <a href="http://www.compjour.org/files/data/guardian-us-election-2012-county.csv">http://www.compjour.org/files/data/guardian-us-election-2012-county.csv</a>
+
+</section>
+
+
+
+
+

@@ -1,0 +1,17 @@
+<!-- services configured for this site -->
+<!-- helpers are located in site_config_helpers -->
+
+<%- if site_google_analytics_id && build? %>
+<%= partial "/layouts/partials/services/google_analytics",
+  :locals => {service_id: site_google_analytics_id} %>
+<%- end %>
+
+<!--TK-HC: remove @dancow -->
+<%= partial "/layouts/partials/services/twitter_card",
+  :locals => {
+    twitter_screen_name: "@dancow",
+    title: meta_title,
+    url: meta_url,
+    description: meta_description,
+    image_url: meta_image_url
+ } %>

@@ -1,0 +1,26 @@
+<div class="snippet content-piece">
+  <div>
+    <h5 class="title"><%=snippet.title%></h5>
+    <div class="description"><%=snippet.description%></div>
+  </div>
+
+  <% if snippet.repl? %>
+    <pre class="highlight repl"><%- snippet.repl.each do |line| %><span class="<%=line.lang%>"><%- code(line.lang, wrap: false) do %><%=line.text %><%- end %></span><%- end %></pre>
+  <% else %>
+    <%- code(snippet.lang) do -%><%= snippet.code %><%- end -%>
+    <%- if snippet.stdout -%>
+      <div class="stdout">
+        <div class="lbl">Output:</div>
+        <%- code("stdout") do -%><%= snippet.stdout %><%-end-%>
+      </div>
+    <%- end -%>
+  <%- end -%>
+
+  <% if snippet.text %>
+      <div class="text">
+        <%=markdownify snippet.text %>
+      </div>
+  <% end %>
+
+
+</div>
