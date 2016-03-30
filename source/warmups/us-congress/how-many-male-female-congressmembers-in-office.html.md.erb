@@ -1,0 +1,131 @@
+---
+title: What is the gender breakdown of the current Congress?
+---
+
+
+~~~py
+import requests
+SOURCE_URL = 'http://stash.compjour.org/samples/us-congress/legislators.csv'
+resp = requests.get(SOURCE_URL)
+with open("legislators.csv", "w") as f:
+    f.write(resp.text)
+~~~
+
+
+## Super naive
+
+~~~py
+from csv import DictReader
+with open('legislators.csv', 'r') as f:
+    datarows = list(DictReader(f))
+
+m_count = 0
+f_count = 0
+
+for d in datarows:
+    if d['in_office'] == '1':
+        x = d['gender']
+        if x == 'M':
+            m_count += 1
+        elif x == 'F':
+            f_count += 1
+
+
+print("F:", f_count)
+print("M:", m_count)
+~~~
+
+
+
+
+## Using a dictionary to keep count
+
+~~~py
+from csv import DictReader
+with open('legislators.csv', 'r') as f:
+    datarows = list(DictReader(f))
+g_counter = {}
+for d in datarows:
+    if d['in_office'] == '1':
+        x = d['gender']
+        if g_counter.get(x):
+            g_counter[x] += 1
+        else:
+            g_counter[x] = 1
+
+for key, val in g_counter.items():
+    print("%s: %s" % (key, val))
+~~~
+
+
+
+
+## Using collections.defaultdict to keep count
+
+~~~py
+from csv import DictReader
+from collections import defaultdict
+with open('legislators.csv', 'r') as f:
+    datarows = list(DictReader(f))
+
+g_counter = defaultdict(int)
+for d in datarows:
+    if d['in_office'] == '1':
+        x = d['gender']
+        g_counter[x] += 1
+
+for key, val in g_counter.items():
+    print("%s: %s" % (key, val))
+~~~
+
+
+
+## Using collections.Counter to keep count
+
+~~~py
+from csv import DictReader
+from collections import Counter
+with open('legislators.csv', 'r') as f:
+    datarows = list(DictReader(f))
+g_counter = Counter()
+for d in datarows:
+    if d['in_office'] == '1':
+        x = d['gender']
+        g_counter.update(x)
+
+for key, val in g_counter.items():
+    print("%s: %s" % (key, val))
+~~~
+
+
+## More compaction with list comprehension
+
+~~~py
+from csv import DictReader
+from collections import defaultdict
+with open('legislators.csv', 'r') as f:
+    datarows = list(DictReader(f))
+
+g_counter = Counter()
+in_office_rows = [d for d in datarows if d['in_office'] == '1']
+for d in in_office_rows:
+    x = d['gender']
+    g_counter.update(x)
+
+for key, val in Counter(gender_list).items():
+    print("%s: %s" % (key, val))
+~~~
+
+## Even more compaction
+
+~~~py
+from csv import DictReader
+from collections import defaultdict
+with open('legislators.csv', 'r') as f:
+    datarows = list(DictReader(f))
+
+gender_list = [d['gender'] for d in datarows if d['in_office'] == '1']
+for key, val in Counter(gender_list).items():
+    print("%s: %s" % (key, val))
+~~~
+

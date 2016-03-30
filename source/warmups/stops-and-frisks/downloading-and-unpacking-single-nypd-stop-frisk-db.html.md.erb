@@ -1,0 +1,111 @@
+---
+title: Downloading a single NYPD stop-and-frisk data file
+description: |
+  Download a single file from the NYPD stop and frisk webpage and unzip it.    
+---
+
+
+# Solutions
+
+## Interactive
+
+~~~py
+import shutil
+import requests
+
+resp = requests.get('http://stash.compjour.org/samples/stops-and-frisks/2015_sqf_csv.zip')
+
+zfile = open('2015_sqf_csv.zip', 'wb')
+zfile.write(resp.content)
+zfile.close()
+shutil.unpack_archive('2015_sqf_csv.zip')
+~~~
+
+
+## Simple script
+
+~~~py
+import shutil
+import requests
+
+print("Downloading", 'http://stash.compjour.org/samples/stops-and-frisks/2015_sqf_csv.zip')
+resp = requests.get('http://stash.compjour.org/samples/stops-and-frisks/2015_sqf_csv.zip')
+
+print("Saving to", '2015_sqf_csv.zip')
+zfile = open('2015_sqf_csv.zip', 'wb')
+zfile.write(resp.content)
+zfile.close()
+
+print("Unzipping", '2015_sqf_csv.zip')
+shutil.unpack_archive('2015_sqf_csv.zip')
+~~~
+
+
+~~~py
+Downloading http://stash.compjour.org/samples/stops-and-frisks/2015_sqf_csv.zip
+Saving to 2015_sqf_csv.zip
+Unzipping 2015_sqf_csv.zip
+~~~
+
+
+## Re-factored script
+
+~~~py
+from shutil import unpack_archive
+from os.path import basename
+import requests
+zip_url = 'http://stash.compjour.org/samples/stops-and-frisks/2015_sqf_csv.zip'
+zip_fname = basename(zip_url)
+
+print("Downloading", zip_url)
+resp = requests.get(zip_url)
+
+print("Saving to", zip_fname)
+with open(zip_fname, 'wb') as zfile:
+    zfile.write(resp.content)
+    # unzip it
+    print("Unzipping", zip_fname)
+    unpack_archive(zip_fname)
+~~~
+
+
+~~~stdout
+Downloading http://stash.compjour.org/samples/stops-and-frisks/2015_sqf_csv.zip
+Saving to 2015_sqf_csv.zip
+Unzipping 2015_sqf_csv.zip
+~~~
+
+
+
+
+## Well-managed
+
+~~~py
+from shutil import unpack_archive
+from os import makedirs
+from os.path import basename, join
+import requests
+
+DATA_DIR = join('mydata', 'fetched')
+makedirs(DATA_DIR, exist_ok=True)
+zip_url = 'http://stash.compjour.org/samples/stops-and-frisks/2015_sqf_csv.zip'
+zip_fname = join(DATA_DIR, basename(zip_url))
+
+print("Downloading", zip_url)
+resp = requests.get(zip_url)
+
+print("Saving to", zip_fname)
+with open(zip_fname, 'wb') as zfile:
+    zfile.write(resp.content)
+    # unzip it
+    print("Unzipping", zip_fname, 'into', DATA_DIR)
+    unpack_archive(zip_fname, extract_dir=DATA_DIR)
+~~~
+
+
+
+~~~stdout
+Downloading http://stash.compjour.org/samples/stops-and-frisks/2015_sqf_csv.zip
+Saving to mydata/fetched/2015_sqf_csv.zip
+Unzipping mydata/fetched/2015_sqf_csv.zip
+~~~

@@ -1,0 +1,221 @@
+---
+title: Download and unzip the U.S. baby name data 
+---
+
+
+https://www.ssa.gov/oact/babynames/names.zip
+https://www.ssa.gov/oact/babynames/state/namesbystate.zip
+
+http://stash.compjour.org/samples/babynames/statewide-2014.zip
+http://stash.compjour.org/samples/babynames/nationwide-2014.zip
+
+~~~py
+import requests
+from shutil import unpack_archive
+source_url = 'https://www.ssa.gov/oact/babynames/names.zip' 
+resp = requests.get(source_url)
+f = open('names.zip', 'wb')
+f.write(resp.content)
+f.close()
+unpack_archive('names.zip')
+~~~
+
+<%= asciinema_player( 
+        '/files/babynames/asciinema/ipython-download-babynames.json',
+        'ipython') %>
+
+
+
+
+![image babies-folder-txt.png](/files/babynames/images/babies-folder-txt.png)
+
+
+
+
+~~~py
+from glob import glob
+files = glob('*.*')
+type(files)
+# => list
+len(files)
+# => 137
+files[0]
+# => 'names.zip'
+files[1]
+# => 'NationalReadMe.pdf'
+files[2]
+# => 'yob1880.txt'
+files[3]
+# => 'yob1881.txt'
+files[-1]
+# => 'yob2014.txt'
+~~~
+
+
+<%= asciinema_player( 
+        '/files/babynames/asciinema/ipython-glob-babynames.json',
+        '>>> from glob import glob') %>
+
+
+
+# Solutions
+
+
+## Incredibly repetitive and prone to typos
+
+
+~~~py
+from os import makedirs
+from os.path import join
+from shutil import unpack_archive
+import requests
+
+# Do the nationwide data
+nation_data_dir = join('mydata', 'fetched', 'nationwide')
+makedirs(nation_data_dir, exist_ok=True)
+nation_url = 'https://www.ssa.gov/oact/babynames/names.zip' 
+nation_zip_fname = join(nation_data_dir, 'nationwide.zip')
+print("Downloading", nation_url)
+resp = requests.get(nation_url)
+with open(nation_zip_fname, 'wb') as f:
+    print("Saving to", nation_zip_fname)
+    f.write(resp.content)
+print("Unizipping to", nation_data_dir)
+unpack_archive(nation_zip_fname, extract_dir=nation_data_dir)
+
+# Now the state data
+state_data_dir = join('mydata', 'fetched', 'statewide')
+makedirs(state_data_dir, exist_ok=True)
+state_url = 'https://www.ssa.gov/oact/babynames/state/namesbystate.zip' 
+print("Downloading", state_url)
+state_zip_fname = join(state_data_dir, 'statewide.zip')
+resp = requests.get(state_url)
+with open(state_zip_fname, 'wb') as f:
+    print("Saving to", state_zip_fname)
+    f.write(resp.content)
+print("Unizipping to", state_data_dir)
+unpack_archive(state_zip_fname, extract_dir=state_data_dir)
+~~~
+
+
+
+## Refactoring and looping
+
+~~~py
+from os import makedirs
+from os.path import join
+from shutil import unpack_archive
+import requests
+FETCHED_DATA_DIR = join('mydata', 'fetched')
+DATAPATHS = [
+      ['nationwide', 'https://www.ssa.gov/oact/babynames/names.zip'],
+      ['statewide', 'https://www.ssa.gov/oact/babynames/state/namesbystate.zip']
+]
+
+for dp in DATAPATHS:
+    dataname = dp[0]
+    url = dp[1]    
+    data_dir = join(FETCHED_DATA_DIR, dataname)
+    makedirs(data_dir, exist_ok=True)
+    zip_fname = join(data_dir, dataname + '.zip')
+
+    print("Downloading", url)
+    resp = requests.get(url)
+    with open(zip_fname, 'wb') as f:
+        print("Saving to", zip_fname)
+        f.write(resp.content)
+    print("Unizipping to", data_dir)
+    unpack_archive(zip_fname, extract_dir=data_dir)
+~~~
+
+
+~~~output
+Downloading https://www.ssa.gov/oact/babynames/names.zip
+Saving to mydata/fetched/nationwide/nationwide.zip
+Unizipping to mydata/fetched/nationwide
+Downloading https://www.ssa.gov/oact/babynames/state/namesbystate.zip
+Saving to mydata/fetched/statewide/statewide.zip
+Unizipping to mydata/fetched/statewide
+~~~
+
+
+## Avoid repeated downloads
+
+
+~~~py
+from os import makedirs
+from os.path import exists, join
+from shutil import unpack_archive
+import requests
+FETCHED_DATA_DIR = join('mydata', 'fetched')
+DATAPATHS = [
+      ['nationwide', 'https://www.ssa.gov/oact/babynames/names.zip'],
+      ['statewide', 'https://www.ssa.gov/oact/babynames/state/namesbystate.zip']
+]
+
+for dataname, url in DATAPATHS:
+    data_dir = join(FETCHED_DATA_DIR, dataname)
+    makedirs(data_dir, exist_ok=True)
+    zip_fname = join(data_dir, dataname + '.zip')
+    if exists(zip_fname):
+        print("Already downloaded", zip_fname)
+    else:
+        print("Downloading", url)
+        resp = requests.get(url)
+        with open(zip_fname, 'wb') as f:
+            print("Saving to", zip_fname)
+            f.write(resp.content)
+
+    # Unzip file
+    print("Unizipping to", data_dir)
+    unpack_archive(zip_fname, extract_dir=data_dir)
+~~~
+
+
+~~~stdout
+Already downloaded mydata/fetched/nationwide/nationwide.zip
+Unizipping to mydata/fetched/nationwide
+Already downloaded mydata/fetched/statewide/statewide.zip
+Unizipping to mydata/fetched/statewide
+~~~
+
+
+
+Your `mydata` folder should look like this:
+
+
+~~~
+  └── mydata
+      └── fetched
+          ├── nationwide
+          │   ├── NationalReadMe.pdf
+          │   ├── nationwide.zip
+          │   ├── yob1880.txt
+          │   ├── yob1881.txt
+          │   ├── yob1882.txt
+          │   ├── yob1883.txt
+          │   ...  
+          │   ├── yob2012.txt
+          │   ├── yob2013.txt
+          │   └── yob2014.txt
+          └── statewide
+              ├── AK.TXT
+              ├── AL.TXT
+              ├── AR.TXT
+              ├── AZ.TXT
+              ├── CA.TXT
+              ...
+              ├── SC.TXT
+              ├── SD.TXT
+              ├── StateReadMe.pdf
+              ├── TN.TXT
+              ├── TX.TXT
+              ├── UT.TXT
+              ├── VA.TXT
+              ├── VT.TXT
+              ├── WA.TXT
+              ├── WI.TXT
+              ├── WV.TXT
+              ├── WY.TXT
+              └── statewide.zip
+~~~

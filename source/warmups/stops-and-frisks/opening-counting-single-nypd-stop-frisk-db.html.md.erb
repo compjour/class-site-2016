@@ -1,0 +1,166 @@
+
+http://www.nyclu.org/content/stop-and-frisk-data
+
+~~~py
+import requests
+data_url = 'http://stash.compjour.org/samples/stops-and-frisks/2015-nypd.csv'
+resp = requests.get(data_url)
+with open('2015-nypd.csv', 'w') as f:
+    f.write(resp.text)
+~~~
+
+
+## Opening the file
+
+~~~py
+with open('2015-nypd.csv', 'r') as f:
+    txt = f.read()
+~~~
+
+
+## Counting characters
+
+~~~py
+type(txt)
+# => str
+len(txt)
+# => 7188241
+~~~
+
+## Counting lines
+
+~~~py
+txtlines = txt.splitlines()
+type(txtlines)
+# => list
+len(txtlines)
+# => 22564
+~~~
+
+
+What is each member of the `txtlines` list?
+
+~~~py
+type(txtlines[0])
+# => str
+len(txtlines[0])
+# => 903
+txtlines[0]
+# => 'year,pct,ser_num,datestop,timestop,recstat,inout,trhsloc,perobs,crimsusp,perstop,typeofid,explnstp,othpers,arstmade,arstoffn,sumissue,sumoffen,compyear,comppct,offunif,officrid,frisked,searched,contrabn,adtlrept,pistol,riflshot,asltweap,knifcuti,machgun,othrweap,pf_hands,pf_wall,pf_grnd,pf_drwep,pf_ptwep,pf_baton,pf_hcuff,pf_pepsp,pf_other,radio,ac_rept,ac_inves,rf_vcrim,rf_othsw,ac_proxm,rf_attir,cs_objcs,cs_descr,cs_casng,cs_lkout,rf_vcact,cs_cloth,cs_drgtr,ac_evasv,ac_assoc,cs_furtv,rf_rfcmp,ac_cgdir,rf_verbl,cs_vcrim,cs_bulge,cs_other,ac_incid,ac_time,rf_knowl,ac_stsnd,ac_other,sb_hdobj,sb_outln,sb_admis,sb_other,repcmd,revcmd,rf_furt,rf_bulg,offverb,offshld,forceuse,sex,race,dob,age,ht_feet,ht_inch,weight,haircolr,eyecolor,build,othfeatr,addrtyp,rescode,premtype,premname,addrnum,stname,stinter,crossst,aptnum,city,state,zip,addrpct,sector,beat,post,xcoord,ycoord,dettypCM,lineCM,detailCM'
+
+len(txtlines[1000])
+# => 903
+
+# => '2015,122,25,1152015,2210,1,O,P,2.00,COMM BURG,2,V,Y,Y,N, ,N, ,0,0,N, ,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,N,Y,Y,N,Y,N,N,N,N,N,N,N,N,N,N,Y,N,N,N,N,N,N,N,N,122,122,N,N,V,S, ,M,W, , 23,5,10,200,BK,BR,M, ,L, , ,COMMERCIAL, , ,HYLAN BOULEVARD,WIMAN AVENUE, ,STATEN IS, , ,122,B, , , 943364, 136416,CM,1, 14'
+~~~
+
+
+
+### Counting by race
+
+
+~~~py
+b_count = 0
+for line in txtlines:
+    if ',B,' in line:
+        b_count +=1
+print("B count is", b_count)        
+# B count is 13053
+print("B percentage is", b_count / len(txtlines))
+# B percentage is 0.5784878567629853
+~~~
+
+
+## Less naive
+
+### Split each line by comma
+
+~~~py
+headers = txtlines[0].split(',')
+type(headers)
+# => list
+headers[82]
+# => 'dob'
+headers[81]
+# => 'race'
+txtlines[1001].split(',')[81]
+# => 'Q'
+txtlines[1002].split(',')[81]
+# => 'B'
+~~~
+
+
+### Loop again
+
+~~~py
+b_count = 0
+for line in txtlines:
+    race = line.split(',')[81]
+    if 'B' == race:
+        b_count +=1
+print("B count is", b_count)        
+# B count is 11918
+print("B percentage is", b_count / len(txtlines))
+# B percentage is 0.5281864917567807
+~~~
+
+
+
+
+## Using csv.reader()
+
+
+~~~py
+from csv import reader
+with open('2015-nypd.csv', 'r') as f:
+    txt = f.read()
+    txtlines = txt.splitlines()
+    datarows = list(reader(txtlines))
+
+b_count = 0
+for d in datarows:
+    if 'B' == d[81]:
+        b_count +=1
+print("B count is", b_count)        
+# B count is 11950
+print("B percentage is", b_count / len(datarows))
+# B percentage is 0.5296046800212728
+~~~
+
+
+
+## Slightly cleaner use of csv.reader()
+
+~~~py
+from csv import reader
+RACE_COL_NUM = 81
+with open('2015-nypd.csv', 'r') as f:
+    datarows = list(reader(f))
+    datarows = datarows[1:]
+
+b_count = 0
+for d in datarows:
+    if 'B' == d[RACE_COL_NUM]:
+        b_count +=1
+print("B count is", b_count)        
+# => B count is 11950
+print("B percentage is", b_count / len(datarows))
+# => B percentage is 0.5296281522847139
+~~~
+
+
+
+## Using csv.DictReader
+
+~~~py
+from csv import DictReader
+with open('2015-nypd.csv', 'r') as f:
+    datarows = list(DictReader(f))
+
+b_count = 0
+for d in datarows:
+    if 'B' == d['race']:
+        b_count +=1
+print("B count is", b_count)        
+print("B percentage is", b_count / len(datarows))
+~~~

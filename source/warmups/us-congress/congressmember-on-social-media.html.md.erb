@@ -1,0 +1,75 @@
+
+
+
+
+
+
+
+~~~py
+import requests
+SOURCE_URL = 'http://stash.compjour.org/samples/us-congress/legislators.csv'
+resp = requests.get(SOURCE_URL)
+with open("legislators.csv", "w") as f:
+    f.write(resp.text)
+~~~
+
+
+
+# Exploring
+
+~~~py
+from csv import DictReader
+with open("legislators.csv", 'r') as f:
+    datarows = list(DictReader(f))
+
+type(datarows)
+# => list
+len(datarows)
+# => 897
+~~~
+
+
+Test out one row
+
+~~~
+row = datarows[0]
+type(row)
+# => dict
+row.keys()
+# => dict_keys(['fec_id', 'nickname', 'firstname', 'lastname', 'district', 'state', 'phone', 'facebook_id', 'votesmart_id', 'official_rss', 'congress_office', 'name_suffix', 'fax', 'congresspedia_url', 'middlename', 'senate_class', 'youtube_url', 'twitter_id', 'title', 'in_office', 'oc_email', 'crp_id', 'gender', 'govtrack_id', 'bioguide_id', 'birthdate', 'party', 'website', 'webform'])
+~~~
+
+Let's test out the keys:
+
+~~~py
+row['firstname'] + row['lastname']
+# => 'NeilAbercrombie'
+row['in_office']
+# => '0'
+row['twitter_id']
+~~~
+
+Visit his Twitter account:
+
+    https://twitter.com/neilabercrombie
+
+
+Or, if you're too lazy to even leave your console:
+
+~~~py
+import webbrowser
+webbrowser.open('https://twitter.com/' + row['twitter_id'])
+~~~
+
+
+You'll see this:
+
+![image neilabercrombie-on-twitter.jpg](/files/us-congress/images/neilabercrombie-on-twitter.jpg)
+
+Which says this:
+
+> Official Twitter account of the Governor of the State of Hawaii, Governor Neil Abercrombie.
+
+So apparently, the `legislators.csv` file keeps past Congressmembers on file, just to
+
+

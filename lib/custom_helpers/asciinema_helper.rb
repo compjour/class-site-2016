@@ -13,15 +13,15 @@ module AsciinemaHelper
     end
 
     %Q{
-      <div class="ascii-cinema-wrap">
-        <div id="#{filename_id}"></div>
-        <script>
-          asciinema_player.core.CreatePlayer(
-                  '#{filename_id}', '#{filename}',
-                  #{opts.to_json}
-                );
-        </script>
-      </div>
+<div class="asciinema-wrap">
+  <div id="#{filename_id}"></div>
+  <script>
+    asciinema_player.core.CreatePlayer(
+            '#{filename_id}', '#{filename}',
+            #{opts.to_json}
+          );
+  </script>
+</div>
     }
   end
 end

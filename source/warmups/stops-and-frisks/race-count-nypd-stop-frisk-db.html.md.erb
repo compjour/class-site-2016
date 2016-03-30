@@ -1,0 +1,63 @@
+---
+title: Getting a break-down by race of a year of NYPD Stop and Frisks
+---
+
+
+## Simple
+
+~~~py
+from csv import DictReader
+with open('2015-nypd.csv', 'r') as f:
+    datarows = list(DictReader(f))
+
+race_counter = {}
+for d in datarows:
+    r = d['race']
+    if race_counter.get(r):
+        race_counter[r] += 1
+    else:
+        race_counter[r] = 1
+
+for key, val in race_counter.items():
+    pct = round(100 * val / len(datarows))
+    print("For race:", key, 'number:', val, ' percentage:', pct)
+~~~
+
+
+## Using defaultdict
+
+~~~py
+
+
+~~~
+
+
+
+## Using Counter
+
+~~~py
+from csv import DictReader
+from collections import Counter
+with open('2015-nypd.csv', 'r') as f:
+    datarows = list(DictReader(f))
+
+race_counter = Counter()
+for d in datarows:
+    race_counter.update(d['race'])
+
+for key, val in race_counter.most_common():
+    pct = round(100 * val / len(datarows))
+    print("For race:", key, 'number:', val, ' percentage:', pct)
+~~~
+
+
+~~~stdout
+For race: B number: 11950  percentage: 53
+For race: Q number: 5090  percentage: 23
+For race: W number: 2514  percentage: 11
+For race: P number: 1409  percentage: 6
+For race: A number: 1103  percentage: 5
+For race: Z number: 298  percentage: 1
+For race: U number: 122  percentage: 1
+For race: I number: 77  percentage: 0
+~~~

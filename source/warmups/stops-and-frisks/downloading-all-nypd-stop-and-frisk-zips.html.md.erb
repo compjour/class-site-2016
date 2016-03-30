@@ -1,0 +1,25 @@
+---
+title: Downloading and unpacking all stop-and-frisk-zip files
+---
+
+
+# Solutions
+
+
+~~~py
+from os.path import join
+from os import makedirs
+from shutil import unpack_archive
+import requests
+
+
+SOURCE_URL_PATH = 'http://www.nyc.gov/html/nypd/downloads/zip/analysis_and_planning/%s_sqf_csv.zip'
+YEAR_START = 2003
+YEAR_END = 2015
+DATA_DIR = join('mydata', 'fetched')
+makedirs(DATA_DIR, exist_ok=True)
+
+for yr in range(YEAR_START, YEAR_END + 1):
+    url = SOURCE_URL_PATH % yr
+    print("Downloading", url)
+~~~

@@ -1,0 +1,19 @@
+
+
+https://sunlightlabs.github.io/congress/index.html#legislator-spreadsheet
+
+
+~~~py
+import requests
+from os import makedirs
+from os.path import basename, join
+SOURCE_URL = 'http://stash.compjour.org/samples/us-congress/legislators.csv'
+DATA_DIR = join('data', 'fetched')
+FILENAME = join(DATA_DIR, basename(SOURCE_URL))
+makedirs(DATA_DIR, exist_ok=True)
+resp = requests.get(SOURCE_URL)
+
+with open("legislators.csv", "w") as f:
+    f.write(resp.text)
+    
+~~~

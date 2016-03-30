@@ -1,0 +1,39 @@
+
+
+~~~py
+import requests
+resp = requests.get('http://stash.compjour.org/samples/babynames/nation_2014.txt')
+with open('nation_2014.txt', 'w') as f:
+    f.write(resp.text)
+~~~
+
+
+
+Interactive:
+
+~~~py
+with open('nation_2014.txt', 'r') as f:
+    txt = f.read()
+
+type(txt)
+# => str
+len(txt)
+# => 392441
+txt[0:50]
+# => 'Emma,F,20799\nOlivia,F,19674\nSophia,F,18490\nIsabell'
+print(txt[0:50])
+# Emma,F,20799
+# Olivia,F,19674
+# Sophia,F,18490
+# Isabell
+~~~
+
+
+~~~py
+lines = txt.splitlines()
+type(lines)
+len(lines)
+print(lines[0])
+print(lines[1])
+print(lines[2])
+~~~

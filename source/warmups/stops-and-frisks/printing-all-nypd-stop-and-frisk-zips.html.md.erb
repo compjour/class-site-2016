@@ -1,0 +1,48 @@
+---
+title: Downloading all the stop and frisk zip files
+---
+
+
+
+# Solutions
+
+## Using a for-loop
+
+~~~py
+SOURCE_URL_PATH = 'http://www.nyc.gov/html/nypd/downloads/zip/analysis_and_planning/'
+for yr in range(2003, 2016):
+    url = SOURCE_URL_PATH + str(yr) + '_sqf_csv.zip'
+    print(url)
+~~~
+
+
+## Using better string-formatting
+
+~~~py
+SOURCE_URL_PATH = 'http://www.nyc.gov/html/nypd/downloads/zip/analysis_and_planning/%s_sqf_csv.zip'
+YEAR_START = 2003
+YEAR_END = 2015
+for yr in range(YEAR_START, YEAR_END + 1):
+    url = SOURCE_URL_PATH % yr
+    print(url)
+~~~
+
+
+
+## Using web-scraping
+
+http://www.crummy.com/software/BeautifulSoup/bs4/doc/
+
+~~~py
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin
+import requests
+SOURCE_HOMEPAGE_URL = 'http://www.nyc.gov/html/nypd/html/analysis_and_planning/stop_question_and_frisk_report.shtml'
+resp = requests.get(SOURCE_HOMEPAGE_URL)
+soup = BeautifulSoup(resp.text)
+for link in soup.find_all('a'):
+    href = link.get('href')
+    url = urljoin(SOURCE_HOMEPAGE_URL, href)
+    if 'csv.zip' in url:
+        print(url)
+~~~
