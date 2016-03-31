@@ -2,7 +2,7 @@
   "version": 1,
   "width": 80,
   "height": 15,
-  "duration": 12.080948,
+  "duration": 5.031969,
   "command": "/bin/bash",
   "title": "",
   "env": {
@@ -11,124 +11,119 @@
   },
   "stdout": [
     [
-      0.007150,
+      0.007731,
       "\u001b[?1034h"
-    ],
-    [
-      0.000007,
-      "bash-3.2$ "
-    ],
-    [
-      1.228628,
-      "i"
-    ],
-    [
-      0.168364,
-      "p"
-    ],
-    [
-      0.191403,
-      "y"
-    ],
-    [
-      0.089892,
-      "t"
-    ],
-    [
-      0.101225,
-      "h"
-    ],
-    [
-      0.056162,
-      "o"
-    ],
-    [
-      0.123746,
-      "n"
-    ],
-    [
-      0.123833,
-      "\r\n"
-    ],
-    [
-      0.538936,
-      "Python 3.5.1 |Anaconda 2.5.0 (x86_64)| (default, Dec  7 2015, 11:24:55) \r\nType \"copyright\", \"credits\" or \"license\" for more information.\r\n\r\nIPython 4.0.3 -- An enhanced Interactive Python.\r\n?         -\u003e Introduction and overview of IPython's features.\r\n%quickref -\u003e Quick reference.\r\nhelp      -\u003e Python's own help system.\r\nobject?   -\u003e Details about 'object', use 'object??' for extra details.\r\n"
-    ],
-    [
-      0.001881,
-      "\u001b[?1034h"
-    ],
-    [
-      0.000008,
-      "\r\n"
     ],
     [
       0.000020,
-      "\u001b[0;34mIn [\u001b[1;34m1\u001b[0;34m]: \u001b[0m"
+      "bash-3.2$ "
     ],
     [
-      2.744522,
-      "1"
-    ],
-    [
-      0.101004,
-      " "
-    ],
-    [
-      0.157612,
-      "+"
-    ],
-    [
-      0.123664,
-      " "
-    ],
-    [
-      0.112532,
-      "2"
-    ],
-    [
-      0.269789,
-      "\r\n"
-    ],
-    [
-      0.008344,
-      "\u001b[0;31mOut[\u001b[1;31m1\u001b[0;31m]: \u001b[0m3\r\n"
-    ],
-    [
-      0.000271,
-      "\r\n\u001b[0;34mIn [\u001b[1;34m2\u001b[0;34m]: \u001b[0m"
-    ],
-    [
-      1.510241,
-      "e"
-    ],
-    [
-      0.269996,
-      "x"
-    ],
-    [
-      0.146255,
+      1.029477,
       "i"
     ],
     [
-      0.078806,
+      0.168442,
+      "p"
+    ],
+    [
+      0.134873,
+      "y"
+    ],
+    [
+      0.124038,
       "t"
     ],
     [
-      0.224842,
-      "("
+      0.069648,
+      "h"
     ],
     [
-      0.067634,
-      ")"
+      0.100045,
+      "o"
     ],
     [
-      0.213787,
+      0.088719,
+      "n"
+    ],
+    [
+      0.101212,
+      "\r\n"
+    ],
+    [
+      0.673127,
+      "Python 3.5.1 |Anaconda 2.5.0 (x86_64)| (default, Dec  7 2015, 11:24:55) \r\nType \"copyright\", \"credits\" or \"license\" for more information.\r\n\r\nIPython 4.0.3 -- An enhanced Interactive Python.\r\n?         -\u003e Introduction and overview of IPython's features.\r\n%quickref -\u003e Quick reference.\r\nhelp      -\u003e Python's own help system.\r\nobject?   -\u003e Details about 'object', use 'object??' for extra details.\r\n"
+    ],
+    [
+      0.002187,
+      "\u001b[?1034h"
+    ],
+    [
+      0.000005,
+      "\r\n\u001b[0;34mIn [\u001b[1;34m1\u001b[0;34m]: \u001b[0m"
+    ],
+    [
+      0.630340,
+      "e"
+    ],
+    [
+      0.169425,
+      "x"
+    ],
+    [
+      0.135537,
+      "i"
+    ],
+    [
+      0.100087,
+      "t"
+    ],
+    [
+      0.179749,
+      "\r\n"
+    ],
+    [
+      0.255224,
+      "bash-3.2$ "
+    ],
+    [
+      0.465601,
+      "e"
+    ],
+    [
+      0.156424,
+      "x"
+    ],
+    [
+      0.146321,
+      "i"
+    ],
+    [
+      0.089985,
+      "t"
+    ],
+    [
+      0.202409,
       "\r\n"
     ],
     [
       0.266594,
-      "bash-3.2$ "
+      "logout "
+    ],
+    [
+      0.02409,
+      "\r\n"
+    ],
+    [
+      0.2,
+      "[Process completed]"
+    ],
+    [
+      0.102409,
+      "\r\n"
     ]
   ]
 }
+
+
+

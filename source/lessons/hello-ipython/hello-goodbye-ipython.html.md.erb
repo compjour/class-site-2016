@@ -1,0 +1,228 @@
+---
+title: Getting started with ipython and command-line basics
+description: |
+  How to run Python interactively and as a shell script
+---
+
+# Your system shell
+
+The **system shell** is a text-only interface to your operating system. Whatever you could do via point-and-click, you can do with text commands.  Here's a directory being created via the OS X shell:
+
+![http://2015.compciv.org/files/images/topics/unix/cli-mkdir-multiple.gif](http://2015.compciv.org/files/images/topics/unix/cli-mkdir-multiple.gif)
+
+However, there are many specific, precise, and powerful actions that can only be invoked through the system shell. [We won't be learning very much of it](http://2015.compciv.org/bash-guide/). But we do need to know how to do these things:
+
+1. Get into the __ipython__ shell 
+2. Run the __Python__ interpreter
+3. Move around our own file system
+4. Not get our __system__ and __ipython__ shells confused.
+
+To access your system shell, which I'll often refer to as __the command prompt__, you'll have to run a program that opens a window to the shell. It's often referred to as the __Terminal__
+
+Follow the instructions appropriate to your system:
+
+- Windows: [Microsoft: Open a Command Prompt window](http://windows.microsoft.com/en-us/windows-vista/open-a-command-prompt-window)
+- OS X: [Introduction to the Mac OS X Command Line](http://blog.teamtreehouse.com/introduction-to-the-mac-os-x-command-line)
+
+Once you're at your Terminal/command-prompt window, you should see a nearly blank screen with perhaps a blinking cursor, waiting for you to type things in.
+
+
+
+# A few system shell commands
+
+This is a live demonstration of a few system shell commands; read on for a little more elaboration.
+
+<%= asciinema_player '/files/hello-ipython/asciinema/hello-shell.json',
+        '$ whoami', height: 10 %>
+
+
+
+## Who am I?
+
+If you're staring at a blank Terminal window and forgotten -- or never actually knew -- how you got there...then you can somehow forgotten where y
+
+~~~sh
+whoami
+~~~
+
+## Where am I?
+
+In OS X/Linux, the `pwd` command -- short for ["print working directory"](https://en.wikipedia.org/wiki/Pwd) -- will print the full directory path that you're currently operating from.
+
+[In Windows](http://stackoverflow.com/questions/921741/windows-equivalent-to-unix-pwd), use: `echo %cd%`
+
+~~~sh
+pwd
+~~~
+
+## Which version of Python am I running?
+
+Whenever you run the `python` command from your system shell, you are calling for the Python interpreter to...interpret and execute some Python code. Most frequently, we usually pass in the name of a Python script file.
+
+But we can invoke the `python` command with certain flags in special cases.
+
+Right now, we just want to know which version of Python we're running:
+
+~~~sh
+python --version
+~~~
+
+### Please install Anaconda
+
+Note: if the result of your `python --version` is _not_ something like:
+
+    Python 3.5.1 :: Anaconda 2.5.0 (x86_64)
+
+-- notably, the `Python 3` and/or the `Anaconda` part, then you should probably install via the [Anaconda Installer](https://www.continuum.io/downloads). Here are links to their one-click installs:
+
+- [Windows](https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda3-4.0.0-Windows-x86_64.exe)
+- [OS X](https://3230d63b5fc54e62148e-c95ac804525aac4b6dba79b00b39d1d3.ssl.cf1.rackcdn.com/Anaconda3-4.0.0-MacOSX-x86_64.pkg)
+
+You can visit their installs page here: [https://www.continuum.io/downloads](https://www.continuum.io/downloads)
+
+Everything from this point on forwards assumes that you have
+
+
+
+# Entering (and exiting) ipython
+
+While we can enter the standard interactive Python shell simply by executing `python` on its own...we want to use [__ipython__](https://ipython.org/)...which comes with many, many conveniences.
+
+Executing the `ipython` command is enough to get you to the Python shell. But before you run any Python-specific code, practice __exiting__ the ipython shell by typing `exit` as soon as you get in:
+
+<%= asciinema_player '/files/hello-ipython/asciinema/hello-goodbye-ipython.json',
+        '$ ipython', height: 15 %>
+
+
+You can also hit __Ctrl-D__ to exit out of ipython. In fact, using your keyboard is the most highly recommended way.
+
+
+## How to know which shell you're in
+
+It is very easy to get confused about the difference between your system shell and the ipython shell. They both technically do the same thing: interpret your text code into commands that get executed by your computer. You can write code that wipes out your file system via ipython or the system shell. The difference is that ipython interprets _Python_ code. Your system shell interprets...whatever is specific to your operating system.
+
+Ergo, running Python commands in your system shell will not work. And vice versa. Don't make the mistake that because both shells are text-based, or that you opened the ipython shell from the system shell, that they are the same thing. They are, in fact, completely different programs...just like when you click a hyperlink in a Word Document and it pop opens your web browser.
+
+Here's an example of when you try to run the `ipython` command when you're _already_ in the ipython shell:
+
+
+<%= asciinema_player '/files/hello-ipython/asciinema/doh-ipython-ipython.json',
+        '$ ipython', height: 15 %>
+
+
+Or, what happens when you `exit` when you've already exited from the ipython shell? Actually, you won't get an error because `exit` is a valid system shell command too. You'll just be booted out of your terminal:
+
+<%= asciinema_player '/files/hello-ipython/asciinema/doh-exit-exit.json',
+        '$ exit', height: 15 %>
+
+
+# Hello ipython
+
+Now that we know how to get into the ipython shell, let's run some Python code.
+
+Here's the classic [__Hello World__ program](https://www.artsy.net/artwork/brian-kernighan-hello-world):
+
+~~~py
+print("Hello World")
+~~~
+
+We can break it up into two lines:
+
+~~~py
+print("hello")
+print("world!")
+~~~
+
+
+## Not printing to screen
+
+The __print()__ function does a fairly simple, but special job: it prints things __to the screen__.
+
+To see why that's special, let's use a function that _doesn't_ print to screen: the __len()__ function -- short for "length" -- will _return_ the value of whatever argument is passed to it:
+
+~~~py
+len("Hello")
+len("Hello World")
+~~~
+
+In ipython, as with most interactive shells, you see the result of what the function returns immediately. Isn't _that_ printing to screen? Yes, technically, but that's a convenient feature of the ipython shell. When we invoke the Python interpreter _by itself_ -- which we do later in this lesson -- it's going to read Python code and not say a single thing to us...unless we tell it to via `print()` -- or something breaks.
+
+For now, see if you can notice the subtle difference between the `print()` and non-`print()` statements in ipython:
+
+~~~py
+"Hello"
+print("Hello")
+
+len("Hello")
+print(len("Hello"))
+~~~
+
+
+<%= asciinema_player '/files/hello-ipython/asciinema/print-vs-nonprint.json',
+        '$ ipython', height: 15 %>
+
+
+# Running a Python script
+
+Python scripts are just __text files__. They don't have to be named with a `.py` extension. And they don't need a special program to _view or edit_ them -- just any thing that can edit text.
+
+- That said, I strongly recommend you download and install [Sublime Text 3](https://www.sublimetext.com/3) (not 2) and use it for all of your text editing, whether it be plain text or text that is Python code.
+
+Once you have a text editor installed and open, create a new file, and enter the following text:
+
+~~~py
+print("Hello world!")
+len("Hello world!")
+~~~
+
+Then __save__ the file. Preferably somewhere like the __Desktop__ -- which is easily accessible via your system GUI and from the command line.
+
+Give it a name like: __testfoo.py__
+
+The following __shell__ commands will:
+
+- change directory to the Desktop (the command and path will be different for Windows)
+- run `pwd` to remind ourselves that we are in the right directory (again, it's different for Windows)
+- invoke the __Python interpreter__ to read and execute whatever was written in `Desktop/testfoo.py`
+
+~~~sh
+cd ~/Desktop
+pwd
+python testfoo.py
+~~~
+
+<%= asciinema_player '/files/hello-ipython/asciinema/python-foo.json',
+        '$ ', height: 15 %>
+
+Note how the output is just:
+
+~~~stdout
+Hello world!
+~~~
+
+Were you expecting it to print the result of the `len()` function? Then you need to change that line in `testfoo.py`:
+
+~~~py
+print("Hello world!")
+print(len("Hello world!"))
+~~~
+
+
+## Are you in the right place?
+
+The most common error I see, especially as the data-gathering gets complicated, are related to files not found. If you're getting this error, it isn't any simpler than this: __you are not where you think you are__:
+
+<%= asciinema_player '/files/hello-ipython/asciinema/python-foo.json',
+        '$ ', height: 15 %>
+
+
+# All together
+
+There's more to learn about the ipython shell and Python programming in general. But there's not much point in knowing Python if you can't communicate it to your computer. In this brief lesson, we've learned two ways to do it:
+
+- Using the __ipython shell__, and executing code line-by-line
+- Using the __python__ command-line interpreter
+
+
+
+

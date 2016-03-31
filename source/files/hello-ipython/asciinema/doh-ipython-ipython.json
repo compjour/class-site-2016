@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "width": 80,
+  "height": 15,
+  "duration": 13.314219,
+  "command": "/bin/bash",
+  "title": "",
+  "env": {
+    "TERM": "xterm-256color",
+    "SHELL": "/bin/bash"
+  },
+  "stdout": [
+    [
+      0.009878,
+      "\u001b[?1034h"
+    ],
+    [
+      0.000023,
+      "bash-3.2$ "
+    ],
+    [
+      1.015723,
+      "i"
+    ],
+    [
+      0.191001,
+      "p"
+    ],
+    [
+      0.179920,
+      "y"
+    ],
+    [
+      0.112717,
+      "t"
+    ],
+    [
+      0.101083,
+      "h"
+    ],
+    [
+      0.360400,
+      "o"
+    ],
+    [
+      0.168633,
+      "n"
+    ],
+    [
+      0.190864,
+      "\r\n"
+    ],
+    [
+      0.727213,
+      "Python 3.5.1 |Anaconda 2.5.0 (x86_64)| (default, Dec  7 2015, 11:24:55) \r\nType \"copyright\", \"credits\" or \"license\" for more information.\r\n\r\nIPython 4.0.3 -- An enhanced Interactive Python.\r\n?         -\u003e Introduction and overview of IPython's features.\r\n%quickref -\u003e Quick reference.\r\nhelp      -\u003e Python's own help system.\r\nobject?   -\u003e Details about 'object', use 'object??' for extra details.\r\n"
+    ],
+    [
+      0.002167,
+      "\u001b[?1034h"
+    ],
+    [
+      0.000005,
+      "\r\n\u001b[0;34mIn [\u001b[1;34m1\u001b[0;34m]: \u001b[0m"
+    ],
+    [
+      0.778402,
+      "i"
+    ],
+    [
+      0.168430,
+      "p"
+    ],
+    [
+      0.191328,
+      "y"
+    ],
+    [
+      0.123814,
+      "t"
+    ],
+    [
+      0.101080,
+      "h"
+    ],
+    [
+      0.101455,
+      "o"
+    ],
+    [
+      0.101297,
+      "n"
+    ],
+    [
+      0.292377,
+      "\r\n"
+    ],
+    [
+      0.530676,
+      "\u001b[0;31m---------------------------------------------------------------------------\u001b[0m\r\n\u001b[0;31mNameError\u001b[0m                                 Traceback (most recent call last)\r\n\u001b[0;32m\u003cipython-input-1-aa842c094c41\u003e\u001b[0m in \u001b[0;36m\u003cmodule\u003e\u001b[0;34m()\u001b[0m\r\n\u001b[0;32m----\u003e 1\u001b[0;31m \u001b[0mipython\u001b[0m\u001b[0;34m\u001b[0m\u001b[0m\r\n\u001b[0m\r\n\u001b[0;31mNameError\u001b[0m: name 'ipython' is not defined\r\n"
+    ],
+    [
+      0.10205,
+      "\r\n\u001b[0;34mIn [\u001b[1;34m2\u001b[0;34m]: \u001b[0m"
+    ]
+  ]
+}

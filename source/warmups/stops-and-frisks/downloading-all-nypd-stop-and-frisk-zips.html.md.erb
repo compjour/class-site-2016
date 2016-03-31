@@ -6,6 +6,41 @@ title: Downloading and unpacking all stop-and-frisk-zip files
 # Solutions
 
 
+## Adding strings together
+
+~~~py
+from os.path import join
+from os import makedirs
+from shutil import unpack_archive
+import requests
+
+
+SOURCE_URL_1 = 'http://www.nyc.gov/html/nypd/downloads/zip/analysis_and_planning/'
+SOURCE_URL_2 = '_sqf_csv.zip'
+YEAR_START = 2003
+YEAR_END = 2015
+DATA_DIR = join('mydata', 'fetched')
+makedirs(DATA_DIR, exist_ok=True)
+
+for yr in range(YEAR_START, YEAR_END + 1):
+    url = SOURCE_URL_1 + str(yr) + SOURCE_URL_2
+    print("Downloading", url)
+~~~
+
+
+
+
+## Using better string-substitution
+
+This is a much better way to substitute variables into text strings:
+
+
+      SOURCE_URL_PATH = 'http://www.example.com/%s/stuff.zip'
+      url = SOURCE_URL_PATH % yr
+
+There are other [alternatives in this StackOverflow question](http://stackoverflow.com/questions/2960772/putting-a-variable-inside-a-string-python).
+
+
 ~~~py
 from os.path import join
 from os import makedirs

@@ -1,6 +1,21 @@
 ---
 title: Getting a break-down by race of a year of NYPD Stop and Frisks
+description: |
+    For a given year, count the number of people stopped by the NYPD according to their Stop and Frisks data.
 ---
+
+
+# Solutions
+
+Note: the following solutions assume that there's a local file named `2015-nypd.csv`. You can set it up like this:
+
+~~~py
+import requests
+url = 'http://stash.compjour.org/samples/stops-and-frisks/2013-nypd.csv'
+resp = requests.get(url)
+with open('2013-nypd.csv', 'w') as thefile:
+    thefile.write(resp.text)
+~~~
 
 
 ## Simple
@@ -10,26 +25,19 @@ from csv import DictReader
 with open('2015-nypd.csv', 'r') as f:
     datarows = list(DictReader(f))
 
-race_counter = {}
+race_tally = {}
 for d in datarows:
     r = d['race']
-    if race_counter.get(r):
-        race_counter[r] += 1
+    if race_tally.get(r):
+        race_tally[r] += 1
     else:
-        race_counter[r] = 1
+        race_tally[r] = 1
 
-for key, val in race_counter.items():
+for key, val in race_tally.items():
     pct = round(100 * val / len(datarows))
     print("For race:", key, 'number:', val, ' percentage:', pct)
 ~~~
 
-
-## Using defaultdict
-
-~~~py
-
-
-~~~
 
 
 
@@ -41,11 +49,11 @@ from collections import Counter
 with open('2015-nypd.csv', 'r') as f:
     datarows = list(DictReader(f))
 
-race_counter = Counter()
+race_tally = Counter()
 for d in datarows:
-    race_counter.update(d['race'])
+    race_tally.update(d['race'])
 
-for key, val in race_counter.most_common():
+for key, val in race_tally.most_common():
     pct = round(100 * val / len(datarows))
     print("For race:", key, 'number:', val, ' percentage:', pct)
 ~~~

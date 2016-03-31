@@ -1,0 +1,135 @@
+---
+title: Lesson plan for scouting the NYPD Stop and Frisk data
+---
+
+# Primer on using iPython
+
+This was more complete before I accidentally deleted most of it. For now, here's at least an introduction to what ipython's interactive shell is:
+
+[Hello iPython](/lessons/hello-ipython/hello-goodbye-ipython)
+
+
+# Sample data to download
+
+- [http://stash.compjour.org/samples/stops-and-frisks/2014-nypd.csv](http://stash.compjour.org/samples/stops-and-frisks/2014-nypd.csv)
+- [http://stash.compjour.org/samples/stops-and-frisks/2015-nypd.csv](http://stash.compjour.org/samples/stops-and-frisks/2015-nypd.csv)
+
+
+
+# Homework
+
+Have it done by __Monday, April 4__. You can email me at dun@stanford.edu. Send attachments, links, whatever. We won't use Github for this particular assignment.
+
+- Can you find records relating to [Alvin's arrest in 2012](http://www.theatlantic.com/politics/archive/2012/10/how-a-17-year-old-changed-the-politics-of-stop-and-frisk/263468/)? According to reports, it took place on [June 3, 2012](http://www.nydailynews.com/new-york/manhattan/cops-stop-and-frisk-harlem-teen-threaten-break-arm-audio-recording-article-1.1178891).
+- Can you [confirm the ratio of innocent people stopped-and-frisked that the NY ACLU reports](http://www.nyclu.org/content/stop-and-frisk-data)?
+
+
+# The NYPD stop and frisk data
+
+[http://www.nyc.gov/html/nypd/html/analysis_and_planning/stop_question_and_frisk_report.shtml](http://www.nyc.gov/html/nypd/html/analysis_and_planning/stop_question_and_frisk_report.shtml)
+
+They also have a link for their [most recent NYPD Stop Question Frisk Database File specifications](http://www.nyc.gov/html/nypd/downloads/excel/analysis_and_planning/2015_sqf_file_spec.xlsx)
+
+
+# Comparing counts by the ACLU
+
+Via the NY ACLU:
+
+[http://www.nyclu.org/content/stop-and-frisk-data](http://www.nyclu.org/content/stop-and-frisk-data)
+
+> An analysis by the NYCLU revealed that innocent New Yorkers have been subjected to police stops and street interrogations more than 5 million times since 2002, and that black and Latino communities continue to be the overwhelming target of these tactics. Nearly nine out of 10 stopped-and-frisked New Yorkers have been completely innocent, according to the NYPD’s own reports:
+
+> In 2014, New Yorkers were stopped by the police 45,787 times.
+> 37,744 were totally innocent (82 percent).
+> 24,319 were black (53 percent).
+> 12,489 were Latino (27 percent).
+> 5,467 were white (12 percent).
+
+>In 2015, New Yorkers were stopped by the police 22,939 times.
+> 18,353 were totally innocent (80 percent).
+> 12,223 were black (54 percent).
+> 2,567 were Latino (11 percent).
+> 6,598 were white (29 percent).
+
+
+### Download the file
+
+The two mirrors of the dataset are here:
+
+- [http://stash.compjour.org/samples/stops-and-frisks/2014-nypd.csv](http://stash.compjour.org/samples/stops-and-frisks/2014-nypd.csv)
+- [http://stash.compjour.org/samples/stops-and-frisks/2015-nypd.csv](http://stash.compjour.org/samples/stops-and-frisks/2015-nypd.csv)
+
+Download the file and save it locally (so that you don't have to keep redownloading it):
+
+~~~py
+import requests
+url = 'http://stash.compjour.org/samples/stops-and-frisks/2015-nypd.csv'
+
+resp = requests.get(url)
+with open('2015-nypd.csv', 'w') as f:
+    f.write(resp.text)
+~~~
+
+Parsing it as data:
+
+~~~py
+from csv import DictReader
+with open('2015-nypd.csv', 'r') as f:
+    datarows = list(DictReader(f))
+
+# count the rows
+len(datarows)
+~~~
+
+
+Count the number of blacks ([remember to check the NYPD documentation](http://www.nyc.gov/html/nypd/html/analysis_and_planning/stop_question_and_frisk_report.shtml)):
+
+
+~~~py
+# quick check
+for row in datarows:
+    print(row['race'])
+~~~
+
+
+~~~py
+# quick check
+for row in datarows:
+    print(row['race'])
+~~~
+
+
+# Finding individual cases
+
+[To Thwart a Powerful Intruder, He Let Him Open the Door](http://www.nytimes.com/2013/02/02/nyregion/to-thwart-powerful-intruder-he-let-him-open-the-door.html?_r=0) - FEB. 1, 2013
+
+
+> But he did not stay away for long. The next day, officers spotted the suspect nearby in the Prince Street subway station and arrested him, Detective Raul Delpozo said. The police identified him as __Anthony Roman, 28__, and said he had been busy in the neighborhood for a month, robbing five other people. He started small, stealing $25 and Chinese food from a victim in the West Village on Dec. 17, the police said, but three days later forced a victim to withdraw $200 from an A.T.M.
+
+
+~~~py
+import requests
+url = 'http://stash.compjour.org/samples/stops-and-frisks/2013-nypd.csv'
+
+resp = requests.get(url)
+with open('2013-nypd.csv', 'w') as f:
+    f.write(resp.text)
+~~~
+
+
+~~~py
+from csv import DictReader
+with open('2013-nypd.csv', 'r') as f:
+    datarows = list(DictReader(f))
+~~~
+
+
+Count the 28 year olds
+
+~~~py
+xcount = 0
+for row in datarows:
+    if '28' == row['age'] and :
+        xcount += 1
+# 5269
+~~~

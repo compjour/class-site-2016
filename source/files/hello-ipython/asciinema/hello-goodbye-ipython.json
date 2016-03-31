@@ -1,0 +1,234 @@
+{
+  "version": 1,
+  "width": 80,
+  "height": 15,
+  "duration": 16.016724,
+  "command": "/bin/bash",
+  "title": "",
+  "env": {
+    "TERM": "xterm-256color",
+    "SHELL": "/bin/bash"
+  },
+  "stdout": [
+    [
+      0.008639,
+      "\u001b[?1034h"
+    ],
+    [
+      0.000025,
+      "bash-3.2$ "
+    ],
+    [
+      1.006387,
+      "i"
+    ],
+    [
+      0.179910,
+      "p"
+    ],
+    [
+      0.168668,
+      "y"
+    ],
+    [
+      0.135082,
+      "t"
+    ],
+    [
+      0.078748,
+      "h"
+    ],
+    [
+      0.078888,
+      "o"
+    ],
+    [
+      0.101042,
+      "n"
+    ],
+    [
+      0.236246,
+      "\r\n"
+    ],
+    [
+      0.808329,
+      "Python 3.5.1 |Anaconda 2.5.0 (x86_64)| (default, Dec  7 2015, 11:24:55) \r\nType \"copyright\", \"credits\" or \"license\" for more information.\r\n\r\nIPython 4.0.3 -- An enhanced Interactive Python.\r\n?         -\u003e Introduction and overview of IPython's features.\r\n%quickref -\u003e Quick reference.\r\nhelp      -\u003e Python's own help system.\r\nobject?   -\u003e Details about 'object', use 'object??' for extra details.\r\n"
+    ],
+    [
+      0.002540,
+      "\u001b[?1034h"
+    ],
+    [
+      0.000005,
+      "\r\n"
+    ],
+    [
+      0.000044,
+      "\u001b[0;34mIn [\u001b[1;34m1\u001b[0;34m]: \u001b[0m"
+    ],
+    [
+      1.518024,
+      "e"
+    ],
+    [
+      0.191108,
+      "x"
+    ],
+    [
+      0.123852,
+      "i"
+    ],
+    [
+      0.112427,
+      "t"
+    ],
+    [
+      0.146320,
+      "\r\n"
+    ],
+    [
+      0.255545,
+      "bash-3.2$ "
+    ],
+    [
+      0.543417,
+      "i"
+    ],
+    [
+      0.180059,
+      "p"
+    ],
+    [
+      0.145784,
+      "y"
+    ],
+    [
+      0.135331,
+      "t"
+    ],
+    [
+      0.070586,
+      "h"
+    ],
+    [
+      0.100283,
+      "o"
+    ],
+    [
+      0.065686,
+      "n"
+    ],
+    [
+      0.190697,
+      "\r\n"
+    ],
+    [
+      0.567398,
+      "Python 3.5.1 |Anaconda 2.5.0 (x86_64)| (default, Dec  7 2015, 11:24:55) \r\nType \"copyright\", \"credits\" or \"license\" for more information.\r\n\r\nIPython 4.0.3 -- An enhanced Interactive Python.\r\n?         -\u003e Introduction and overview of IPython's features.\r\n%quickref -\u003e Quick reference.\r\nhelp      -\u003e Python's own help system.\r\nobject?   -\u003e Details about 'object', use 'object??' for extra details.\r\n"
+    ],
+    [
+      0.002216,
+      "\u001b[?1034h"
+    ],
+    [
+      0.000005,
+      "\r\n\u001b[0;34mIn [\u001b[1;34m1\u001b[0;34m]: \u001b[0m"
+    ],
+    [
+      0.960628,
+      "e"
+    ],
+    [
+      0.168548,
+      "x"
+    ],
+    [
+      0.135029,
+      "i"
+    ],
+    [
+      0.123793,
+      "t"
+    ],
+    [
+      0.697588,
+      "\r\n"
+    ],
+    [
+      0.254571,
+      "bash-3.2$ "
+    ],
+    [
+      0.578058,
+      "i"
+    ],
+    [
+      0.157168,
+      "p"
+    ],
+    [
+      0.191316,
+      "y"
+    ],
+    [
+      0.124105,
+      "t"
+    ],
+    [
+      0.089750,
+      "h"
+    ],
+    [
+      0.101140,
+      "o"
+    ],
+    [
+      0.067454,
+      "n"
+    ],
+    [
+      0.258879,
+      "\r\n"
+    ],
+    [
+      0.582234,
+      "Python 3.5.1 |Anaconda 2.5.0 (x86_64)| (default, Dec  7 2015, 11:24:55) \r\nType \"copyright\", \"credits\" or \"license\" for more information.\r\n\r\nIPython 4.0.3 -- An enhanced Interactive Python.\r\n?         -\u003e Introduction and overview of IPython's features.\r\n%quickref -\u003e Quick reference.\r\nhelp      -\u003e Python's own help system.\r\nobject?   -\u003e Details about 'object', use 'object??' for extra details.\r\n"
+    ],
+    [
+      0.002105,
+      "\u001b[?1034h"
+    ],
+    [
+      0.000004,
+      "\r\n"
+    ],
+    [
+      0.000003,
+      "\u001b[0;34mIn [\u001b[1;34m1\u001b[0;34m]: \u001b[0m"
+    ],
+    [
+      1.103343,
+      "e"
+    ],
+    [
+      0.179684,
+      "x"
+    ],
+    [
+      0.134997,
+      "i"
+    ],
+    [
+      0.130149,
+      "t"
+    ],
+    [
+      0.117272,
+      "\r\n"
+    ],
+    [
+      0.259788,
+      "bash-3.2$ "
+    ]
+  ]
+}
