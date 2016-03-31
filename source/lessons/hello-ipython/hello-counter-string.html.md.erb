@@ -1,0 +1,75 @@
+
+
+
+# Using string.ascii_lowercase
+
+~~~py
+import string
+type(string)
+string.ascii_lowercase
+type(string.ascii_lowercase)
+len(string.ascii_lowercase)
+# => 26
+~~~
+
+
+Shorten it:
+
+~~~py
+from string import ascii_lowercase
+len(ascii_lowercase)
+~~~
+
+#
+
+
+~~~py
+from string import ascii_lowercase
+mytext = "Hello World"
+mytext = mytext.lower()
+print("Top 12 letters by frequency:")
+for ltr in ascii_lowercase:
+    ltr_count = mytext.count(ltr)
+    print(ltr, ltr_count)
+~~~
+
+
+
+
+~~~py
+from collections import Counter
+from string import ascii_lowercase
+
+mytext = "Hello World"
+mytext = mytext.lower()
+
+letter_counts = Counter(mytext).most_common()
+print("Top 12 letters by frequency:")
+for item in letter_counts:
+    ltr = item[0]
+    ltr_count = item[1]
+    if ltr in ascii_lowercase:
+        print(ltr, ltr_count) 
+~~~
+
+
+
+
+
+~~~py
+from collections import Counter
+from string import ascii_lowercase
+
+print("Top 12 letters by frequency")
+mytext = "Hello World"
+mytext = mytext.lower()
+
+letter_counts = Counter(mytext).most_common()
+print("Top 12 letters by frequency:")
+for ltr, ltr_count in letter_counts:
+    if ltr in ascii_lowercase:
+        print(ltr, ltr_count) 
+~~~
+
+
+

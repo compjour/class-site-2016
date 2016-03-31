@@ -1,0 +1,186 @@
+https://data.consumerfinance.gov/dataset/Consumer-Complaints/s6ew-h6mp
+
+
+~~~sh
+curl -o cfpb-complaints.csv \
+  'https://data.consumerfinance.gov/api/views/s6ew-h6mp/rows.csv?accessType=DOWNLOAD'
+
+csvcut -c 'Issue' cfpb-complaints.csv \
+  | sort | uniq -c | sort -rn
+~~~
+
+
+
+~~~stdout
+95855 "Loan modification,collection,foreclosure"
+64349 Incorrect information on credit report
+59132 "Loan servicing, payments, escrow account"
+41123 Cont'd attempts collect debt not owed
+26160 "Account opening, closing, or management"
+17858 Communication tactics
+17646 Disclosure verification of debt
+16901 Deposits and withdrawals
+13071 "Application, originator, mortgage broker"
+10813 Billing disputes
+10598 Other
+10127 Credit reporting company's investigation
+9643 Managing the loan or lease
+8902 Problems caused by my funds being low
+8053 False statements or representation
+7871 Unable to get credit report/credit score
+7214 Improper contact or sharing of info
+6764 Settlement process and costs
+6718 Problems when you are unable to pay
+6373 Taking/threatening an illegal action
+5755 Identity theft / Fraud / Embezzlement
+5677 Dealing with my lender or servicer
+5255 "Making/receiving payments, sending money"
+4682 Closing/Cancelling account
+4558 APR or interest rate
+4332 Credit decision / Underwriting
+4234 Using a debit or ATM card
+3844 Repaying your loan
+3805 Can't repay my loan
+3315 Improper use of my credit report
+2897 Credit monitoring or identity protection
+2783 Taking out the loan or lease
+2775 Late fee
+2447 Customer service / Customer relations
+2282 Delinquent account
+2274 Credit determination
+2143 Advertising and marketing
+2017 Credit card protection / Debt protection
+1981 Fraud or scam
+1972 Billing statement
+1858 Charged fees or interest I didn't expect
+1845 Transaction issue
+1744 Rewards
+1730 Payoff process
+1706 Credit line increase/decrease
+1700 Credit reporting
+1639 Other fee
+1276 Shopping for a loan or lease
+1135 Unsolicited issuance of credit card
+1003 Collection practices
+ 972 Other transaction issues
+ 904 Collection debt dispute
+ 816 "Managing, opening, or closing account"
+ 799 Balance transfer
+ 754 Unauthorized transactions/trans. issues
+ 730 Can't contact lender
+ 671 Money was not available when promised
+ 634 Managing the line of credit
+ 476 Getting a loan
+ 448 Forbearance / Workout plans
+ 432 Account terms and changes
+ 409 Received a loan I didn't apply for
+ 387 Application processing delay
+ 383 Privacy
+ 371 Bankruptcy
+ 340 Other service issues
+ 336 Can't stop charges to bank account
+ 288 Payment to acct not credited
+ 280 Applied for loan/did not receive money
+ 248 Arbitration
+ 244 Sale of account
+ 232 Shopping for a line of credit
+ 200 Wrong amount charged or received
+ 189 Charged bank acct wrong day or amt
+ 187 Cash advance
+ 177 Overlimit fee
+ 166 Balance transfer fee
+ 157 Cash advance fee
+ 149 Customer service/Customer relations
+ 148 Adding money
+ 144 Incorrect/missing disclosures or info
+ 134 Fees
+ 113 Convenience checks
+  57 Excessive fees
+  55 Unexpected/Other fees
+  47 Lender repossessed or sold the vehicle
+  42 "Advertising, marketing or disclosures"
+  31 "Overdraft, savings or rewards features"
+  28 Disclosures
+  27 Lost or stolen check
+  22 Lost or stolen money order
+  13 Incorrect exchange rate
+  13 
+   5 Lender sold the property
+   5 Lender damaged or destroyed vehicle
+   1 Lender damaged or destroyed property
+   1 Issue
+~~~
+
+
+
+~~~sh
+csvcut -n cfpb-complaints.csv 
+~~~
+
+
+~~~stdout
+  1: Date received
+  2: Product
+  3: Sub-product
+  4: Issue
+  5: Sub-issue
+  6: Consumer complaint narrative
+  7: Company public response
+  8: Company
+  9: State
+ 10: ZIP code
+ 11: Tags
+ 12: Consumer consent provided?
+ 13: Submitted via
+ 14: Date sent to company
+ 15: Company response to consumer
+ 16: Timely response?
+ 17: Consumer disputed?
+ 18: Complaint ID
+~~~
+
+
+
+~~~sh
+csvcut -c 'Company' cfpb-complaints.csv  | sort | uniq -c | sort -rn | head
+~~~
+
+
+~~~stdout
+55322 Bank of America
+41323 Wells Fargo & Company
+33303 JPMorgan Chase & Co.
+30680 Equifax
+29857 Experian
+25074 Citibank
+24532 "TransUnion Intermediate Holdings, Inc."
+20711 Ocwen
+15379 Capital One
+12948 Nationstar Mortgage
+~~~
+
+
+Year:
+
+~~~sh
+csvcut -c 'Date received' cfpb-complaints.csv | ack -o '\d{4}$' |
+  sort | uniq -c 
+~~~
+
+
+~~~stdout
+2549 2011
+72524 2012
+108273 2013
+153151 2014
+168631 2015
+37971 2016
+~~~
+
+
+~~~sh
+csvcut -c 'Date received,Company' cfpb-complaints.csv | 
+  ack 'Experian' |
+  ack -o '/\d{4}' |
+  sort | uniq -c 
+~~~
