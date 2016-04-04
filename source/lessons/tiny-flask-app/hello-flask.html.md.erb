@@ -1,0 +1,189 @@
+---
+title: Hello Tiny Flask App
+description: Let's make a small Python-powered web app with Flask and watch movies all day.
+---
+
+This is a slimmed-down version for [NICAR's First News App](http://first-news-app.readthedocs.org/en/latest/). The overall concept is the same but I'll try to present the bare minimum of configuration.
+
+Here's what I skip:
+
+- All the `virtualenv` commands, which is used to create a separate environment where additional Python libraries can be installed for a specific project/app that we're working without causing conflicts with the rest of the system...but that's a very, very low priority for us right now.
+- git and Github -- we're just playing around on a lone test project. No need to worry about version control.
+
+
+Basically, skip to the heading titled, [Act 2: Hello Flask](http://first-news-app.readthedocs.org/en/latest/#act-2-hello-flask)
+
+
+If you are running [__Anaconda__](https://www.continuum.io/downloads), you shouldn't have to install Flask via pip, but it won't hurt either:
+
+      pip install Flask
+
+
+# Keyboard practice
+
+- Besides the browser you're reading this webpage on, open a new browser (i.e. Chrome if you're currently using Safari)
+- Pop open your text editor to an empty project
+- Create a new file (Cmd + N)
+- Save it (as app.py)
+- Use Cmd-Tab 
+
+
+
+## app.py
+
+The core of a Flask application is a file named `app.py`. Think of it as short for, _application_.
+
+Add this line to bring in the Flask library:
+
+~~~py
+from flask import Flask
+~~~
+
+Then, instantiate a `Flask` object and assign it to the `app` variable.
+
+~~~py
+app = Flask(__name__)
+~~~
+
+Finally, add this:
+
+~~~py
+if __name__ == '__main__':
+    app.run()
+~~~
+
+
+The result will be this error message:
+
+![image 404-localhost.png](/files/images/tiny-flask-app/404-localhost.png)
+
+# Tell the webserver to quit
+
+TK
+
+Go to the Terminal window and hit Ctrl-C
+
+
+
+
+
+
+# A path and an index
+
+The web-app isn't completely broken. Visiting the root path of `localhost:5000` causes the app to respond...with a _"WTF I don't know who you are or what you want"_.
+
+So we create an `index()` function:
+
+~~~py
+@app.route("/")
+def index():
+    return "Hello world!"
+~~~
+
+
+
+## What is app.py, redux
+
+
+~~~py
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    return "Hello world!"
+
+if __name__ == '__main__':
+    app.run()
+~~~
+
+
+## Restart the server
+
+tk with python app.py
+
+
+Then Reload the browser.
+
+## Change the message
+
+- shut off the server
+- change the message
+
+~~~py
+def index():
+    print "Hello and goodbye world!"
+~~~
+
+
+- restart the server
+
+
+
+## Add the reloader
+
+As with all things inconvenient, someone has come up with a system to streamline the reloading process:
+
+
+
+
+
+
+
+
+
+
+
+## Please return something
+
+A segue: note that these routing functions, e.g. `index()`, must _return_ a value. Your `print()` function has no power here:
+
+~~~py
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    print "Hello and goodbye world!"
+
+if __name__ == '__main__':
+    app.run()
+~~~
+
+
+
+# Playing with text and HTML
+
+While text is fun, it's not HTML, per se. For example, HTML _ignores_ (consecutive) whitespace and newlines:
+
+
+
+
+
+## Simple webpage
+
+http://stackoverflow.com/questions/11942116/is-this-minimalist-html5-markup-valid
+
+
+~~~py
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    return """
+      <!DOCTYPE html>
+      <title>My webpage</title>
+      <body>
+          <h1>Hello</h1> 
+          <h2>world!</h2>
+      </body>"""
+
+if __name__ == '__main__':
+    app.run(use_reloader=True)
+~~~
+
+
+As you can see, things are starting to get messy. That's why the [First News App example](http://first-news-app.readthedocs.org/en/latest/#act-3-hello-html) suggests creating a new folder, `templates/` with a new file named `index.html`.
+
+But we don't need such organization. We're pretty much done here. It is absolutely essential, however that you understand that `index()`, and other router functions like it, return _text_, whether you do it our crude way 

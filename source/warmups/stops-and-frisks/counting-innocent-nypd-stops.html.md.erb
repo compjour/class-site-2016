@@ -1,0 +1,294 @@
+---
+title: Counting the innocent stops by the NYPD
+description: Sample code for counting number of innocents stopped in NYPD stop and frisks and comparing to NYCLU numbers.
+---
+
+Comparing against these numbers:
+
+http://www.nyclu.org/content/stop-and-frisk-data
+
+
+# Step by step
+
+## Downloading just the 2015 file
+
+~~~py
+
+import requests
+
+zip_url ='http://www.nyc.gov/html/nypd/downloads/zip/analysis_and_planning/2015_sqf_csv.zip'
+
+print("Downloading", zip_url)
+resp = requests.get(zip_url)
+with open('2015.zip', 'wb') as z:
+    print("Saving", len(resp.content), 'bytes to file:', '2015.zip')
+    z.write(resp.content)
+~~~
+
+## Unzip the file
+
+~~~py
+from shutil import unpack_archive
+print("Unzipping", '2015.zip')
+unpack_archive('2015.zip')
+~~~
+
+This results in a file named `'2015_sqf_csv.csv'` being dumped in the local directory (predicting that filename is actually annoying difficult, but we ignore that problem for now)
+
+## Count up the rows
+
+
+Open up and read the file. Then [use Python's CSV library](https://docs.python.org/3/library/csv.html) to deserialize the text as a __list__:
+
+~~~py
+from csv import DictReader
+with open('2015_sqf_csv.csv', 'r') as rf:
+    datarows = list(DictReader(rf))
+~~~
+
+Then use the `len()` function and arithmetic to get the calculation
+
+~~~py
+
+total_stops = len(datarows)
+print("Total stops", total_stops)
+
+# calculate number of arrests or summons issued
+actions_taken = 0
+for d in datarows:
+    if d['arstmade'] == 'Y' or d['sumissue'] == 'Y':
+        actions_taken += 1
+
+# "innocent" stops are the total stops that didn't result in an arrest or summons
+innocents_stopped = total_stops - actions_taken
+print("Number of innocent stops:", innocents_stopped)
+
+# calculate "innocents" pct
+innocents_pct = 100 * innocents_stopped / total_stops
+print("Percentage of innocent stops:",  round(innocents_pct, 1))
+~~~
+
+
+
+# More organized solution
+
+
+## Download
+
+This time, we use variable names to keep track of the downloaded zip file...we want to avoid repeating string literals, e.g. `2015.zip`, as much as possible.
+
+We also create a subdirectory to store the data, `mydata/fetched/2015`...which will make sense when we need to download all the files for all the years.
+
+~~~py
+import requests
+from os import makedirs
+from os.path import join
+year = str('2015')
+base_zip_url = 'http://www.nyc.gov/html/nypd/downloads/zip/analysis_and_planning/' 
+zip_url = base_zip_url + year + '_sqf_csv.zip'
+
+# make the directory
+my_data_dir = join('mydata', 'fetched', year)
+makedirs(my_data_dir, exist_ok=True)
+
+# path will be: mydata/fetched/2015/2015.zip
+zip_fname = join(my_data_dir, year + '.zip')
+
+print("Downloading", zip_url)
+resp = requests.get(zip_url)
+with open(zip_fname, 'wb') as z:
+    print("Saving", len(resp.content), 'bytes to file:', zip_fname)
+    z.write(resp.content)
+~~~
+
+
+## Unzip
+
+Pretend this was in its own separate file -- hence, the reinitialization of `year` and other variables:
+
+
+~~~py
+from shutil import unpack_archive
+from os.path import join
+year = str('2015')
+my_data_dir = join('mydata', 'fetched', year)
+zip_fname = join(my_data_dir, year + '.zip')
+print("Unzipping", zip_fname, "to directory", my_data_dir)
+unpack_archive(zip_fname, extract_dir=my_data_dir)
+~~~
+
+
+
+
+### Parse and count
+
+
+Pretend this was in its own separate file -- hence, the reinitialization of `year` and other variables:
+
+
+~~~py
+from glob import glob
+from csv import DictReader
+
+my_files_path = join('mydata', 'fetched', '*', '*.csv')
+my_filenames = glob(my_files_path)
+for fname in my_filenames:
+  with open(fname, 'r') as rf:
+      print("Opening", fname)
+      datarows = list(DictReader(rf))    
+
+      total_stops = len(datarows)
+      print("Total stops", total_stops)
+
+      # calculate number of arrests or summons issued
+      actions_taken = 0
+      for d in datarows:
+          if d['arstmade'] == 'Y' or d['sumissue'] == 'Y':
+              actions_taken += 1
+
+      # "innocent" stops are the total stops that didn't result in an arrest or summons
+      innocents_stopped = total_stops - actions_taken
+      print("Number of innocent stops:", innocents_stopped)
+
+      # calculate "innocents" pct
+      innocents_pct = 100 * innocents_stopped / total_stops
+      print("Percentage of innocent stops:",  round(innocents_pct, 1))
+~~~
+
+
+
+
+# All together, all years
+
+What was the point of all that abstraction and organization? Now it's pretty simple to throw all of it into one big for-loop. Here's how to do that analysis for _every_ year -- including the downloading, unpacking, and counting parts:
+
+## Download
+
+
+~~~py
+import requests
+from os import makedirs
+from os.path import join
+for yr in range(2003, 2016):
+    year = str(yr)
+    base_zip_url = 'http://www.nyc.gov/html/nypd/downloads/zip/analysis_and_planning/' 
+    zip_url = base_zip_url + year + '_sqf_csv.zip'
+
+    # make the directory
+    my_data_dir = join('mydata', 'fetched', year)
+    makedirs(my_data_dir, exist_ok=True)
+
+    # path will be: mydata/fetched/2015/2015.zip
+    zip_fname = join(my_data_dir, year + '.zip')
+
+    print("Downloading", zip_url)
+    resp = requests.get(zip_url)
+    with open(zip_fname, 'wb') as z:
+        print("Saving", len(resp.content), 'bytes to file:', zip_fname)
+        z.write(resp.content)
+~~~
+
+
+## Unzip
+
+
+~~~py
+from shutil import unpack_archive
+from os.path import join
+for yr in range(2003, 2016):
+    year = str(yr)
+    my_data_dir = join('mydata', 'fetched', year)
+    zip_fname = join(my_data_dir, year + '.zip')
+    print("Unzipping", zip_fname, "to directory", my_data_dir)
+    unpack_archive(zip_fname, extract_dir=my_data_dir)
+~~~
+
+
+## Parse and count
+
+~~~py
+from glob import glob
+from csv import DictReader
+
+my_files_path = join('mydata', 'fetched', '*', '*.csv')
+my_filenames = glob(my_files_path)
+for fname in my_filenames:
+    with open(fname, 'r', encoding='latin-1') as rf:
+        print("Opening", fname)
+        datarows = list(DictReader(rf))    
+
+        total_stops = len(datarows)
+        print("Total stops", total_stops)
+
+        # calculate number of arrests or summons issued
+        actions_taken = 0
+        for d in datarows:
+            if d['arstmade'] == 'Y' or d['sumissue'] == 'Y':
+                actions_taken += 1
+
+        # "innocent" stops are the total stops that didn't result in an arrest or summons
+        innocents_stopped = total_stops - actions_taken
+        print("Number of innocent stops:", innocents_stopped)
+
+        # calculate "innocents" pct
+        innocents_pct = 100 * innocents_stopped / total_stops
+        print("Percentage of innocent stops:",  round(innocents_pct, 1))
+~~~
+
+
+The output
+
+~~~stdout
+Opening mydata/fetched/2003/2003.csv
+Total stops 160851
+Number of innocent stops: 140442
+Percentage of innocent stops: 87.3
+Opening mydata/fetched/2004/2004.csv
+Total stops 313523
+Number of innocent stops: 278933
+Percentage of innocent stops: 89.0
+Opening mydata/fetched/2005/2005.csv
+Total stops 398191
+Number of innocent stops: 352348
+Percentage of innocent stops: 88.5
+Opening mydata/fetched/2006/2006.csv
+Total stops 506491
+Number of innocent stops: 457163
+Percentage of innocent stops: 90.3
+Opening mydata/fetched/2007/2007.csv
+Total stops 472096
+Number of innocent stops: 410936
+Percentage of innocent stops: 87.0
+Opening mydata/fetched/2008/2008.csv
+Total stops 540302
+Number of innocent stops: 474387
+Percentage of innocent stops: 87.8
+Opening mydata/fetched/2009/2009.csv
+Total stops 581168
+Number of innocent stops: 510742
+Percentage of innocent stops: 87.9
+Opening mydata/fetched/2010/2010.csv
+Total stops 601285
+Number of innocent stops: 518849
+Percentage of innocent stops: 86.3
+Opening mydata/fetched/2011/2011.csv
+Total stops 685724
+Number of innocent stops: 605328
+Percentage of innocent stops: 88.3
+Opening mydata/fetched/2012/2012.csv
+Total stops 532911
+Number of innocent stops: 473644
+Percentage of innocent stops: 88.9
+Opening mydata/fetched/2013/2013.csv
+Total stops 191851
+Number of innocent stops: 169662
+Percentage of innocent stops: 88.4
+Opening mydata/fetched/2014/2014.csv
+Total stops 45787
+Number of innocent stops: 37744
+Percentage of innocent stops: 82.4
+Opening mydata/fetched/2015/2015_sqf_csv.csv
+Total stops 22563
+Number of innocent stops: 18066
+Percentage of innocent stops: 80.1
+~~~

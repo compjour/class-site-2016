@@ -1,0 +1,75 @@
+
+
+
+[Pockets of City See Higher Use of Force During Police Stops](http://www.nytimes.com/2012/08/16/nyregion/in-police-stop-data-pockets-where-force-is-used-more-often.html)
+
+
+> The 46th Precinct has about 128,000 residents and includes the predominantly black and Hispanic neighborhoods of University Heights, Morris Heights and Fordham. Officers used force in __58 percent of stops last year__, the highest rate of any of the city’s 76 precincts, according to The Times’s analysis. 
+
+
+This assumes you have a file named `'2011.csv'`
+
+~~~py
+from csv import DictReader
+csv_fname = '2011.csv'
+with open(csv_fname, 'r', encoding='latin-1') as rf:
+    datarows = list(DictReader(rf))
+
+pct_num = str(46)
+precinct_rows = []
+for d in datarows:
+    if d['pct'].strip() == pct_num:
+        precinct_rows.append(d)
+
+force_count = 0
+for d in precinct_rows:
+    was_force_used = None
+    for header, value in d.items():
+        if 'pf_' in header:
+            if value == 'Y':
+                was_force_used = True
+    if was_force_used:
+        force_count += 1
+
+print("Total stops in precinct:", len(precinct_rows))
+print("Stops with force used:", force_count)        
+print("Pct force used:", round(100 * force_count / len(precinct_rows) ))
+~~~
+
+
+
+Using glob
+
+
+
+~~~py
+from csv import DictReader
+from glob import glob
+from os.path import join
+my_filenames = join('mydata', 'fetched', '*', '*.csv')
+
+for csv_fname in glob(my_filenames):
+    with open(csv_fname, 'r', encoding='latin-1') as rf:
+        print(csv_fname)
+        datarows = list(DictReader(rf))
+
+        pct_num = str(46)
+        precinct_rows = []
+        for d in datarows:
+            if d['pct'].strip() == pct_num:
+                precinct_rows.append(d)
+
+        force_count = 0
+        for d in precinct_rows:
+            was_force_used = None
+            for header, value in d.items():
+                if 'pf_' in header:
+                    if value == 'Y':
+                        was_force_used = True
+            if was_force_used:
+                force_count += 1
+
+        print("Total stops in precinct:", len(precinct_rows))
+        print("Stops with force used:", force_count)        
+        print("Pct force used:", round(100 * force_count / len(precinct_rows)))
+~~~

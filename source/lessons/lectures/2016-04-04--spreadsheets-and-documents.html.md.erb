@@ -1,0 +1,164 @@
+---
+title: Lecture 2016-04-04
+description: |
+  An overview of text and text-like documents and turning them into data 
+---
+
+
+
+# Homework 
+
+#### Due Wednesday, 2016-04-06 23:59 (but try to have it done before class so you can ask questions)
+
+
+## 0. Read the following and be prepared to discuss
+
+- [Pharmaceutical Company Payments to Physicians Early Experiences With Disclosure Laws in Vermont and Minnesota](http://jama.jamanetwork.com/article.aspx?articleid=206127) via JAMA, March 21, 2007
+- [Psychiatrists Top List in Drug Maker Gifts](http://www.nytimes.com/2007/06/27/health/psychology/27doctors.html) via New York Times, June 6, 2007
+- [Researchers Fail to Reveal Full Drug Pay](http://www.nytimes.com/2008/06/08/us/08conflict.html), via New York Times, June 8, 2008
+- [Data on Fees to Doctors Is Called Hard to Parse](http://www.nytimes.com/2010/04/13/business/13docpay.html), via New York Times, April 12, 2010
+- [Docs on Pharma Payroll Have Blemished Records, Limited Credentials](https://www.propublica.org/article/dollarcs-to-doctors-physician-disciplinary-records) via ProPublica, October 10, 2010
+
+
+## 1. Aggregate and inspect healthcare data breach records
+
+- Download the __CSV__ version of the data from the [U.S. Department of Health and Human Services Office for Civil Rights database of Breaches Affecting 500 or More Individuals](http://www.hhs.gov/hipaa/for-professionals/breach-notification/index.html)
+
+In an email to (dun@stanford.edu), send in free-form letter (text, attachments, etc):
+
+- The total the number of individuals affected.
+- A chart showing the number of individuals affected by year.
+- An _attempt_ at ascertaining whether or not electronic records are more prone to violation than non-electronic records.
+- A paragraph or so explaining why it is difficult to ascertain _any_ paper vs. electronic trend, in terms of pure numbers. This includes thinking about the limitations of the data and how it was collected and recorded.
+
+## 2. Aggregate the job losses as recorded by the California WARN act
+
+__Write a Python script that__:
+
+- Downloads all of the PDF WARN reports for California, which can be found here: [http://www.edd.ca.gov/jobs_and_training/Layoff_Services_WARN.htm](http://www.edd.ca.gov/jobs_and_training/Layoff_Services_WARN.htm)
+- Extracts tabular data from each PDF and serializes it as CSV (i.e. saves it as a CSV file). You can save all to one CSV file. Or make a CSV file for each PDF. Note that you're going to run into a data "uncleanliness" issue, in which the columns aren't correctly translated across each PDF.
+- Use Excel (or you can do it in Python, though you'll have to deal with various text/typecasting errors) to open that file and aggregate that total number of jobs lost.
+
+Note: you will probably want to have the [pdfplumber library for Python installed](https://github.com/jsvine/pdfplumber)...which you should be able to do by running the following command at your Terminal/system shell:
+
+      pip install pdfplumber
+
+(Please email me if you have problems with this)
+
+Here's some code snippets on how to use pdfplumber with the California WARN act PDFs:
+
+
+[https://gist.github.com/dannguyen/4263ceb99365def49fba78df59a8d23c](https://gist.github.com/dannguyen/4263ceb99365def49fba78df59a8d23c)
+
+
+
+Send me another email with: 
+
+- your Python code for downloading the PDFs and converting to CSV/text
+- the CSV file(s) you created
+- the total number of California job losses you calculated
+
+
+## 3. Download and process a data file from another state's WARN Act
+
+Google for another state that posts its WARN acts. Convert one of its PDFs into CSV and total up the job losses in that PDF. Or, better yet, find a state that reports the data in a better format than CSV.
+
+Send me another email with:
+
+- Your relevant Python code (for downloading the data)
+- The CSV file you created, if any
+- The total number of jobs listed in that particular report
+
+
+---------------
+
+
+
+
+# Notes
+
+
+## Example answers to number of "innocents" stopped by NYPD Stop and Frisk
+
+The code here shows how to count "innocents": basically, filter for all stops in which both the `'arstmade'` and `'sumissue'` are _not_ equal to `'Y'`:
+
+[Warmup exercise: Counting the innocent stops by the NYPD](/warmups/stops-and-frisks/counting-innocent-nypd-stops)
+
+This is something we learn from [the data schema provided by the NYPD](http://www.nyc.gov/html/nypd/html/analysis_and_planning/stop_question_and_frisk_report.shtml).
+
+
+## The problem with PDFs
+
+The Wall Street Journal has mass-downloaded the tens of thousands of scanned PDFs of [Secretary Clinton emails and uploaded them to a viewer (which has links to the zip files)](http://graphics.wsj.com/hillary-clinton-email-documents/):
+
+![image wsj-clinton-emails.jpg](/files/pdf-explorations/images/wsj-clinton-emails.jpg)
+
+You can see their Github repo of Python scraping code here: [https://github.com/wsjdata/clinton-email-cruncher](https://github.com/wsjdata/clinton-email-cruncher).
+
+
+### Governor Sarah Palin's emails
+
+Back when Governor Palin was running for VP, [her emails were also FOIAed. And they, too, were printed out, redacted, and [then scanned back in digitally](https://www.washingtonpost.com/palinemails/).
+
+Here's what the extracted text of a digital scan looks like, thanks to the inaccuracies of optical character recognition (OCR) technology:
+
+~~~
+Best wishes, Louis
+
+Kelli Adams-Jenkinson
+Assistant to Ambassador Louis Susman
+24 Grosvenor Square
+London W1A 1AE
+020-7894-0214
+adamskc3@state.clov
+~~~
+
+
+Compared it to the scanned text:
+
+![image clinton-ocr-state.clov.jpg](/files/pdf-explorations/images/clinton-ocr-state.clov.jpg)
+
+BTW, here's the full PDF of that email. See if you can spot the other mistranslations:
+
+[http://stash.compjour.org/samples/pdfs/clinton-emails/HRCEmail_DecWeb/C05788935.pdf](http://stash.compjour.org/samples/pdfs/clinton-emails/HRCEmail_DecWeb/C05788935.pdf)
+
+## Examples of PDFs/emails in which digital files were uploaded
+
+- [Enron emails, as preserved for study](https://www.cs.cmu.edu/~./enron/)
+- Jeb W. Bush ([as archived by the American Bridge PAC](https://americanbridgepac.org/jeb-bushs-gubernatorial-email-archive/))
+- [Rod Blagojevich's Motion to Subpoena President Barack Obama](http://media.apps.chicagotribune.com/docs/obama-subpoena.html) -- download the PDF here and see if [you notice a problem](https://assets.documentcloud.org/documents/1754/motion-to-subpoena-barack-obama.pdf).
+
+Can you _see_ the problem with Blagojevich's document? If not, that's the problem (and an answer to why digital scans are usually uploaded):
+
+![image blago-non-redacts.png](/files/pdf-explorations/images/blago-non-redacts.png)
+
+
+# Having data our way
+
+Extracting messy text and turning it into structured data and machine-readable text formats (e.g. CSV, JSON) will generally be the hardest problem that we face. However, even when the data already comes as non-scanned PDFs...or perfectly seeming HTML files (which we can "web-scrape")...or even as raw CSVs...there's still a lot of work to wrangle the data.
+
+# Medical records breach data
+
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">Seen in my doctor&#39;s office: <a href="https://t.co/LhXkjKvhQd">pic.twitter.com/LhXkjKvhQd</a></p>&mdash; Steven Bellovin (@SteveBellovin) <a href="https://twitter.com/SteveBellovin/status/712660040163962880">March 23, 2016</a></blockquote>
+<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+# California WARN ACT PDFs
+
+
+These are tables...but they're PDFs. Why do organizations make PDFs when they're so hard to parse?
+
+[http://www.edd.ca.gov/jobs_and_training/Layoff_Services_WARN.htm](http://www.edd.ca.gov/jobs_and_training/Layoff_Services_WARN.htm)
+
+
+# Pfizer Doctor Payments
+
+[Even a nice looking website like this Pfizer site has inherent problems](http://exthcpui.pfizer.com:84/HCPDisclosureWebApplication/jsp/payments_report.jsp?enPdNm=All&iPageNo=1):
+
+![image pfizer-pharma.png](/files/pdf-explorations/images/pfizer-pharma.png)
+
+
+Via the New York Times: [Data on Fees to Doctors Is Called Hard to Parse](http://www.nytimes.com/2010/04/13/business/13docpay.html), April 12, 2010
+
+
+
+

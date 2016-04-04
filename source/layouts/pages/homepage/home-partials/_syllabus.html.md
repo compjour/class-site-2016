@@ -31,6 +31,7 @@ Due on __Monday__, via today's lesson plan:
 
 #### April 4 / April 6
 
+[April 4 Lecture and Homework](/lessons/lectures/2016-04-04--spreadsheets-and-documents)
 
 
 We'll continue reviewing the Python programming fundamentals, in the service of deserializing text into data structures, and, when necessary, turning data structures into text files, particularly formatted as CSV and JSON.
