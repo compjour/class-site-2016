@@ -5,6 +5,7 @@ require 'lib/general_helpers/site_config_helpers'
 require 'lib/general_helpers/markup_helpers'
 require 'lib/custom_helpers/asciinema_helper'
 require 'lib/custom_helpers/toc_helper'
+require 'lib/custom_helpers/card_helpers'
 
 
 module GeneralHelpers
@@ -16,5 +17,6 @@ module GeneralHelpers
     include GeneralHelpers::SiteConfigHelpers
     include AsciinemaHelper
     include TocHelper
+    include CardHelpers
 
 end

@@ -5,19 +5,17 @@ has_header: false
 page_class: home
 ---
 
-<section>
-<h2>For today</h2>
+<% content_card 'Agenda' do %>
+  <h2>For today</h2>
 
-<a href="/lessons/lectures/2016-04-04--spreadsheets-and-documents/">April 4 Lecture and Homework</a>
-
-
-<h3>Last Week</h3>
-
-<p><a href="/lessons/static/where-is-nypd-stop-and-frisks">Practice examining NYPD Stop and Frisk Data using interactive Python.</a></p>
+  <a href="/lessons/lectures/2016-04-04--spreadsheets-and-documents/">April 4 Lecture and Homework</a>
 
 
+  <h3>Last Week</h3>
 
-</section>
+  <p><a href="/lessons/static/where-is-nypd-stop-and-frisks">Practice examining NYPD Stop and Frisk Data using interactive Python.</a></p>
+
+<% end %>
 
 
 <section class="sec">
@@ -94,8 +92,8 @@ page_class: home
 
 
 
-<section class="syllabus">
+  <section class="syllabus">
 
-<%= partial '/layouts/pages/homepage/home-partials/syllabus' %>
+  <%= partial '/layouts/pages/homepage/home-partials/syllabus' %>
 
-</section>
+  </section>
