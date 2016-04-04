@@ -1,0 +1,38 @@
+.content-card{
+  @extend .card;
+  border: thin solid #aaa;
+  .body{
+    @extend .card-block;
+  }
+
+  .body:first-child{
+    padding-top: 1.0rem;
+  }
+
+  .header{
+    @extend .card-header;
+    @extend .h5;
+    background: black;
+    font-weight: bold;
+    color: white;
+    border: thin solid #777;
+
+  }
+}
+
+
+.content-card-minimal{
+  @extend .content-card;
+
+  .header{
+    background: inherit;
+    border: 0;
+    color: inherit;
+    @extend .h6;
+  }
+
+  .body{
+    padding-bottom: 1.0rem;
+    padding-top: 1.0rem;
+  }
+}

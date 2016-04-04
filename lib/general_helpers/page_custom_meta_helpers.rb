@@ -1,5 +1,5 @@
-# module GeneralHelpers
-#   module PageCustomMetaHelpers
+module GeneralHelpers
+  module PageCustomMetaHelpers
 
 #     def page_sequence
 #       _current_page_data.sequence
@@ -18,10 +18,10 @@
 #     end
 
 
-#     def page_toc?
-#       _current_page_data.hide_toc != true
-#     end
+    def page_toc?
+      _current_page_data.hide_toc != true
+    end
 
 
-#   end
-# end
+  end
+end

@@ -1,0 +1,23 @@
+footer.site-footer{
+  font-family: $font-family-sans-serif;
+  border-top: thin solid #bbb;
+  margin-top: 3.0em;
+  min-height: 4.0em;
+  padding-top: 3.0em;
+  padding-bottom: 5.0em;
+  background: black;
+
+  //TODO: uh there has to be a more modular way to hook into the bg-primary module
+  a:link, a:visited, a:hover{
+    color: white;
+    text-decoration: none;
+  }
+
+  a:link{
+    padding: 1px 2px;
+  }
+
+  .title{
+    font-family: $font-family-headings;
+  }
+}

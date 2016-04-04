@@ -1,0 +1,16 @@
+header.site-header{
+  margin-bottom: 0;
+  min-height: $header-height;
+  padding: 0.25em 0;
+  background: white;
+
+  &.navbar{
+    border-bottom: thin solid #ddd;
+  }
+
+  .site-title{
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: black;
+  }
+}

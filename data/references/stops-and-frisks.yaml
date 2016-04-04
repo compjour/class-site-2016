@@ -5,8 +5,6 @@
     Internet Archive
   slug: archive_2013_broadwayworld_giancorlo_esposito
 
-
-
 - title: "‘Breaking Bad’ Star Giancarlo Esposito and the Healing Power of Gus Fring"
   url: http://www.thewrap.com/tv/article/breaking-bads-giancarlo-esposito-and-healing-power-gus-fring-44131/
   description: |
@@ -15,8 +13,8 @@
   slug: giancarlo_esposito_the_wrap_interview
 
 
-- title: 'The Hunted and the Hated: An Inside Look at the NYPD's Stop-and-Frisk Policy'
-  url: https://www.youtube.com/watch?v=7rWtDMPaRD8
+- title: "The Hunted and the Hated: An Inside Look at the NYPD's Stop-and-Frisk Policy"
+  url: 'https://www.youtube.com/watch?v=7rWtDMPaRD8'
   publisher: The Nation
   slug: the_nation_hunted_hated_stop_frisk_video
   description: |
