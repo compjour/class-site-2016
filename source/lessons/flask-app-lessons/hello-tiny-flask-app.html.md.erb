@@ -1,0 +1,273 @@
+---
+title: Hello Tiny Flask App
+description: (draft) Let's make a small Python-powered web app with Flask and watch videos all day.
+summary: |
+  An short introduction to web application development using the [Flask Python "microframework"](http://flask.pocoo.org/). Although a web application is by no means the only or best means of digital publishing, knowing how to build one can help you think in more data-centric ways, while also forcing you to think about user interfaces and experiences.
+
+  In this tutorial, we just get acquainted with the basic conventions of Flask and web application development.
+---
+
+# Installing Flask
+
+If you are running [__Anaconda__](https://www.continuum.io/downloads), you shouldn't have to install Flask via __pip__. But just in case you don't, run this from your shell: 
+
+      pip install Flask
+
+As with any other library, if it's already installed, you won't break anything (hopefully).
+
+## Getting a proper text editor
+
+You're going to want to do this with a proper text editor, such as [Sublime Text 3](https://www.sublimetext.com/3) (do _not_ download Sublime Text 2), which comes with a 30-day free period and an occasional (ignorable) reminder afterwards. Or, you could go with [Github's free Atom editor](https://atom.io/).
+
+In this tutorial, we'll be making a one-page web app. Though, if you peruse other Flask apps, such as [NICAR's First News App tutorial](http://first-news-app.readthedocs.org/en/latest/) that this is based off of, you'll see that a web app consists of several files and folders.
+
+
+
+## Learning from the official documentation
+
+The Flask documentation is great; there's even a Quickstart section titled, [A Minimal Application](http://flask.pocoo.org/docs/0.10/quickstart/#a-minimal-application). Our tiny Flask app basically follows its lead, with a few modifications that you should be able to understand and tweak yourself.
+
+
+
+
+# Creating app.py
+
+Let's get started
+
+The core of a Flask application is a file named __app.py__; think of it as short for, _application_.
+
+In your text-editor, create a new file named __app.py__ -- and keep track of where you save it, because you will need to be able to activate it from the command-line like so:
+
+~~~sh
+    python app.py
+~~~
+
+(We'll get to that in a minute)
+
+## Importing the Flask library
+
+As with all functionality that goes beyond Python's standard library, we need an import statement to bring in Flask. Add this to the top of __app.py__:
+
+~~~py
+from flask import Flask
+~~~
+
+## Instantiate
+
+Then, instantiate a `Flask` object (technically, a `flask.app.Flask` object) and assign it to an easy-to-remember variable; people seem to go for the simple label of: `app`: 
+
+~~~py
+app = Flask(__name__)
+~~~
+
+Don't worry about that `__name__` object, it's just a convention. 
+
+
+Finally, add this:
+
+~~~py
+if __name__ == '__main__':
+    app.run()
+~~~
+
+The above snippet is yet another common Python convention, one that you can get by with just memorizing rather than fully understanding...though at some point, if you're curious:
+
+- [Stack Overflow: What does `if __name__ == “__main__”:` do?](http://stackoverflow.com/questions/419163/what-does-if-name-main-do)
+- [Python documentation: `__main__`](https://docs.python.org/3/library/__main__.html)
+
+# First try at app.py
+
+All together, this is what your __app.py__ file should look like:
+
+~~~py
+from flask import Flask
+app = Flask(__name__)
+
+if __name__ == '__main__':
+    app.run()
+~~~
+
+
+Save the file. Then jump into your command-line and change into the directory that __app.py__ exists.
+
+## Running a Flask app
+
+Running your Flask app is no different than running any other Python script. Go to your system shell and run:
+
+~~~sh
+python app.py
+~~~
+
+But unlike your typical Python script, this script, thanks to the Flask library, will start a local webserver. You should see this message:
+
+~~~py
+ * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
+~~~
+
+Here's an animated version of the process:
+
+<%= asciinema_player '/files/flask-app-lessons/asciinema/starting-localhost.json', '$ python app.py', height: 10 %>
+
+
+
+What does that mean? It means if you visit that URL in your web browser (`127.0.0.1` always refers to _your own machine_), you'll see your brand new web app!
+
+# Your first Flask error
+
+Visiting [http://127.0.0.1:5000/](http://127.0.0.1:5000/) (or, if you prefer the human-readable equivalent: [localhost:5000](localhost:5000)) will result in an error message being displayed in your __web browser__:
+
+![image 404-localhost.png](/files/flask-app-lessons/images/404-localhost.png)
+
+
+
+
+## Tell the webserver to quit
+
+Our app is a joke. Time to abort. Hit __Ctrl-C__ to break out of this unwanted sequence (this, or any other system process):
+
+<%= asciinema_player '/files/flask-app-lessons/asciinema/ending-404-localhost.json', '* Running on http://127.0.0.1:5000/', height: 10 %>
+
+Note how visiting your web app at `127.0.0.1:5000` resulted in a couple of server messages:
+
+~~~sh
+127.0.0.1 - - [04/Apr/2016 18:34:53] "GET / HTTP/1.1" 404 -
+127.0.0.1 - - [04/Apr/2016 18:34:53] "GET /favicon.ico HTTP/1.1" 404 -
+~~~
+
+You're basically a system devops watching traffic hit your webserver...in this case, you're seeing the error messages (note the `404`).
+
+
+
+# A path and an index
+
+So why did our web app return a 404 page? Because our app literally has no "pages" -- you saw the 4 lines of code we've produced so far.
+
+Part of what makes a web app a web app is that it has _routes_. When you visit `http://www.nytimes.com/` -- i.e. its _homepage_ -- the NYT webserver is directing you to what's commonly known as an __index page__. When you visit the URL `http://www.nytimes.com/pages/world`, the `pages/world` path let's the webserver know that we want to be routed to wherever the _World_ news section is on the NYT's great big webserver in the sky.
+
+Right now, our web app doesn't even have the default route -- again, what many people refer to as the __index page__  or __homepage__ -- which is what the user (i.e. us, the app maker) should wee when visiting `http://127.0.0.0.1/`.
+
+Segue: if you're really new to web development, visit [http://127.0.0.0.1/](http://127.0.0.0.1/) while your web server is shut off. You'll get a wholly different kind of _"WTF are you looking for?"_ error.
+
+
+Visiting the root path of `localhost:5000` causes the app to respond...with a _"WTF I don't know who you are or what you want"_.
+
+
+# Creating a "homepage" route
+
+To specify a route, we need to do two things:
+
+1. Specify the __path__ that leads to the route.
+2. Specify the function that serves up the content at that route
+
+## Specifying the path string
+
+To specify a path, use this convention (the `@` sign is very important here):
+
+~~~py
+@app.route("/")
+~~~
+
+Ignore the `@app` convention for now (technically, it's called a __decorator__) and instead, pay attention to the argument we pass to its `route()` method: `"/"`. Look familiar? It's the `/` for the web domain URI at `http://127.0.0.1/`. It's simply the __path__, known as `"/"`
+
+## Specifying the function that serves a message
+
+The decorator function `@app.route()` will "decorate" the function that comes after it. In this case, it's the function that generates a _message_. What _message_? The message that the user sees in their browser when they visit `127.0.0.1/`.
+
+Does it have to be HTML? Nope. Go for the classic message:
+
+~~~py
+@app.route("/")
+def homepage():
+    return "Hello world!"
+~~~
+
+One thing to note: it doesn't matter what you call the decorated function (though obviously, call it something that makes sense to you on a second reading):
+
+~~~py
+@app.route("/")
+def booyahshaka():
+    return "Hello world!"
+~~~
+
+# A second try at running app.py 
+
+This is what __app.py__ should look like:
+
+~~~py
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def whatever_homepage_blah():
+    return "Hello world!"
+
+if __name__ == '__main__':
+    app.run()
+~~~
+
+Switch to your command-line and restart the server with:
+
+~~~sh
+python app.py
+~~~
+
+Then revisit [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
+
+Joy:
+
+![image 200-hello-world.png](/files/flask-app-lessons/images/200-hello-world.png)
+
+If you check the Terminal window for wherever you ran `python app.py`, each visit/reload of your webserver should trigger a new set of server messages:
+
+<%= asciinema_player '/files/flask-app-lessons/asciinema/starting-200-localhost-watching-traffic.json', '$ python app.py', height: 12 %>
+
+
+
+
+__A quick note about terminology and ports:__ The `5000` refers to the __port__ number on your computer, not a part of the webserver path. By default, a Flask app will run a web server on your computer at port 5000 for testing. Why `5000`? Because it's not usually taken up by other apps currently running on your system...
+
+
+
+
+
+
+# TK (to come)
+
+## Change the message
+
+- shut off the server
+- change the message
+
+~~~py
+def index():
+    print "Hello and goodbye world!"
+~~~
+
+
+- restart the server TK
+
+## Add the reloader (TK)
+
+As with all things inconvenient, someone has come up with a system to streamline the reloading process:
+
+
+## Please return something
+
+A segue: note that these routing functions, e.g. `index()`, must _return_ a value. Your `print()` function has no power here:
+
+~~~py
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    print "Hello and goodbye world!"
+
+if __name__ == '__main__':
+    app.run()
+~~~
+
+
+# Conclusion TK
+
+Next lesson: Make a simple web app that serves up actual HTML

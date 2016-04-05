@@ -2,4 +2,12 @@
   img{
     @extend .img-fluid;
   }
+
+}
+
+
+#the-page-content p img{
+  margin-top: 1.5em;
+  margin-bottom: 2.0em
+
 }

@@ -1,0 +1,37 @@
+
+
+# Playing with text and HTML
+
+While text is fun, it's not HTML, per se. For example, HTML _ignores_ (consecutive) whitespace and newlines:
+
+
+
+
+
+## Simple webpage
+
+http://stackoverflow.com/questions/11942116/is-this-minimalist-html5-markup-valid
+
+
+~~~py
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    return """
+      <!DOCTYPE html>
+      <title>My webpage</title>
+      <body>
+          <h1>Hello</h1> 
+          <h2>world!</h2>
+      </body>"""
+
+if __name__ == '__main__':
+    app.run(use_reloader=True)
+~~~
+
+
+As you can see, things are starting to get messy. That's why the [First News App example](http://first-news-app.readthedocs.org/en/latest/#act-3-hello-html) suggests creating a new folder, `templates/` with a new file named `index.html`.
+
+But we don't need such organization. We're pretty much done here. It is absolutely essential, however that you understand that `index()`, and other router functions like it, return _text_, whether you do it our crude way 
