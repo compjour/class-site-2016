@@ -1,7 +1,8 @@
 # Special config
-require "lib/general_helpers"
+require 'lib/uniform_content_resource/uniform_content_resource'
+require "lib/site_helpers"
 require "lib/site_config"
-helpers GeneralHelpers
+helpers SiteHelpers
 config[:site_config] = SiteConfig.load_site_config("./site_config.yaml")
 
 

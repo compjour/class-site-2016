@@ -1,5 +1,7 @@
-module TocHelper
-  def render_toc(opts = {})
-    partial "/layouts/partials/components/toc", locals: opts
+module CustomHelpers
+  module TocHelper
+    def render_toc(opts = {})
+      partial "/layouts/partials/components/toc", locals: opts
+    end
   end
 end

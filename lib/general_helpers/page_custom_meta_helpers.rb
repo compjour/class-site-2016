@@ -13,9 +13,9 @@ module GeneralHelpers
 #       page_sequence.previous
 #     end
 
-#     def page_mymeta
-#       _current_page_data.mymeta
-#     end
+    def page_mymeta
+      _current_page_data.mymeta
+    end
 
 
     def page_toc?

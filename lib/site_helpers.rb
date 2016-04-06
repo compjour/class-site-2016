@@ -3,9 +3,6 @@ require 'lib/general_helpers/page_custom_meta_helpers'
 require 'lib/general_helpers/page_data_helpers'
 require 'lib/general_helpers/site_config_helpers'
 require 'lib/general_helpers/markup_helpers'
-require 'lib/custom_helpers/asciinema_helper'
-require 'lib/custom_helpers/toc_helper'
-require 'lib/custom_helpers/card_helpers'
 
 
 module GeneralHelpers
@@ -15,8 +12,24 @@ module GeneralHelpers
 
     include GeneralHelpers::PageDataHelpers
     include GeneralHelpers::SiteConfigHelpers
-    include AsciinemaHelper
-    include TocHelper
-    include CardHelpers
-
 end
+
+
+require 'lib/custom_helpers/asciinema_helper'
+require 'lib/custom_helpers/card_helpers'
+require 'lib/custom_helpers/toc_helper'
+
+
+module CustomHelpers
+    include CustomHelpers::AsciinemaHelper
+    include CustomHelpers::TocHelper
+    include CustomHelpers::CardHelpers
+end
+
+require 'lib/uniform_content_resource/uniform_content_resource_helpers'
+module SiteHelpers
+  include CustomHelpers
+  include GeneralHelpers
+  include UniformContentResource::UniformContentResourceHelpers
+end
+

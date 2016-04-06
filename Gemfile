@@ -22,3 +22,4 @@ gem "middleman-sprockets", "~> 4.0.0.rc" # take this out in favor of webpack...
 gem 'middleman-pry'
 gem 'hashie'
 gem 'addressable'
+gem 'chronic'
