@@ -140,8 +140,92 @@ Hello                                            world
 
 
 
+# What is HTML
 
-&ndash; it will rend
+So if HTML is just plain text, then we can write our web app's responses as plain text strings. But what makes HTML more than just plain text is its syntax and specification, particularly, its concept of text elements enclosed in tags. 
+
+To have a browser render 2 separate lines of text, we don't rely on newline whitespace characters. We enclose the each line of text, separately, within HTML tags. Traditionally, the __paragraph__ tag -- represented by `<p>` -- is used to denote paragraphs of body text:
+
+~~~html
+<p>Hello</p>
+<p>world</p>
+~~~
+
+Add this as a string to __app.py__; I include the entirety of app.py, so far, just in case you're lost:
+
+~~~py
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def homepage():
+    return """
+    <p>Hello</p>
+    <p>world</p>
+    """
+
+if __name__ == '__main__':
+    app.run(use_reloader=True)
+~~~
+
+Reload `localhost:5000` in your browser to see the result:
+
+![image p-hello-world.png](/files/flask-app-lessons/images/p-hello-world.png)
+
+For reasons that are beyond the scope of this lesson, it is not necessary to memorize that `<p>` stands for "paragraph", or that it is the only way to denote blocks of text. Or that all browsers/sites render `<p>` the same way.
+
+It _is_ important to understand the nature of HTML and its syntax, such as how the angled brackets denote tags that are interpreted by the browser, _but are not rendered_ by the browser...i.e. the `<p>` and `</p>` parts of our web app response do not show up to the web browser user. They are code that is meant only for the browser.
+
+This concept of _what you see is not what you get_ is fundamental to understanding HTML, and well, computational languages in general. It is definitely a core concept in understanding how web scraping works...
+
+
+## Making a hyperlink
+
+We won't be learning 1% of all the menial details of HTML and its syntax. But it is important to understand one common feature: making a hyperlink. You _do_ want to memorize that the tags for hyperlinks are denoted with `<a>`. To designate that a string of text is intended to be a link to be clicked -- and also, _the destination_ of the hyperlink, we use the following syntax:
+
+~~~html
+Hello <a href="https://www.planet.com/">world</a>!!!
+~~~
+
+Alter your __app.py__:
+
+
+~~~py
+@app.route("/")
+def homepage():
+    return """
+    Hello
+    <a href="https://www.planet.com">world</a>
+    """
+~~~
+
+And the result:
+
+![image a-hello-world.png](/files/flask-app-lessons/images/a-hello-world.png)
+
+Don't worry about the _style_ of the hyperlink -- changing what it looks like is beyond the scope of our HTML lesson. But note how only the word `world` is a hyperlink. And note how, in the HTML, the `href` attribute denotes the destination, which has nothing to do with the content of the visible text itself. That is, the web page would look exactly the same if we did this:
+
+(note, again, how whitespace is insignificant in what the browser renders)
+
+~~~py
+@app.route("/")
+def homepage():
+    return """
+    Hello
+    <a href="http://www.milliondollarhomepage.com">
+      world
+    </a>
+    """
+~~~
+
+
+
+
+
+
+
+
+
 
 # Playing with text and HTML
 
@@ -180,4 +264,4 @@ if __name__ == '__main__':
 
 As you can see, things are starting to get messy. That's why the [First News App example](http://first-news-app.readthedocs.org/en/latest/#act-3-hello-html) suggests creating a new folder, `templates/` with a new file named `index.html`.
 
-But we don't need such organization. We're pretty much done here. It is absolutely essential, however that you understand that `index()`, and other router functions like it, return _text_, whether you do it our crude way 
+But we don't need such organization. We're pretty much done here. It is absolutely essential, however that you understand that `index()`, and other router functions like it, return _text_, whether you do it our crude way
