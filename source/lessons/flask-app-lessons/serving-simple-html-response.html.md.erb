@@ -14,7 +14,7 @@ See if you can create the boilerplate from memory:
 from flask import Flask
 app = Flask(__name__)
 
-@app.path('/')
+@app.route('/')
 def homepage():
     return """
     Hello world!
@@ -23,7 +23,7 @@ def homepage():
     """
 
 if __name__ == '__main__':
-    app.run(use_autoreloader=True)
+    app.run(use_reloader=True)
 ~~~
 
 And switch to the command-line and get it running:
@@ -42,7 +42,7 @@ Then visit [127.0.0.1:5000](http://127.0.0.1:5000) (i.e. [localhost:5000](http:/
 Program your __app.py__ to return a multi-line text string message for the `/` route, e.g.
 
 ~~~py
-@app.path('/')
+@app.route('/')
 def homepage():
     return """
     Hello world!
@@ -219,49 +219,66 @@ def homepage():
 ~~~
 
 
+...And this concludes the extent of the HTML knowledge that we need to cover in order to build a web application, for now. If you're really fascinated by the topic of Hypertext Markup Language, [one of the best introductions to HTML (and CSS and JS) can be found in Chapter 3 of Scott Murray's *Interactive Data Visualization*](http://chimera.labs.oreilly.com/books/1230000000345/ch03.html#_the_web), which can be read online for free.
+
+# The simplest webpage
+
+The fact that a modern web browser will actually show something for a web server response as simple as:
+
+      <p>Hello World</p>
+
+&ndash; or even, just:
+
+      Hello World
+
+Is a reflection of the fact that modern web browsers have been engineered to just "roll with it" when it comes to with malformed HTML that doesn't follow the [actual official HTML specification](https://www.w3.org/TR/html5/)...this lenient attitude is obviously not the way the Python interpreter has been designed...but it makes for a nicer user experience when visiting a webpage that is slightly _off_.
+
+When making an actual web app, though, it's worth following as much of the HTML spec as possible just so that when your served-up webpages don't act like you think they should, it won't be because you had overestimated how much the web browser would cover up for your sloppiness.
+
+So what is the most minimalist HTML document that meets the HTML5 spec? According to the answer to this Stack Overflow question:
+
+~~~html
+<!DOCTYPE html>
+<title></title>
+~~~
+
+While that's a valid webpage, it will display exactly nothing in a web browser. So here's a "fatter" webpage that contains the typical tags of most websites in production today:
 
 
+~~~html
+<!DOCTYPE html>
+<head>
+   <title>My title</title>
+</head>
+<body>  
+    <h1>Visible stuff goes here</h1>
+    <p>here's a paragraph, fwiw</p>
+</body>
+~~~
 
-
-
-
-
-
-# Playing with text and HTML
-
-While text is fun, it's not HTML, per se. For example, HTML _ignores_ (consecutive) whitespace and newlines:
-
-
-
-
-
-
-
-
-## Simple webpage
-
-http://stackoverflow.com/questions/11942116/is-this-minimalist-html5-markup-valid
-
+And here is all the code for the Flask app that produces that visible, minimal webpage:
 
 ~~~py
 from flask import Flask
 app = Flask(__name__)
 
-@app.route("/")
-def index():
+@app.route('/')
+def homepage():
     return """
-      <!DOCTYPE html>
-      <title>My webpage</title>
-      <body>
-          <h1>Hello</h1> 
-          <h2>world!</h2>
-      </body>"""
+<!DOCTYPE html>
+<head>
+   <title>My title</title>
+</head>
+<body>  
+    <h1>Visible stuff goes here</h1>
+    <p>here's a paragraph, fwiw</p>
+</body>
+    """
 
 if __name__ == '__main__':
     app.run(use_reloader=True)
 ~~~
 
 
-As you can see, things are starting to get messy. That's why the [First News App example](http://first-news-app.readthedocs.org/en/latest/#act-3-hello-html) suggests creating a new folder, `templates/` with a new file named `index.html`.
 
-But we don't need such organization. We're pretty much done here. It is absolutely essential, however that you understand that `index()`, and other router functions like it, return _text_, whether you do it our crude way
+
