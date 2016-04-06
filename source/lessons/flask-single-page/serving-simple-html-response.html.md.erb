@@ -32,7 +32,7 @@ And switch to the command-line and get it running:
 python app.py
 ~~~
 
-<%= asciinema_player '/files/flask-app-lessons/asciinema/starting-localhost.json', '$ python app.py', height: 10 %>
+<%= asciinema_player '/files/flask-single-page/asciinema/starting-localhost.json', '$ python app.py', height: 10 %>
 
 Then visit [127.0.0.1:5000](http://127.0.0.1:5000) (i.e. [localhost:5000](http://localhost:5000))
 
@@ -55,7 +55,7 @@ def homepage():
 
 No matter how many newlines of text are in your message, your web browser will render it as one single line:
 
-![image multiline-text.png](/files/flask-app-lessons/images/multiline-text.png)
+![image multiline-text.png](/files/flask-single-page/images/multiline-text.png)
 
 By default, the Flask app responds to the web browser with a heads-up that it is sending along data that should be interpreted as `"text/html"`. 
 
@@ -66,7 +66,7 @@ A quick segue that will be more relevant when we learn web-scraping: let's see t
 
 If you know how to use your [browser's developer tools](http://2015.compjour.org/tutorials/intro-to-the-web-inspector/), you can view the headers your response:
 
-![image inspector-localhost-response-type.png](/files/flask-app-lessons/images/inspector-localhost-response-type.png)
+![image inspector-localhost-response-type.png](/files/flask-single-page/images/inspector-localhost-response-type.png)
 
 Or heck, get some more Python practice in. Open up a new Terminal window/tab, jump into __ipython__ and perform a HTTP request against your local web server. Then examine the response object's headers:
 
@@ -82,7 +82,7 @@ resp.headers
 ~~~
 
 
-<%= asciinema_player '/files/flask-app-lessons/asciinema/requests-localhost-response-type.json', '$ ipython', height: 15 %>
+<%= asciinema_player '/files/flask-single-page/asciinema/requests-localhost-response-type.json', '$ ipython', height: 15 %>
 
 
 ## HTML and whitespace insensitivity
@@ -170,7 +170,7 @@ if __name__ == '__main__':
 
 Reload `localhost:5000` in your browser to see the result:
 
-![image p-hello-world.png](/files/flask-app-lessons/images/p-hello-world.png)
+![image p-hello-world.png](/files/flask-single-page/images/p-hello-world.png)
 
 For reasons that are beyond the scope of this lesson, it is not necessary to memorize that `<p>` stands for "paragraph", or that it is the only way to denote blocks of text. Or that all browsers/sites render `<p>` the same way.
 
@@ -201,7 +201,7 @@ def homepage():
 
 And the result:
 
-![image a-hello-world.png](/files/flask-app-lessons/images/a-hello-world.png)
+![image a-hello-world.png](/files/flask-single-page/images/a-hello-world.png)
 
 Don't worry about the _style_ of the hyperlink -- changing what it looks like is beyond the scope of our HTML lesson. But note how only the word `world` is a hyperlink. And note how, in the HTML, the `href` attribute denotes the destination, which has nothing to do with the content of the visible text itself. That is, the web page would look exactly the same if we did this:
 

@@ -109,7 +109,7 @@ But unlike your typical Python script, this script, thanks to the Flask library,
 
 Here's an animated version of the process:
 
-<%= asciinema_player '/files/flask-app-lessons/asciinema/starting-localhost.json', '$ python app.py', height: 10 %>
+<%= asciinema_player '/files/flask-single-page/asciinema/starting-localhost.json', '$ python app.py', height: 10 %>
 
 
 
@@ -119,7 +119,7 @@ What does that mean? It means if you visit that URL in your web browser (`127.0.
 
 Visiting [http://127.0.0.1:5000/](http://127.0.0.1:5000/) (or, if you prefer the human-readable equivalent: [localhost:5000](localhost:5000)) will result in an error message being displayed in your __web browser__:
 
-![image 404-localhost.png](/files/flask-app-lessons/images/404-localhost.png)
+![image 404-localhost.png](/files/flask-single-page/images/404-localhost.png)
 
 
 
@@ -128,7 +128,7 @@ Visiting [http://127.0.0.1:5000/](http://127.0.0.1:5000/) (or, if you prefer the
 
 Our app is a joke. Time to abort. Hit __Ctrl-C__ to break out of this unwanted sequence (this, or any other system process):
 
-<%= asciinema_player '/files/flask-app-lessons/asciinema/ending-404-localhost.json', '* Running on http://127.0.0.1:5000/', height: 10 %>
+<%= asciinema_player '/files/flask-single-page/asciinema/ending-404-localhost.json', '* Running on http://127.0.0.1:5000/', height: 10 %>
 
 Note how visiting your web app at `127.0.0.1:5000` resulted in a couple of server messages:
 
@@ -218,11 +218,11 @@ Then revisit [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
 
 Joy:
 
-![image 200-hello-world.png](/files/flask-app-lessons/images/200-hello-world.png)
+![image 200-hello-world.png](/files/flask-single-page/images/200-hello-world.png)
 
 If you check the Terminal window for wherever you ran `python app.py`, each visit/reload of your webserver should trigger a new set of server messages:
 
-<%= asciinema_player '/files/flask-app-lessons/asciinema/starting-200-localhost-watching-traffic.json', '$ python app.py', height: 12 %>
+<%= asciinema_player '/files/flask-single-page/asciinema/starting-200-localhost-watching-traffic.json', '$ python app.py', height: 12 %>
 
 
 
