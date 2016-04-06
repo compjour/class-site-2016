@@ -1,8 +1,154 @@
+---
+title: Creating a Flask app that serves HTML
+description: |
+  A Flask web application can serve up HTML webpages just as easy as "Hello world", because HTML is just text.
+---
 
+# Create a basic Flask app
+
+For this lesson, we'll start off with a boilerplate, one-file Flask app, i.e. just __app.py__. We won't worry yet about making multiple pages or multiple file.
+
+See if you can create the boilerplate from memory:
+
+~~~py
+from flask import Flask
+app = Flask(__name__)
+
+@app.path('/')
+def homepage():
+    return """
+    Hello world!
+    
+    This is my first web app!
+    """
+
+if __name__ == '__main__':
+    app.run(use_autoreloader=True)
+~~~
+
+And switch to the command-line and get it running:
+
+~~~py
+python app.py
+~~~
+
+<%= asciinema_player '/files/flask-app-lessons/asciinema/starting-localhost.json', '$ python app.py', height: 10 %>
+
+Then visit [127.0.0.1:5000](http://127.0.0.1:5000) (i.e. [localhost:5000](http://localhost:5000))
+
+
+# The limitations of text and the purpose of HTML
+
+Program your __app.py__ to return a multi-line text string message for the `/` route, e.g.
+
+~~~py
+@app.path('/')
+def homepage():
+    return """
+    Hello world!
+    
+    This is my first web app!
+
+    I'm so excited!
+    """
+~~~
+
+No matter how many newlines of text are in your message, your web browser will render it as one single line:
+
+![image multiline-text.png](/files/flask-app-lessons/images/multiline-text.png)
+
+By default, the Flask app responds to the web browser with a heads-up that it is sending along data that should be interpreted as `"text/html"`. 
+
+## Inspecting a web server's response
+
+A quick segue that will be more relevant when we learn web-scraping: let's see the metadata behind our localhost web server's response. More specifically, let's confirm that the Flask app is sending its response with the indication that it is mean to be interpreted as HTML
+
+
+If you know how to use your [browser's developer tools](http://2015.compjour.org/tutorials/intro-to-the-web-inspector/), you can view the headers your response:
+
+![image inspector-localhost-response-type.png](/files/flask-app-lessons/images/inspector-localhost-response-type.png)
+
+Or heck, get some more Python practice in. Open up a new Terminal window/tab, jump into __ipython__ and perform a HTTP request against your local web server. Then examine the response object's headers:
+
+~~~py
+import requests
+resp = requests.get("http://localhost:5000")
+resp.text
+# => "\n    Hello world!\n\n    This is my first web app!\n\n    I'm so excited!\n    "
+resp.url
+# => 'http://localhost:5000/'
+resp.headers
+# => {'Content-Type': 'text/html; charset=utf-8', 'Date': 'Tue, 05 Apr 2016 21:49:45 GMT', 'Content-Length': '74', 'Server': 'Werkzeug/0.11.3 Python/3.5.1'}
+~~~
+
+
+<%= asciinema_player '/files/flask-app-lessons/asciinema/requests-localhost-response-type.json', '$ ipython', height: 15 %>
+
+
+## HTML and whitespace insensitivity
+
+If you haven't figured it out by now, the Python language is __whitespace sensitive__; or, in other words, _white space is significant_. 
+
+Or, in more specific words: Python cares about exactly how many _consecutive_ space characters [are at the beginning of each line of code](http://stackoverflow.com/questions/13884499/what-is-python-whitespace-and-how-does-it-work).
+
+This works:
+
+~~~py
+for i in range(5):
+    print(   "Hello world"  )
+    print("for the", i, "time.")
+~~~
+
+And this throws an error:
+
+~~~py
+for i in range(5):
+    print(   "Hello world"  )
+   print("for the", i, "time.")
+~~~
+
+
+HTML, on the other hand, does _not_ care. So when a browser sees _one or more whitespace characters__ -- and __whitespace characters__ include spaces and new lines -- within a string of text, it will render those consecutive whitespaces as a single whitespace. Well, as long as those whitespace characters occur between non-whitespace characters. 
+
+This means that the following browser output:
+
+~~~
+Hello world ! ?
+~~~
+
+&ndash; can be represented by any of the following HTML strings:
+
+~~~
+ Hello     world !  ?
+~~~
+
+~~~
+  Hello
+world
+!
+?
+~~~
+
+
+~~~
+Hello                                            world 
+                  ! 
+
+
+                  ?
+~~~
+
+
+
+
+&ndash; it will rend
 
 # Playing with text and HTML
 
 While text is fun, it's not HTML, per se. For example, HTML _ignores_ (consecutive) whitespace and newlines:
+
+
+
 
 
 

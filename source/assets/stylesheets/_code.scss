@@ -1,12 +1,20 @@
 @import "syntax/monokai-theme";
 
+pre{
+  margin: $element-margins;
+}
+
 pre.highlight{
   @extend .monokai-syntax;
   background: #333;
   padding: 1.0em;
 }
 
+pre.highlight.plaintext{
+  background: #555;
+}
+
 
 pre.highlight.plaintext code, pre.repl .plaintext{
-    color: $gray-light;
+    color: $gray-lighter;
 }

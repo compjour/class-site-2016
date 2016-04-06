@@ -2,7 +2,7 @@
 title: Hello Tiny Flask App
 description: (draft) Let's make a small Python-powered web app with Flask and watch videos all day.
 summary: |
-  An short introduction to web application development using the [Flask Python "microframework"](http://flask.pocoo.org/). Although a web application is by no means the only or best means of digital publishing, knowing how to build one can help you think in more data-centric ways, while also forcing you to think about user interfaces and experiences.
+  A very tiny introduction to web application development using the [Flask Python "microframework"](http://flask.pocoo.org/). Although a web application is by no means the only or best means of digital publishing, knowing how to build one can help you think in more data-centric ways, while also forcing you to think about user interfaces and experiences.
 
   In this tutorial, we just get acquainted with the basic conventions of Flask and web application development.
 ---
@@ -11,7 +11,10 @@ summary: |
 
 If you are running [__Anaconda__](https://www.continuum.io/downloads), you shouldn't have to install Flask via __pip__. But just in case you don't, run this from your shell: 
 
-      pip install Flask
+~~~sh
+pip install Flask
+~~~
+
 
 As with any other library, if it's already installed, you won't break anything (hopefully).
 
@@ -227,47 +230,62 @@ If you check the Terminal window for wherever you ran `python app.py`, each visi
 __A quick note about terminology and ports:__ The `5000` refers to the __port__ number on your computer, not a part of the webserver path. By default, a Flask app will run a web server on your computer at port 5000 for testing. Why `5000`? Because it's not usually taken up by other apps currently running on your system...
 
 
+# Efficiently iterating on our simple app.py
 
+Our Flask app is very basic, but it's never too early to learn some good habits for app development, one line at a time.
 
+First, let's change the message that the app displays for the `"/"` route. Don't shut down your app; just switch over to your editor and make a change to __app.py__. Make it return a multi-line string (denoted with triple quotation marks, `"""`) just for kicks. 
 
-
-# TK (to come)
-
-## Change the message
-
-- shut off the server
-- change the message
+And by now, you should be comfortable with the fact that the name of the text-returning function can be completely arbitrary:
 
 ~~~py
-def index():
-    print "Hello and goodbye world!"
+@app.route("/")
+def supercalifragalistic():
+    return """Hello 
+    and 
+    goodbye world!
+???    """
 ~~~
-
-
-- restart the server TK
-
-## Add the reloader (TK)
-
-As with all things inconvenient, someone has come up with a system to streamline the reloading process:
-
 
 ## Please return something
 
-A segue: note that these routing functions, e.g. `index()`, must _return_ a value. Your `print()` function has no power here:
+A segue: note that the routing function must _return_ a value. Your `print()` function has no power here, so don't do this:
 
 ~~~py
-from flask import Flask
-app = Flask(__name__)
-
 @app.route("/")
-def index():
-    print "Hello and goodbye world!"
-
-if __name__ == '__main__':
-    app.run()
+def supercalifragalistic():
+    print("""Hello 
+    and 
+    goodbye world!
+???    """)
 ~~~
 
 
-# Conclusion TK
+## Add auto-reload to the app configuration
 
-Next lesson: Make a simple web app that serves up actual HTML
+
+
+If you reload your browser at `127.0.0.1:5000/`, you should see that _nothing has changed_. By default, a currently-running Flask app won't render changes made to its source code. You have to shut down the app's web server down with __Ctrl-C__, then restart it with `python app.py`. 
+
+And then reload the browser.
+
+As with all things inconvenient, the Flask library maintainers have come up with a way to streamline the reloading process. has come up with a way to streamline reloading for development purposes.
+
+In the call to the `app.run()` method, pass in the keyword argument, `use_reloader=True`:
+
+
+~~~py
+if __name__ == '__main__':
+    app.run(use_reloader=True)
+~~~
+
+Shut your app's web server down and restart it. Any changes you make to __app.py__ should be reflected upon reloading the browser.
+
+
+
+# Conclusion 
+
+And that's a Flask app. While we haven't done much of what normally constitutes web application development, it's important to get a feel for the bare foundation of a Flask app and what we get with a few lines of boilerplate code. 
+
+In the next lesson, we'll create an app that serves up a "proper" webpage with actual HTML. But it's important to understand that the app's routing function really just returns a __string__ object -- and thus, a "proper" webpage with "real" HTML is just a big string.
+

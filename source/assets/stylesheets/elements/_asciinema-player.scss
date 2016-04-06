@@ -2,7 +2,11 @@
   position: relative;
   text-align: center;
   outline: none;
+  margin: $element-margins;
+
 }
+
+
 .asciinema-player-wrapper .title-bar {
   display: none;
   top: -78px;
