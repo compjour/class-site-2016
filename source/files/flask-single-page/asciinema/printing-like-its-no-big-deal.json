@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "width": 80,
+  "height": 10,
+  "duration": 12.367982,
+  "command": "/bin/bash",
+  "title": "",
+  "env": {
+    "TERM": "xterm-256color",
+    "SHELL": "/bin/bash"
+  },
+  "stdout": [
+    [
+      0.009128,
+      "\u001b[?1034h"
+    ],
+    [
+      0.000021,
+      "bash-3.2$ "
+    ],
+    [
+      1.013197,
+      "p"
+    ],
+    [
+      0.145786,
+      "y"
+    ],
+    [
+      0.112620,
+      "t"
+    ],
+    [
+      0.101088,
+      "h"
+    ],
+    [
+      0.078768,
+      "o"
+    ],
+    [
+      0.089988,
+      "n"
+    ],
+    [
+      0.089869,
+      " "
+    ],
+    [
+      0.146446,
+      "a"
+    ],
+    [
+      0.101263,
+      "p"
+    ],
+    [
+      0.146167,
+      "p"
+    ],
+    [
+      0.219969,
+      "."
+    ],
+    [
+      0.173739,
+      "p"
+    ],
+    [
+      0.146302,
+      "y"
+    ],
+    [
+      0.337544,
+      "\r\n"
+    ],
+    [
+      0.220609,
+      "initiated the app! With a name of: __main__\r\n"
+    ],
+    [
+      0.000153,
+      "App is starting...I think?\r\n"
+    ],
+    [
+      0.008671,
+      " * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)\r\n"
+    ],
+    [
+      0.000648,
+      " * Restarting with stat\r\n"
+    ],
+    [
+      0.165319,
+      "initiated the app! With a name of: __main__\r\n"
+    ],
+    [
+      0.000164,
+      "App is starting...I think?\r\n"
+    ],
+    [
+      2.843975,
+      "Hey I'm visiting the homepage!\r\n"
+    ],
+    [
+      0.001828,
+      "127.0.0.1 - - [06/Apr/2016 21:23:25] \"GET / HTTP/1.1\" 200 -\r\n"
+    ],
+    [
+      2.385334,
+      "^C"
+    ],
+    [
+      0.000160,
+      "Umm...no idea what/how this message will be seen...\r\n"
+    ],
+    [
+      0.007877,
+      "Umm...no idea what/how this message will be seen...\r\n"
+    ],
+    [
+      0.021792,
+      "bash-3.2$ "
+    ]
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "width": 80,
+  "height": 15,
+  "duration": 8.839151,
+  "command": "/bin/bash",
+  "title": "",
+  "env": {
+    "TERM": "xterm-256color",
+    "SHELL": "/bin/bash"
+  },
+  "stdout": [
+    [
+      0.009387,
+      "\u001b[?1034h"
+    ],
+    [
+      0.000021,
+      "bash-3.2$ "
+    ],
+    [
+      1.556092,
+      "p"
+    ],
+    [
+      0.190809,
+      "y"
+    ],
+    [
+      0.112443,
+      "t"
+    ],
+    [
+      0.112652,
+      "h"
+    ],
+    [
+      0.067489,
+      "o"
+    ],
+    [
+      0.101282,
+      "n"
+    ],
+    [
+      0.090039,
+      " "
+    ],
+    [
+      0.123709,
+      "a"
+    ],
+    [
+      0.067475,
+      "p"
+    ],
+    [
+      0.146182,
+      "p"
+    ],
+    [
+      0.281278,
+      "."
+    ],
+    [
+      0.224967,
+      "p"
+    ],
+    [
+      0.134921,
+      "y"
+    ],
+    [
+      0.168276,
+      "\r\n"
+    ],
+    [
+      0.220651,
+      "initiated the app! With a name of: __main__\r\n"
+    ],
+    [
+      0.000129,
+      "App is starting...I think?\r\n"
+    ],
+    [
+      0.006987,
+      "Traceback (most recent call last):\r\n  File \"app.py\", line 12, in \u003cmodule\u003e\r\n"
+    ],
+    [
+      0.000149,
+      "    app.run(use_reloader=True)\r\n  File \"/Users/dtown/.pyenv/versions/anaconda3-2.5.0/lib/python3.5/site-packages/flask/app.py\", line 772, in run\r\n"
+    ],
+    [
+      0.000328,
+      "    run_simple(host, port, self, **options)\r\n  File \"/Users/dtown/.pyenv/versions/anaconda3-2.5.0/lib/python3.5/site-packages/werkzeug/serving.py\", line 675, in run_simple\r\n"
+    ],
+    [
+      0.000305,
+      "    s.bind((hostname, port))\r\nOSError: [Errno 48] Address already in use\r\n"
+    ],
+    [
+      0.021908,
+      "bash-3.2$ "
+    ]
+  ]
+}

@@ -1,10 +1,15 @@
 ---
 title: Hello Tiny Flask App
-description: (draft) Let's make a small Python-powered web app with Flask and watch videos all day.
+description: How to make the simplest of web applications in Python.
+objectives:
+    - Get introduced to the Python Flask web application framework.
+    - Build a Flask app that will respond with a simple message when visited by a web browser.
+    - Learn how to develop a Flask app, including how to run a local webserver.
+    - Learn how to debug a Flask app.
 summary: |
-  A very tiny introduction to web application development using the [Flask Python "microframework"](http://flask.pocoo.org/). Although a web application is by no means the only or best means of digital publishing, knowing how to build one can help you think in more data-centric ways, while also forcing you to think about user interfaces and experiences.
+  This is a very tiny introduction to web application development using the [Flask Python "microframework"](http://flask.pocoo.org/). A web application is by no means the only, nor the best means of digital publishing. But knowing how to build one can help you think in more data-centric ways, while also forcing you to think about user interfaces and experiences.
 
-  In this tutorial, we just get acquainted with the basic conventions of Flask and web application development.
+  In this tutorial, we just get acquainted with the basic conventions of Flask and web application development. This tutorial assumes you know a bit about Python, but virtually nothing else about the web stack, including what HTML or a web server is.
 ---
 
 # Installing Flask
@@ -22,20 +27,35 @@ As with any other library, if it's already installed, you won't break anything (
 
 You're going to want to do this with a proper text editor, such as [Sublime Text 3](https://www.sublimetext.com/3) (do _not_ download Sublime Text 2), which comes with a 30-day free period and an occasional (ignorable) reminder afterwards. Or, you could go with [Github's free Atom editor](https://atom.io/).
 
-In this tutorial, we'll be making a one-page web app. Though, if you peruse other Flask apps, such as [NICAR's First News App tutorial](http://first-news-app.readthedocs.org/en/latest/) that this is based off of, you'll see that a web app consists of several files and folders.
+In this tutorial, we'll be making a one-page web app. If you peruse other Flask apps, such as [NICAR's First News App tutorial](http://first-news-app.readthedocs.org/en/latest/), you'll see that a web app consists of several files and folders. But right now, we'll just keep things simple with a single file named __app.py__.
 
+Here's what the code for the finished web app will look like in your text editor:
+
+![image hello-world-sublime-project.png](/files/flask-single-page/images/hello-world-sublime-project.png)
+
+There's a lot of conventions and structures you probably don't know. So try to find and focus on what you _do_ know. Even if it's just this:
+
+
+~~~py
+    "Hello world!"
+~~~
 
 
 ## Learning from the official documentation
 
 The Flask documentation is great; there's even a Quickstart section titled, [A Minimal Application](http://flask.pocoo.org/docs/0.10/quickstart/#a-minimal-application). Our tiny Flask app basically follows its lead, with a few modifications that you should be able to understand and tweak yourself.
 
+## Dealing with errors
+
+Web application development is a complicated business, and you will struggle with not just avoiding typical Python programming errors, but also, web application-specific errors. The hardest part, of course, is knowing the difference when you don't know much about Python and virtually nothing about web applications.
+
+My intent is that you can complete the first parts of this tutorial without too much confusion...but I can't predict all the ways you might accidentally break things. So you might have to skip down to the [Debugging section](#mark-debugging) at the end of this tutorial if you hit a roadblock.
 
 
 
 # Creating app.py
 
-Let's get started
+Let's get started.
 
 The core of a Flask application is a file named __app.py__; think of it as short for, _application_.
 
@@ -45,7 +65,7 @@ In your text-editor, create a new file named __app.py__ -- and keep track of whe
     python app.py
 ~~~
 
-(We'll get to that in a minute)
+We'll get to that python-script-running step in a minute. First, we have to write the code for our app.
 
 ## Importing the Flask library
 
@@ -101,7 +121,7 @@ Running your Flask app is no different than running any other Python script. Go 
 python app.py
 ~~~
 
-But unlike your typical Python script, this script, thanks to the Flask library, will start a local webserver. You should see this message:
+But unlike your typical Python script, this script, thanks to the Flask library, will start a local webserver. You should see this message (I'll frequently refer to it as a __console message__):
 
 ~~~py
  * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)
@@ -115,18 +135,49 @@ Here's an animated version of the process:
 
 What does that mean? It means if you visit that URL in your web browser (`127.0.0.1` always refers to _your own machine_), you'll see your brand new web app!
 
-# Your first Flask error
 
-Visiting [http://127.0.0.1:5000/](http://127.0.0.1:5000/) (or, if you prefer the human-readable equivalent: [localhost:5000](localhost:5000)) will result in an error message being displayed in your __web browser__:
+## Your first (likely) accidental  error
+
+You might have made an error even before you tried visiting your web app with your browser. Here's a common error after running `python app.py`:
+
+~~~
+python: can't open file 'app.py': [Errno 2] No such file or directory
+~~~
+
+That error message means exactly what it says: you're trying to run a file named `app.py` but it doesn't exist. Which means you either didn't save the file properly. Or you didn't save it with the name `app.py`. Or you didn't save it to directory you _thought_ you did. Or, when opening your Terminal and trying to navigate to where you think `app.py` exists...you didn't navigate to where you had hoped to be.
+
+Use the standard shell commands to make sure you know where you are (`pwd` for Linux/OSX, or the [Windows equivalent](http://stackoverflow.com/questions/921741/windows-equivalent-to-unix-pwd)). And _as much as possible_ use the __Tab__ key to autocomplete, even for something as short as `app.py`.
+
+
+
+# Your first Flask web application error
+
+Assuming you've followed my example exactly and haven't made a typo, pop open a new browser window and visit the URL at [http://127.0.0.1:5000/](http://127.0.0.1:5000/). 
+
+Or, you might prefer the human-readable equivalent: [localhost:5000](localhost:5000)).
+
+Either one will result in a __Not Found__ error message (aka, the dreaded __404__) being displayed in your __web browser__:
 
 ![image 404-localhost.png](/files/flask-single-page/images/404-localhost.png)
 
 
+Note: you may get an error message that reads, " __Internal Server Error__"
+
+You can jump down to the [debugging section for a few more details](#mark-debugging). Or, you can modify your call to `app.run()`:
+
+~~~py
+if __name__ == '__main__':
+    app.run(debug=True)
+~~~
+
+This will allow the app to display a proper Python error message, so you can fix the typo/syntax error.
 
 
-## Tell the webserver to quit
+## Tell the webserver to quit with Ctrl-C
 
-Our app is a joke. Time to abort. Hit __Ctrl-C__ to break out of this unwanted sequence (this, or any other system process):
+Assuming you're at the point where your browser displays the __Not Found__ error...well, your app is broken, and you need to fix it.
+
+Time to abort. Hit __Ctrl-C__ to break out of this unwanted sequence (this, or any other system process):
 
 <%= asciinema_player '/files/flask-single-page/asciinema/ending-404-localhost.json', '* Running on http://127.0.0.1:5000/', height: 10 %>
 
@@ -172,9 +223,11 @@ To specify a path, use this convention (the `@` sign is very important here):
 
 Ignore the `@app` convention for now (technically, it's called a __decorator__) and instead, pay attention to the argument we pass to its `route()` method: `"/"`. Look familiar? It's the `/` for the web domain URI at `http://127.0.0.1/`. It's simply the __path__, known as `"/"`
 
-## Specifying the function that serves a message
+## Creating the view function that serves a message
 
-The decorator function `@app.route()` will "decorate" the function that comes after it. In this case, it's the function that generates a _message_. What _message_? The message that the user sees in their browser when they visit `127.0.0.1/`.
+The decorator function `@app.route()` will "decorate" the function that comes after it. In this case, it's the function that generates a _message_ that will be rendered by the browser, i.e. the content that the user sees in their browser when they visit `127.0.0.1/`.
+
+We refer to this message-making function as the __view function__ for the __route__ that preceded it, e.g. `/`
 
 Does it have to be HTML? Nope. Go for the classic message:
 
@@ -184,7 +237,7 @@ def homepage():
     return "Hello world!"
 ~~~
 
-One thing to note: it doesn't matter what you call the decorated function (though obviously, call it something that makes sense to you on a second reading):
+One thing to note: it doesn't matter what you name the __view function__ (though obviously, name it something that makes sense to you on subsequent re-readings):
 
 ~~~py
 @app.route("/")
@@ -192,9 +245,16 @@ def booyahshaka():
     return "Hello world!"
 ~~~
 
+~~~py
+@app.route("/")
+def homepage():
+    return "Hello world!"
+~~~
+
+
 # A second try at running app.py 
 
-This is what __app.py__ should look like:
+This is what the entirety of __app.py__ should look like:
 
 ~~~py
 from flask import Flask
@@ -220,7 +280,7 @@ Joy:
 
 ![image 200-hello-world.png](/files/flask-single-page/images/200-hello-world.png)
 
-If you check the Terminal window for wherever you ran `python app.py`, each visit/reload of your webserver should trigger a new set of server messages:
+If you check the Terminal window for wherever you ran `python app.py` (i.e. the __console window__), each visit/reload of your webserver should trigger a new set of server messages:
 
 <%= asciinema_player '/files/flask-single-page/asciinema/starting-200-localhost-watching-traffic.json', '$ python app.py', height: 12 %>
 
@@ -234,9 +294,9 @@ __A quick note about terminology and ports:__ The `5000` refers to the __port__ 
 
 Our Flask app is very basic, but it's never too early to learn some good habits for app development, one line at a time.
 
-First, let's change the message that the app displays for the `"/"` route. Don't shut down your app; just switch over to your editor and make a change to __app.py__. Make it return a multi-line string (denoted with triple quotation marks, `"""`) just for kicks. 
+First, let's change the message that the __view function__ returns for the `"/"` route. Don't shut down your app; just switch over to your editor and make a change to __app.py__. Make it return a multi-line string (denoted with triple quotation marks, `"""`) just for kicks. 
 
-And by now, you should be comfortable with the fact that the name of the text-returning function can be completely arbitrary:
+And by now, you should be comfortable with the fact that the name of the __view function__ can be completely arbitrary:
 
 ~~~py
 @app.route("/")
@@ -249,7 +309,7 @@ def supercalifragalistic():
 
 ## Please return something
 
-A segue: note that the routing function must _return_ a value. Your `print()` function has no power here, so don't do this:
+A segue: note that the __view function__ must _return_ a value. Your `print()` function has no power here, so don't do this:
 
 ~~~py
 @app.route("/")
@@ -282,12 +342,165 @@ if __name__ == '__main__':
 Shut your app's web server down and restart it. Any changes you make to __app.py__ should be reflected upon reloading the browser.
 
 
-## Show a debug message
+
+<a id="mark-debugging"></a>
+
+
+# Debugging a Flask app in development
+
+Web apps are __fun__. But with their browser-friendly interface comes the price of a new layer of things to debug. When your app does something weird, is it the browser's fault? Is it in the HTML/JS/CSS code that you hacked together? Or is it a Python error? 
+
+__Hint:__ early on, most of your errors are going to be good-ol fashioned Python errors. With your app and web server still running, make an intentional error. For example, alter your __view function__ to return something that is obviously an error, e.g.
+
+~~~py
+"Hello" + 1
+~~~
+
+In context, with the rest of __app.py__:
+
+~~~py
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def homepage():
+    return "Hello" + 1
+
+if __name__ == '__main__':
+    app.run(use_reloader=True)
+~~~
+
+When reloading the page, you should get this completely opaque error message __in the browser__:
+
+    Internal Server Error
+
+    The server encountered an internal error and was unable to complete your request. Either the server is overloaded or there is an error in the application.
+
+![image 500-internal-error.png](/files/flask-single-page/images/500-internal-error.png)
+
+## Enabling debug mode
+
+That vagueness of error message is actually a good thing. When your app is live and facing the entire world and unexpectedly breaks, you don't want everyone in the world to know exactly which line in which file threw what type of error exactly.
+
+But such obfuscation is __fatal__ during development -- you don't want to be spending hours guessing where you made a typo. You need the typical error reporting that Python provides, especially as you stumble your way in this new development framework.
+
+Having the Flask app display a proper error message in the web browser is as easy as supplying a keyword argument to the app's __run()__ function: 
+
+    debug=true
+
+In context:
+
+~~~py
+if __name__ == '__main__':
+    app.run(debug=True, use_reloader=True)
+~~~
+
+
+Ah...sweet, verbose stack trace:
+
+![image 500-internal-error-stacktrace.png](/files/flask-single-page/images/500-internal-error-stacktrace.png)
+
+Note that the relevant message is at the top:
+
+    TypeError: Can't convert 'int' object to str implicitly
+
+
+## Using `print()` to print messages to the console
+
+While `print()` functions won't ever impact what's rendered by the browser, they still will print out to the __console screen__ -- i.e. the Terminal window in which you ran `python app.py`.
+
+There's obviously better, more [sophisticated ways to do error logging built into the Flask library](http://flask.pocoo.org/docs/0.10/errorhandling/)...but in a jiffy, go with what works: use `print()` calls to tell you what's going on in your app, as you would in any Python script:
+
+~~~py
+from flask import Flask
+app = Flask(__name__)
+print("initiated the app! With a name of:", __name__)
+
+@app.route('/')
+def homepage():
+    print("Hey I'm visiting the homepage!")
+    return "Hello world!"
+
+if __name__ == '__main__':
+    print("App is starting...I think?")
+    app.run(use_reloader=True)
+    print("Umm...no idea what/how this message will be seen...")
+~~~
+
+
+Here's what my server console looks like when I start the app, visit the homepage, and then shut the app down with __Ctrl-C__:
+
+
+<%= asciinema_player '/files/flask-single-page/asciinema/flask-single-page/asciinema/printing-like-its-no-big-deal.json', '$ python app.py', height: 10 %>
+
+
+
+## Other run-time application errors
+
+Beyond Python syntax and logic errors, there are going to be a myriad of errors exclusively in the domain of running a web application. I'll cover a few of the show-stoppers that you are likely to run into, even with just a "Hello world" app:
+
+### Connection refused/"This site can’t be reached"
+
+In Chrome, this error looks like this:
+
+![image connection-refused.png](/files/flask-single-page/images/connection-refused.png)
+
+This could mean either of these things:
+
+1. You mistyped the URL port number, e.g. `localhost:5999` instead of `localhost:5000`
+2. You correctly typed the URL and port number but your web server isn't running, i.e. you forgot to execute `python app.py`
+
+### `OSError: [Errno 48] Address already in use`
+
+So you're switching between multiple browser and Terminal windows like a pro, but as soon as you try to execute `python app.py`, you get this error:
+
+~~~
+OSError: [Errno 48] Address already in use
+~~~
+
+
+<%= asciinema_player '/files/flask-single-page/asciinema/flask-single-page/asciinema/os-error-address-in-use.json', '$ python app.py', height: 15 %>
+
+This error means that in one of your _other_ Terminal windows, you've already run a web app (Flask, or even something else) that is hogging up port 5000. You need to shut it down and free up the port 5000 if you want to run `python app.py`.
+
+
+### 404 Not Found (again)
+
+Don't forget that classic "__Not Found__" error. Just because we fixed one instance earlier in the lesson doesn't mean that the web server knows how to deal with all the typos you might throw its way. Instead of visiting a path that you've written a route function for -- i.e. `/` -- try visiting a made-up path, e.g.
+
+        http://127.0.0.1:5000/hey/heyhey
+
+Because that path was never defined in __app.py__, you'll get the 404:
+
+![image 404-heyhey.png](/files/flask-single-page/images/404-heyhey.png)
+
+Basically, not only do you have to worry about typos in your Python code, but typos in your browser bar, too.
+
+
+
+
 
 
 # Conclusion 
 
 And that's a Flask app. While we haven't done much of what normally constitutes web application development, it's important to get a feel for the bare foundation of a Flask app and what we get with a few lines of boilerplate code. 
 
-In the next lesson, we'll create an app that serves up a "proper" webpage with actual HTML. But it's important to understand that the app's routing function really just returns a __string__ object -- and thus, a "proper" webpage with "real" HTML is just a big string.
+In the next lesson, we'll create an app that serves up a "proper" webpage with actual HTML. But it's important to understand that the app's __view function__ really just returns a __string__ object -- and thus, a "proper" webpage with "real" HTML is just a big string.
+
+Here's all the code for the app we created, though your function/variable names may vary. See how much of it you can reproduce from memory:
+
+~~~py
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def homepage():
+    return """
+    Hello world!
+    This is my first web app!
+    """
+
+if __name__ == '__main__':
+    app.run(use_reloader=True)
+~~~
 
