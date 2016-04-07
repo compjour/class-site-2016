@@ -1,6 +1,6 @@
 ---
 title: Hello Tiny Flask App
-description: How to make the simplest of web applications in Python.
+description: How to make the simplest of Python web applications.
 objectives:
     - Get introduced to the Python Flask web application framework.
     - Build a Flask app that will respond with a simple message when visited by a web browser.
@@ -431,7 +431,7 @@ if __name__ == '__main__':
 Here's what my server console looks like when I start the app, visit the homepage, and then shut the app down with __Ctrl-C__:
 
 
-<%= asciinema_player '/files/flask-single-page/asciinema/flask-single-page/asciinema/printing-like-its-no-big-deal.json', '$ python app.py', height: 10 %>
+<%= asciinema_player '/files/flask-single-page/asciinema/printing-like-its-no-big-deal.json', '$ python app.py', height: 10 %>
 
 
 
@@ -459,7 +459,7 @@ OSError: [Errno 48] Address already in use
 ~~~
 
 
-<%= asciinema_player '/files/flask-single-page/asciinema/flask-single-page/asciinema/os-error-address-in-use.json', '$ python app.py', height: 15 %>
+<%= asciinema_player '/files/flask-single-page/asciinema/os-error-address-in-use.json', '$ python app.py', height: 15 %>
 
 This error means that in one of your _other_ Terminal windows, you've already run a web app (Flask, or even something else) that is hogging up port 5000. You need to shut it down and free up the port 5000 if you want to run `python app.py`.
 

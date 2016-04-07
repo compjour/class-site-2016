@@ -1,0 +1,52 @@
+#the-page-content{
+  display: relative;
+
+  img{
+    max-width: 100%;
+  }
+
+
+  p {
+    a:link, a:visited{
+      text-decoration: underline;
+    }
+  }
+
+  h1{
+    margin-top: 3.5rem;
+  }
+
+  h2{
+    margin-top: 2.2rem;
+  }
+
+  table{
+    @extend .table;
+    @extend .table-sm;
+  }
+
+}
+
+
+#the-page-meta{
+  margin-bottom: 2.0rem;
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
+
+  .page-description{
+    font-size: $font-size-h5;
+    color: #434;
+  }
+
+  section{
+    margin-top: 2.0rem;
+  }
+
+  .page-title{
+    @extend .h1;
+    color: #434;
+    font-size: 1.05 * $font-size-h1;
+  }
+
+}
+
