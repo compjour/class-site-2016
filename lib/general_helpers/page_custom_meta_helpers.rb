@@ -22,6 +22,13 @@ module GeneralHelpers
       _current_page_data.hide_toc != true
     end
 
+    def page_objectives
+      _current_page_data.objectives
+    end
+
+    def page_objectives?
+      _current_page_data.objectives.present?
+    end
 
   end
 end

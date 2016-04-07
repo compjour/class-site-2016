@@ -15,6 +15,19 @@
         </section>
       <% end %>
 
+      <% if page_objectives? %>
+        <section class="sec objectives">
+          <div class="container">
+            <h1>Objectives</h1>
+            <ul class="objectives-list">
+              <% page_objectives.each do |o| %>
+                  <li class="objective"><%= o %></li>
+              <% end %>
+            </ul>
+          </div>
+        </section>
+      <% end %>
+
       <% if page_toc? %>
         <section class="sec table-of-contents page">
           <div class="container">
@@ -28,18 +41,6 @@
         </section>
        <% end %>
 
-       <% if page_objectives? %>
-          <section class="sec objectives">
-            <div class="container">
-              <h1>Objectives</h1>
-              <ul class="objectives-list">
-                <% page_objectives.each do |o| %>
-                    <li class="objective"><%= o %></li>
-                <% end %>
-              </ul>
-            </div>
-          </section>
-       <% end %>
 
     </div>
   </section>
