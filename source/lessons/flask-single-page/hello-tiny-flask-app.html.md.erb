@@ -192,40 +192,39 @@ You're basically a system devops watching traffic hit your webserver...in this c
 
 
 
-# A path and an index
+# Routing and views
 
 So why did our web app return a 404 page? Because our app literally has no "pages" -- you saw the 4 lines of code we've produced so far.
 
-Part of what makes a web app a web app is that it has _routes_. When you visit `http://www.nytimes.com/` -- i.e. its _homepage_ -- the NYT webserver is directing you to what's commonly known as an __index page__. When you visit the URL `http://www.nytimes.com/pages/world`, the `pages/world` path let's the webserver know that we want to be routed to wherever the _World_ news section is on the NYT's great big webserver in the sky.
+Part of what makes a web app a web app is that it has multiple paths, i.e. URLs. When you visit `http://www.nytimes.com/` -- i.e. its _homepage_ -- the NYT webserver is directing you to what's commonly known as an __index page__. When you visit the URL `http://www.nytimes.com/pages/world`, the `pages/world` path let's the webserver know that we want to be sent to wherever the _World_ news section is on the NYT's great big webserver in the sky.
 
-Right now, our web app doesn't even have the default route -- again, what many people refer to as the __index page__  or __homepage__ -- which is what the user (i.e. us, the app maker) should wee when visiting `http://127.0.0.0.1/`.
+Right now, our web app doesn't include the code that defines even the most basic route, http://127.0.0.0.1/` -- which is commonly referred to as the __index page__  or __homepage__.
 
-Segue: if you're really new to web development, visit [http://127.0.0.0.1/](http://127.0.0.0.1/) while your web server is shut off. You'll get a wholly different kind of _"WTF are you looking for?"_ error.
-
-
-Visiting the root path of `localhost:5000` causes the app to respond...with a _"WTF I don't know who you are or what you want"_.
+Without a single __route__ defined, visiting `127.0.0.1:5000` causes the app to respond...with a _"WTF I don't know who you are or what you want"_.
 
 
 # Creating a "homepage" route
 
-To specify a route, we need to do two things:
+To specify a route in our web app, we need to do two things:
 
-1. Specify the __path__ that leads to the route.
-2. Specify the function that serves up the content at that route
+1. Define the __path__ that leads to the route. This is a _string_, e.g. `"/"` and `"/photos/cats`, that follows the domain address in the URL, e.g. `http://127.0.0.1/` and `http://127.0.0.1/photos/cats`
+2. Specify the __view function__ that serves up the content at that route
 
-## Specifying the path string
+## Defining the path string
 
-To specify a path, use this convention (the `@` sign is very important here):
+To define a path, use this convention (the `@` sign is very important here) with the `app.route()` method:
 
 ~~~py
 @app.route("/")
 ~~~
 
-Ignore the `@app` convention for now (technically, it's called a __decorator__) and instead, pay attention to the argument we pass to its `route()` method: `"/"`. Look familiar? It's the `/` for the web domain URI at `http://127.0.0.1/`. It's simply the __path__, known as `"/"`
+Ignore the `@` convention for now (technically, it's called a __decorator__) and instead, pay attention to the argument we pass to its `route()` method: `"/"`. It's the `/` for the web domain URI at `http://127.0.0.1/`. It's simply the __path__, known as `"/"`
+
+
 
 ## Creating the view function that serves a message
 
-The decorator function `@app.route()` will "decorate" the function that comes after it. In this case, it's the function that generates a _message_ that will be rendered by the browser, i.e. the content that the user sees in their browser when they visit `127.0.0.1/`.
+The decorator function `@app.route()` will "decorate" the __view function__ that comes after it: the function that generates a _message_ to be send to and rendered by the browser, i.e. the content that the user sees in their browser when they visit `127.0.0.1/`.
 
 We refer to this message-making function as the __view function__ for the __route__ that preceded it, e.g. `/`
 
@@ -405,6 +404,9 @@ Note that the relevant message is at the top:
     TypeError: Can't convert 'int' object to str implicitly
 
 
+You can read more about [Flask's debug mode in its documentation.](http://flask.pocoo.org/docs/0.10/quickstart/#debug-mode)
+
+
 ## Using `print()` to print messages to the console
 
 While `print()` functions won't ever impact what's rendered by the browser, they still will print out to the __console screen__ -- i.e. the Terminal window in which you ran `python app.py`.
@@ -450,7 +452,7 @@ This could mean either of these things:
 1. You mistyped the URL port number, e.g. `localhost:5999` instead of `localhost:5000`
 2. You correctly typed the URL and port number but your web server isn't running, i.e. you forgot to execute `python app.py`
 
-### `OSError: [Errno 48] Address already in use`
+### OSError: [Errno 48] Address already in use
 
 So you're switching between multiple browser and Terminal windows like a pro, but as soon as you try to execute `python app.py`, you get this error:
 
