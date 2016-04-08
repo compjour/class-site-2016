@@ -1,0 +1,84 @@
+---
+title: Creating Multiple Routes and Dynamic Content in Flask
+description: |
+  How to make a Flask web app with multiple pages and dynamic endpoints.
+objectives:
+  - How to define multiple routes in a Flask web app.
+  - How to define a route that can generate pages dynamically based on string values in the path string.
+summary: |
+  Up to this point, the kind of Flask apps we've built literally do nothing more than just respond with HTML-shaped text, which means they haven't done anything that we couldn't do by just writing HTML and saving it as a text file and skipping the whole Python part.  
+sequence:
+  previous: /lessons/flask-single-page/serving-simple-html-response/
+  landing: /lessons/flask-single-page
+---
+
+Let's revisit the __app.py__ for the most basic Flask app. Try to rewrite it from scratch, just from memory:
+
+~~~py
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def homepage():
+    return """<h1>Hello world!</h1>"""
+
+if __name__ == '__main__':
+    app.run(use_reloader=True)
+~~~
+
+
+We'll be complicating __app.py__ in this lesson so if you don't understand all the moving parts in the Flask app yet, you should at least be familiar enough to know what's being repeated and changed and expanded upon.
+
+
+# Creating multiple routes
+
+http://flask.pocoo.org/docs/0.10/quickstart/#routing
+
+To add a new route, simply call the `route()` function again with the desired path and create a view function for it:
+
+~~~py
+@app.route('/stanford')
+def stanford_page():
+    return """<h1>Hello stanford!</h1>"""
+~~~
+
+Just for fun, let's include a [static Google Maps](https://developers.google.com/maps/documentation/static-maps/intro) image of "stanford". This is the simplest call (by "call", I mean, _URL_, as that's how this particular API works) [to the Google Static Map API](https://developers.google.com/maps/documentation/static-maps/intro#URL_Parameters) that will return a map image with a marker placed at "stanford":
+
+<%= url_alone "https://maps.googleapis.com/maps/api/staticmap?size=700x300&markers=stanford" %>
+
+Click on that URL to see the image that it generates -- note that the URL takes you to an __image file__, not a HTML webpage that displays a map image.
+
+While we're at it, let's add an image from Google's Street View service; here's the call to that API, according to the [Street View Image API](https://developers.google.com/maps/documentation/streetview/intro#url_parameters):
+
+<%= url_alone "https://maps.googleapis.com/maps/api/streetview?size=700x300&location=stanford" %>
+
+Let's add both images to the HTML returned by view function binded to the `/stanford` path:
+
+~~~py
+@app.route('/stanford')
+def stanford_page():
+    return """
+      <h1>Hello stanford!</h1>
+
+      <img src="https://maps.googleapis.com/maps/api/staticmap?size=700x300&markers=stanford" alt="map of stanford">
+  
+      <img src="https://maps.googleapis.com/maps/api/streetview?size=700x300&location=stanford" alt="street view of stanford">
+    """
+~~~
+
+The resulting page when visiting <%=url_alone 'http://localhost:5000/stanford' %> looks like:
+
+![image stanford-maps.jpg](/files/flask-single-page/images/stanford-maps.jpg)
+
+
+TKTKTK
+
+
+# Creating routes with variables
+
+http://flask.pocoo.org/docs/0.10/quickstart/#variable-rules
+
+> To add variable parts to a URL you can mark these special sections as <variable_name>. Such a part is then passed as a keyword argument to your function.
+
+
+![image new-york-maps.jpg](/files/flask-single-page/images/new-york-maps.jpg)

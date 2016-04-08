@@ -8,8 +8,13 @@
         </div>
       <% end %>
 
+      <% if page_sequence.present? %>
+        <%= partial "/layouts/partials/components/page-sequence", :locals => {:sequence => page_sequence} %>
+      <% end %>
+
+
       <% if page_summary.present? %>
-        <section class="summary">
+        <section class="page-summary">
             <h4 class="section-title">Summary</h4>
             <%= markdownify page_summary %>
         </section>
@@ -17,14 +22,12 @@
 
       <% if page_objectives? %>
         <section class="sec objectives">
-          <div class="container">
-            <h1>Objectives</h1>
+            <h4 class="section-title">Objectives</h4>
             <ul class="objectives-list">
               <% page_objectives.each do |o| %>
                   <li class="objective"><%= o %></li>
               <% end %>
             </ul>
-          </div>
         </section>
       <% end %>
 
@@ -55,5 +58,10 @@
 
 
   <section id="the-page-footcontent">
+    <div class="container">
+      <% if page_sequence.present? %>
+        <%= partial "/layouts/partials/components/page-sequence", :locals => {:sequence => page_sequence} %>
+      <% end %>
+    </div>
   </section>
 <% end %>

@@ -1,0 +1,35 @@
+<section class="page-sequence">
+
+  <div class="header">
+    This article is part of a sequence:
+    <% if sequence.landing %>
+      <div class="landing">
+        <%= content_resource_element sequence.landing %>
+      </div>
+    <% end %>
+
+  </div>
+
+  <div class="body">
+
+
+
+        <% if sequence.previous %>
+          <div class="previous">
+             <div class="lbl"> &laquo; Previously</div>
+              <div class="items">
+                <div class="item"><%=content_resource_element sequence.previous %></div>
+              </div>
+          </div>
+        <% end %>
+        <% if sequence.next %>
+          <div class="next">
+            <div class="lbl">Next &raquo; </div>
+
+            <div class="items">
+              <div class="item"><%=content_resource_element sequence.next %></div>
+            </div>
+          </div>
+        <% end %>
+  </div>
+</section>

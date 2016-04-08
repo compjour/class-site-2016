@@ -1,0 +1,9 @@
+blockquote{
+  @extend .blockquote;
+  border-left: 1.0rem solid #ddd;
+  background: #eaeaea;
+  p{
+    font-size: $font-size-base;
+    font-family: $font-family-serif;
+  }
+}

@@ -7,6 +7,7 @@
 
 
   p {
+    font-family: $font-family-serif;
     a:link, a:visited{
       text-decoration: underline;
     }
@@ -42,11 +43,34 @@
     margin-top: 2.0rem;
   }
 
+  .section-title{
+    font-weight: 400;
+  }
+
+  .page-summary{
+    font-family: $font-family-serif;
+  }
+
   .page-title{
     @extend .h1;
     color: #434;
     font-size: 1.05 * $font-size-h1;
   }
 
+  ul.objectives-list{
+    padding-left: 1.0rem;
+  }
+
 }
 
+
+
+
+#the-page-footcontent{
+  margin-top: 3.0rem;
+  padding-top: 1.5rem;
+
+  // .references{
+  //   @extend .uniform-content-resource-listing;
+  // }
+}

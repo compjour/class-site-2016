@@ -46,10 +46,13 @@ module UniformContentResource
 
     def link_to_content_resource(obj, opts = {})
       ucrobj = uniform_content_resource_adapter(obj)
-      link_to ucrobj.title, ucrobj.url, opts
+      _title = opts[:title] || ucrobj.title
+      link_to _title, ucrobj.url, opts
     end
 
-    def content_resource_tag(obj, tag = :div, opts = {})
+    alias_method :link_cro, :link_to_content_resource
+
+    def content_resource_element(obj, tag = :div, opts = {})
       opts[:class] = [opts[:class], "uniform-content-resource"].compact.join(' ')
       ucrobj = uniform_content_resource_adapter(obj)
       buff = ActiveSupport::SafeBuffer.new

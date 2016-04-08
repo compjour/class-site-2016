@@ -1,0 +1,49 @@
+.page-sequence{
+  @extend .content-card-minimal;
+
+
+  .next, .previous{
+    @extend .row;
+  }
+
+  .landing{
+    margin-top: 1.0em;
+    .title{
+      font-weight: bold;
+    }
+  }
+
+  .lbl{
+    @extend .col-xs-2;
+    font-weight: bold;
+  }
+
+  .item{
+    @extend .col-xs-10;
+    margin-bottom: 1.5em;
+  }
+
+}
+
+
+
+.uniform-content-resource-listing{
+  .uniform-content-resource{
+    margin-bottom: 1.5rem;
+    .title{
+      font-weight: bold;
+    }
+  }
+
+  .sub-listing{
+      .uniform-content-resource{
+        title{
+          font-weight: bold;
+        }
+        padding-left: 3.0rem;
+        margin-bottom: 1.0rem;
+        font-size: 0.9 * $font-size-base;
+      }
+  }
+}
+

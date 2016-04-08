@@ -40,5 +40,7 @@ module GeneralHelpers
       link_to(a_url.to_s, a_url.to_s, :class => "url-alone")
     end
 
+    alias_method :url_alone, :link_to_url_alone
+
   end
 end
