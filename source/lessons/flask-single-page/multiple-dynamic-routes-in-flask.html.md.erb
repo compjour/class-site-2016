@@ -70,11 +70,54 @@ The resulting page when visiting <%=url_alone 'http://localhost:5000/stanford' %
 
 ![image stanford-maps.jpg](/files/flask-single-page/images/stanford-maps.jpg)
 
+With just a few lines of code, we've got a couple of neat visuals of a place named "stanford". Sure, Google is doing 99.999% of the work, but using a company's work for our own purposes and amusement is why we take the (tedious) time to read through their API documentation.
 
-TKTKTK
+## Making even more routes
+
+But what if we wanted to create a paths for other locations, such as "new york" and "tokyo"? Well, there's always copy and paste:
+
+~~~py
+@app.route('/stanford')
+def stanford_page():
+    return """
+      <h1>Hello stanford!</h1>
+
+      <img src="https://maps.googleapis.com/maps/api/staticmap?size=700x300&markers=stanford" alt="map of stanford">
+  
+      <img src="https://maps.googleapis.com/maps/api/streetview?size=700x300&location=stanford" alt="street view of stanford">
+    """
+
+@app.route('/newyork')
+def newyork_page():
+    return """
+      <h1>Hello newyork!</h1>
+
+      <img src="https://maps.googleapis.com/maps/api/staticmap?size=700x300&markers=newyork" alt="map of newyork">
+  
+      <img src="https://maps.googleapis.com/maps/api/streetview?size=700x300&location=newyork" alt="street view of newyork">
+      """
+@app.route('/tokyo')
+def tokyo_page():
+    return """
+      <h1>Hello tokyo!</h1>
+
+      <img src="https://maps.googleapis.com/maps/api/staticmap?size=700x300&markers=tokyo" alt="map of tokyo">
+  
+      <img src="https://maps.googleapis.com/maps/api/streetview?size=700x300&location=tokyo" alt="street view of tokyo">
+    """
+~~~
+
+### Refactoring practice
+
+OK, you can see how trying to make multiple paths and routes gets out of hand, making our slim `app.py` bloated with repetitive code. This 
+
+
 
 
 # Creating routes with variables
+
+
+
 
 http://flask.pocoo.org/docs/0.10/quickstart/#variable-rules
 
