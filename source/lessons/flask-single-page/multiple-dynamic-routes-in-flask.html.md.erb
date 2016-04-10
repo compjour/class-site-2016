@@ -107,17 +107,162 @@ def tokyo_page():
     """
 ~~~
 
-### Refactoring practice
+# Refactoring practice
 
-OK, you can see how trying to make multiple paths and routes gets out of hand, making our slim `app.py` bloated with repetitive code. This 
+OK, you can see how trying to make multiple paths and routes gets out of hand, making our slim `app.py` bloated with repetitive code. Before we move on to the next, most important phase -- creating routes with variables in the path names -- let's just do a little cleanup of the __app.py__ code. Remember that even though it's a web application, it's still just a Python script.
 
+Note that the HTML for all of the different routes is basically the same thing, with just the change in the name of location:
+
+~~~html
+    <img src="https://maps.googleapis.com/maps/api/staticmap?size=700x300&markers=stanford" alt="map of stanford">
+~~~
+
+We want to abstract it out as a reusable  __template__. In the following snippet, the specific place name, `stanford`, has been replaced with a placeholder template variable, `${place_name}`
+
+~~~html
+    <img src="https://maps.googleapis.com/maps/api/staticmap?size=700x300&markers=${place_name}" alt="map of ${place_name}">
+~~~
+
+
+## Using string.Template
+
+If you already know about web app development in other languages, then you may just want to jump to [Jinja2 templating](http://flask.pocoo.org/docs/0.10/templating/), which is the official way to do string templating with Flask apps.
+
+However, assuming you're relatively new to Python and/or web apps:
+
+https://docs.python.org/3/library/string.html#template-strings
+
+What is string templating? Think of it as a better way to substitute values into strings. 
+
+Let's take a simple example; we want a way to generate the string, `"Hello, SOMEBODY, how are you?"`, except with `SOMEBODY` being an actual name:
+
+
+~~~py
+str_a = "Hello, "
+str_b = ", how are you?"
+for name in ['Jane', 'Bob', 'Dan']:
+    print(str_a + name + str_b)
+# Hello, Jane, how are you?
+# Hello, Bob, how are you?
+# Hello, Dan, how are you?
+~~~
+
+String templating, at the cost of additional verbosity, gives us a cleaner way of doing this:
+
+~~~py
+from string import Template
+my_template = Template("Hello, ${person_name}, how are you?")
+for name in ['Jane', 'Bob', 'Dan']:
+    print(my_template.substitute(person_name=name))
+~~~
+
+
+Here's what that would look like in our current __app.py__ -- I like using all-caps variable names, e.g. `STATIC_MAP_TEMPLATE`, to indicate that the thing represented by the variable is a _constant_. Helps to separate the things that don't change from the things that _do_ change within a program's execution:
+
+~~~py
+from flask import Flask
+app = Flask(__name__)
+
+STATIC_MAP_TEMPLATE = Template("""
+<img src="https://maps.googleapis.com/maps/api/staticmap?size=700x300&markers=${place_name}" alt="map of ${place_name}">
+""")
+
+STREET_VIEW_TEMPLATE = Template("""
+<img src="https://maps.googleapis.com/maps/api/streetview?size=700x300&location=${place_name}" alt="street view of ${place_name}">
+""")
+
+@app.route('/')
+def homepage():
+    return """<h1>Hello world!</h1>"""
+
+@app.route('/stanford')
+def stanford_page():
+    return("""<h1>Hello stanford!</h1>""" +
+            STATIC_MAP_TEMPLATE.substitute(place_name="stanford") +
+            STREET_VIEW_TEMPLATE.substitute(place_name="stanford"))
+
+@app.route('/newyork')
+def newyork_page():
+    return("""<h1>Hello newyork!</h1>""" +
+            STATIC_MAP_TEMPLATE.substitute(place_name="newyork") +
+            STREET_VIEW_TEMPLATE.substitute(place_name="newyork"))
+
+@app.route('/tokyo')
+def newyork_page():
+    return("""<h1>Hello tokyo!</h1>""" +
+            STATIC_MAP_TEMPLATE.substitute(place_name="tokyo") +
+            STREET_VIEW_TEMPLATE.substitute(place_name="tokyo"))
+~~~
+
+Note how much cleaner each view function looks, with _most_ of the HTML code being taken out and moved to the top. Since the HTML is basically the same for every page, no need to repeat the same HTML in each view function.
+
+Almost all of the HTML is abstracted away. See if you can figure out an even more complete abstraction. Here's my solution below:
+
+~~~py
+from flask import Flask
+app = Flask(__name__)
+
+HTML_TEMPLATE = Template("""
+<h1>Hello ${place_name}!</h1>
+
+<img src="https://maps.googleapis.com/maps/api/staticmap?size=700x300&markers=${place_name}" alt="map of ${place_name}">
+
+<img src="https://maps.googleapis.com/maps/api/streetview?size=700x300&location=${place_name}" alt="street view of ${place_name}">
+""")
+
+@app.route('/')
+def homepage():
+    return """<h1>Hello world!</h1>"""
+
+@app.route('/stanford')
+def stanford_page():
+    return(HTML_TEMPLATE.substitute(place_name='stanford'))
+
+@app.route('/newyork')
+def newyork_page():
+    return(HTML_TEMPLATE.substitute(place_name='newyork'))
+
+@app.route('/tokyo')
+def tokyo_page():
+    return(HTML_TEMPLATE.substitute(place_name='tokyo'))
+~~~
+
+The main takeaway is that string templates are just a fancier way to deal with strings. The view functions are still returning strings, as we learned from the very first lesson.
 
 
 
 # Creating routes with variables
 
+Of course, it's just not feasible for you, the developer, to enumerate every possible route that a user will want to try out, whether it be `stanford` or `chicago` or `timbuktu`.
+
+This is where we get into the core of what makes a web application different from a regular web page: we program our app to accept _variable paths_. 
+
+We already have 95% of the process abstracted. Remember that we started out with a view function that looked like this:
+
+~~~py
+@app.route('/stanford')
+def stanford_page():
+    return """
+      <h1>Hello stanford!</h1>
+
+      <img src="https://maps.googleapis.com/maps/api/staticmap?size=700x300&markers=stanford" alt="map of stanford">
+  
+      <img src="https://maps.googleapis.com/maps/api/streetview?size=700x300&location=stanford" alt="street view of stanford">
+    """
+~~~
 
 
+~~~py
+@app.route('/stanford')
+def stanford_page():
+    return(HTML_TEMPLATE.substitute(place_name='stanford'))
+~~~
+
+Now we have to abstract the __routing function__ itself:
+
+~~~py
+@app.route('/stanford')
+~~~
 
 http://flask.pocoo.org/docs/0.10/quickstart/#variable-rules
 
@@ -125,3 +270,8 @@ http://flask.pocoo.org/docs/0.10/quickstart/#variable-rules
 
 
 ![image new-york-maps.jpg](/files/flask-single-page/images/new-york-maps.jpg)
+
+
+
+# Final
+
