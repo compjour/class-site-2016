@@ -22,8 +22,8 @@ require 'lib/custom_helpers/toc_helper'
 
 module CustomHelpers
     include CustomHelpers::AsciinemaHelper
-    include CustomHelpers::TocHelper
     include CustomHelpers::CardHelpers
+    include CustomHelpers::TocHelper
 end
 
 require 'lib/uniform_content_resource/uniform_content_resource_helpers'

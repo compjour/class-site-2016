@@ -12,9 +12,7 @@ gem 'tzinfo-data', platforms: [:mswin, :mingw, :jruby]
 gem 'middleman', '>= 4.1.2'
 gem 'middleman-livereload'
 gem 'middleman-compass', '>= 4.0.0'
-
 gem 'mime-types' # dependency for Fog with s3_sync: https://github.com/fog/fog-core/issues/171
-
 gem 'bootstrap', '~> 4.0.0.alpha3'
 gem "middleman-syntax"
 gem 'middleman-s3_sync', '>= 4.0.2'
