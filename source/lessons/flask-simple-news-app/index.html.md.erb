@@ -1,6 +1,6 @@
 ---
 title: Introduction to Building Web Applications from Data
-description: A series on building a simple data app with Flask
+description: A series on building a simple Flask app that reads and filters a data file.
 hide_toc: true
 mymeta:
   articles:
@@ -9,6 +9,9 @@ mymeta:
     - /lessons/flask-simple-news-app/flask-app-listing-congress-birthdays
     - /lessons/flask-simple-news-app/flask-app-tweeting-congress-birthdays
 ---
+
+This series assumes you've finished <%=link_cro '/lessons/flask-single-page/' %>
+
 
 # The articles
 
@@ -19,3 +22,39 @@ mymeta:
 </section>
 
 
+# Creating an app from data 
+
+One of the best Flask tutorials out there is [NICAR's First News App guide](http://first-news-app.readthedocs.org/en/latest/), which walks you through all the steps to set-up from scratch to creating a complete web application based off of data from the Los Angeles riots.
+
+You can see it in action here:
+
+<%=url_alone 'http://ireapps.github.io/first-news-app/build/index.html' %>
+
+It's not a bad place to start, and if you've finished the previous series, [you might be able to try it out](/lessons/flask-single-page/), though it contains a lot of set up steps (setting up Github and virtualenv) that you don't need to actually do to get a Flask app going.
+
+The series that I provide here is an intermediary step to going big-time news app development.
+
+## The data and the app
+
+The Sunlight Foundation [compiles legislator data in a convenient spreadsheet](https://sunlightlabs.github.io/congress/index.html#legislator-spreadsheet). Let's build a news app that...on any given day, will show which Congressmembers have birthdays, and how old they are. and since so many of them have Twitter accounts, and the Sunlight spreadsheet has collected that information for every congressmember, we should make it easy to tweet 'Happy Birthday' at the legislator.
+
+This ends up not being much of a Flask app, but being more practice on how to work with data, no matter what you intend to build with it. To underscore the point that this is going to be not at all about cool design, here's a screenshot of the final app:
+
+![image happy-birthday-kevin-brady.jpg](/files/flask-simple-news-app/images/happy-birthday-kevin-brady.jpg)
+
+
+Ugly design aside, this series is meant to practice the ability to break up and organize an application into separate files. Instead of making just __app.py__, our Flask app will have several files. Here's the intended folder structure:
+
+~~~
+    /my-project
+    ├── app.py
+    ├── fetch.py
+    ├── filter.py
+    ├── htmlmaker.py
+    └── legislators.csv
+~~~
+
+
+You can see an example of the project structure on the Github repo, though you'll have to download each file individually if you want to test it on your own:
+
+<%=url_alone 'https://github.com/compjour/class-site-2016/tree/master/source/files/flask-simple-news-app/content/flask-app-finished' %>
