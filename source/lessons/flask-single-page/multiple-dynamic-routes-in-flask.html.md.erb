@@ -9,6 +9,7 @@ summary: |
   Up to this point, the kind of Flask apps we've built literally do nothing more than just respond with HTML-shaped text, which means they haven't done anything that we couldn't do by just writing HTML and saving it as a text file and skipping the whole Python part.  
 sequence:
   previous: /lessons/flask-single-page/serving-simple-html-response/
+  next: /lessons/flask-single-page/simple-youtube-viewing-flask-app
   landing: /lessons/flask-single-page
 ---
 
@@ -74,7 +75,7 @@ With just a few lines of code, we've got a couple of neat visuals of a place nam
 
 ## Making even more routes
 
-But what if we wanted to create a paths for other locations, such as "new york" and "tokyo"? Well, there's always copy and paste:
+But what if we wanted to create a paths for other locations, such as `newyork` and `tokyo`? Well, there's always copy and paste:
 
 ~~~py
 @app.route('/stanford')
@@ -106,6 +107,12 @@ def tokyo_page():
       <img src="https://maps.googleapis.com/maps/api/streetview?size=700x300&location=tokyo" alt="street view of tokyo">
     """
 ~~~
+
+Here's what <%=url_alone 'http://127.0.0.1/newyork' %> looks like:
+
+![image new-york-maps.jpg](/files/flask-single-page/images/new-york-maps.jpg)
+
+
 
 # Refactoring practice
 
@@ -229,6 +236,7 @@ def tokyo_page():
 
 The main takeaway is that string templates are just a fancier way to deal with strings. The view functions are still returning strings, as we learned from the very first lesson.
 
+-----------------------
 
 
 # Creating routes with variables
@@ -251,6 +259,7 @@ def stanford_page():
     """
 ~~~
 
+And now it looks like this:
 
 ~~~py
 @app.route('/stanford')
@@ -258,20 +267,101 @@ def stanford_page():
     return(HTML_TEMPLATE.substitute(place_name='stanford'))
 ~~~
 
-Now we have to abstract the __routing function__ itself:
+Now we have to abstract the parts of the routing function and view function that explicitly refer to `stanford`...In pseudocode, it might look something like this:
 
 ~~~py
-@app.route('/stanford')
+@app.route('/SOME_PLACE')
+def some_place_page():
+    return(HTML_TEMPLATE.substitute(place_name=SOME_PLACE))
 ~~~
 
-http://flask.pocoo.org/docs/0.10/quickstart/#variable-rules
+In fact, that pseudocode is very close to what Flask requires; [from its Quickstart documentation on variable rules](http://flask.pocoo.org/docs/0.10/quickstart/#variable-rules):
 
 > To add variable parts to a URL you can mark these special sections as <variable_name>. Such a part is then passed as a keyword argument to your function.
 
+Here's what that abstracted route/view function can look like; notice what __stays the same__ and what _changes_:
 
-![image new-york-maps.jpg](/files/flask-single-page/images/new-york-maps.jpg)
+~~~py
+@app.route('/<some_place>')
+def some_place_page(some_place):
+    return(HTML_TEMPLATE.substitute(place_name=some_place))
+~~~
+
+__Delete__ the code regarding the `/stanford`, `/newyork`, and other routes (although you should leave the Hello World for `/`, just to have a page for the root homepage route). We don't need it now. This is what the entire app looks like:
+
+~~~py
+from flask import Flask
+from string import Template
+app = Flask(__name__)
+
+HTML_TEMPLATE = Template("""
+<h1>Hello ${place_name}!</h1>
+
+<img src="https://maps.googleapis.com/maps/api/staticmap?size=700x300&markers=${place_name}" alt="map of ${place_name}">
+
+<img src="https://maps.googleapis.com/maps/api/streetview?size=700x300&location=${place_name}" alt="street view of ${place_name}">
+""")
+
+@app.route('/')
+def homepage():
+    return """<h1>Hello world!</h1>"""
+
+@app.route('/<some_place>')
+def some_place_page(some_place):
+    return(HTML_TEMPLATE.substitute(place_name=some_place))
+
+if __name__ == '__main__':
+    app.run(debug=True, use_reloader=True)
+~~~
+
+<p>
+Now, put <em>any</em> name you'd like in your web app's path, e.g. <%= url_alone 'http://127.0.0.1/chicago' %>, <%= url_alone 'http://127.0.0.1/hong+kong' %>, <%= url_alone 'http://127.0.0.1/moscow' %>, <%= url_alone 'http://127.0.0.1/zimbabwe' %> 
+</p>
+
+
+## Mixing constants and variables in path names
+
+Later down the road, we might have more complex web apps that do more than one kind of thing. What if we wanted to have the current functionality of showing a place via Google Maps, but we also wanted to have a `/weather` route, which would tell us, well, the _weather_?
+
+Right now, this is how our app reacts when visiting <%=url_alone "http://localhost:5000/weather" %>: We show the map and (unavailable) street view for a place named "weather":
+
+![image hello-weather.png](/files/flask-single-page/images/hello-weather.png)
+
+So let's create __subroutes__ -- which are not much different in concept than creating subfolders within a file folder:
+
+~~~py
+@app.route('/places/<some_place>')
+def some_place_page(some_place):
+    return(HTML_TEMPLATE.substitute(place_name=some_place))
+
+@app.route('/weather/<n>')
+def some_weather_page(n):
+    return("I don't know what the weather is in {name}".format(name=n))
+~~~
+
+Note: for the "weather" route, I'm [using the string __format()__ method](https://www.python.org/dev/peps/pep-3101/), which works nearly exactly like the __string.Template__ object with its `substitute()` method, but with fewer steps. It's more suited for one-line variable substitution.
+
+Make sure you understand Python syntax enough to understand how the following code is _functionally_ equivalent to the previous snippet:
+
+~~~py
+@app.route('/places/<p>')
+def places_view(p):
+    return(HTML_TEMPLATE.substitute(place_name=p))
+
+@app.route('/weather/<blahblahblah>')
+def weather_view(blahblahblah):
+    s = """I don't know what the weather is in {zzz}"""
+    return s.format(zzz=blahblahblah)
+~~~
 
 
 
-# Final
+# Conclusion
+
+Web applications tend to have more than one page, and so we've learned how to create more than one route to our web app. We've also seen how we can use __string templating__ to make it easier to re-use repetitive HTML and other strings.
+
+Finally, we learned how to create routes with variable names that can _dynamically_ respond to user input. Everything we did in Flask before this was barely different than just writing raw HTML in a text editor and saving it as an HTML file. Now, we're doing something that is impossible to do without a programmatic element.
+
+
+In <%= link_to 'the next lesson', url_for_sequence_next %>, we'll practice what we've learned by creating a simple video viewer.
 

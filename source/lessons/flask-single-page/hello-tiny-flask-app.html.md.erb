@@ -491,8 +491,6 @@ Basically, not only do you have to worry about typos in your Python code, but ty
 
 And that's a Flask app. While we haven't done much of what normally constitutes web application development, it's important to get a feel for the bare foundation of a Flask app and what we get with a few lines of boilerplate code. 
 
-In the next lesson, we'll create an app that serves up a "proper" webpage with actual HTML. But it's important to understand that the app's __view function__ really just returns a __string__ object -- and thus, a "proper" webpage with "real" HTML is just a big string.
-
 Here's all the code for the app we created, though your function/variable names may vary. See how much of it you can reproduce from memory:
 
 ~~~py
@@ -509,4 +507,8 @@ def homepage():
 if __name__ == '__main__':
     app.run(use_reloader=True)
 ~~~
+
+In <%=link_to 'the next lesson', url_for_sequence_next%>, we'll create an app that serves up a "proper" webpage with actual HTML. But it's important to understand that the app's __view function__ really just returns a __string__ object -- and thus, a "proper" webpage with "real" HTML is just a big string.
+
+
 
