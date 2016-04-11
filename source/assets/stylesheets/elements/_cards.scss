@@ -12,14 +12,13 @@
   .header{
     @extend .card-header;
     @extend .h5;
-    background: black;
-    font-weight: bold;
+    background: #777;
+    font-weight: 400;
     color: white;
     border: thin solid #777;
 
   }
 }
-
 
 .content-card-minimal{
   @extend .content-card;

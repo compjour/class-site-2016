@@ -176,8 +176,6 @@ Before moving on, let's refactor that redundant HTML code and move it to the top
 ~~~py
 from flask import Flask
 from string import Template
-app = Flask(__name__)
-
 HTML_TEMPLATE = Template("""
       <h2>
         YouTube video link: 
@@ -188,6 +186,7 @@ HTML_TEMPLATE = Template("""
     
       <iframe src="https://www.youtube.com/embed/${youtube_id}" width="853" height="480" frameborder="0" allowfullscreen></iframe>""")
 
+app = Flask(__name__)
 @app.route('/')
 def homepage():
     vidhtml =  HTML_TEMPLATE.substitute(youtube_id='YQHsXMglC9A')
@@ -222,16 +221,16 @@ For example, if you want a video to __autoplay__, add the `autoplay` parameter t
 
 <% content_card('Restrictions on embedding YouTube video') do %>
 
-Note: the `autoplay` parameter, among others, won't work for the [Adelle "Hello" video](https://www.youtube.com/watch?v=YQHsXMglC9A): 
+Note: the `autoplay` parameter, among others, won't work for the [Adelle "Hello" video](https://www.youtube.com/watch?v=YQHsXMglC9A) if you attempt to directly visit the embed code:
 
 <%=url_alone 'https://www.youtube.com/embed/YQHsXMglC9A?autoplay=1' %>  
 
-&ndash; as apparently its publisher does not want its embeddable videos to autoplay. You'll find this restriction on a lot of commercial video. So in subsequent examples, I'm going to be using this [public domain video from the White House](https://www.youtube.com/embed/YQHsXMglC9A).
+&ndash; as apparently its publisher does not want its videos to autoplay upon a direct visit to the embed URL. You'll find this restriction on a lot of commercial video. That doesn't really impact the way we do embeds via iframes, just wanted to point out this kind of YouTube-specific behavior...
 
 <% end %>
 
 
-To make a video autoplay, and start at 90 seconds in, and loop continuously, tack on the `start` and `loop` parameters: 
+To make a video autoplay, and start at 90 seconds in, and loop continuously, tack on the `start` and `loop` parameters. You can view it in action at this URL:
 
 <%=url_alone 'https://www.youtube.com/embed/mP1cRqZ8JGw?autoplay=1&start=90&loop=1' %>  
 
@@ -262,7 +261,7 @@ Here's how YouTube does it:
 Let's try to do something different, such as sending the user to some _other_ video that _does_ work.
 
 
-## Detecting a 404
+## Detecting a valid YouTube video ID
 
 So, how do we tell if a given YouTube video ID actually refers to a real video?
 
@@ -304,10 +303,244 @@ resp.status_code
 
 <%= asciinema_player '/files/flask-single-page/asciinema/request-youtube-200.json', '$ ipython', height: 15 %>
 
-The status code of `200` amounts to the webserver saying everything is "OK". So what is the status code when a video
+The status code of `200` amounts to the webserver saying everything is "OK". 
+
+So what is the status code when a video ID _isn't_ valid?
+
+Try the same code, but use an obviously fake YouTube ID:
+
+~~~py
+import requests
+resp = requests.get('https://www.youtube.com/watch?v=LOREMIPSUM')
+resp.status_code
+# 404
+~~~
+
+The dreaded 404 status code, i.e. "Not Found", is what a web server returns when you visit a non-existent URL.
+
+Note that most modern websites are configured to return a webpage even when a URL doesn't correspond to an existing resource, so sometimes it's hard to tell that what you're getting is an actual 404 response. 
+
+Here's YouTube: <%=url_alone 'https://www.youtube.com/watch?v=LOREMIPSUM' %>
+
+![image youtube-404.png](/files/flask-single-page/images/youtube-404.png)
+
+Some sites, like [Bloomberg.com](http://www.bloomberg.com/loremipsum), will make it much more obvious that the rendered webpage you're receiving is an actual 404 page:
+
+<%= url_alone 'http://www.bloomberg.com/loremipsum' %>
+
+![img bloomberg](/files/flask-single-page/images/bloomberg404.gif)
+
+
+## Writing a status_code-testing function
+
+So now we have a Python routine which can determine whether any given URL (YouTube or whatever) actually exists
+
+~~~py
+import requests
+some_url = 'https://www.youtube.com'
+resp = requests.get(some_url)
+if resp.status_code == 200:
+   print("OK")
+else:
+   print("Not OK")
+~~~
+
+
+Abstract that to a function (and assume that `import requests` is at the top of the file). And also, instead of using Requests `get()` method, let's use `head()`, which attempts to do a lightweight request. We don't need the entire web response, just its metadata, i.e. its "head". You can read more about [HTTP request types, including HEAD, on Wikipedia](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods):
+
+~~~py
+def is_url_ok(url):
+    resp = requests.head(url)
+    if resp.status_code == 200:
+        return True
+    else:
+        return False
+~~~
+
+Or, to be even more concise:
+
+~~~py
+def is_url_ok(url):
+    resp = requests.head(url)
+    return 200 == resp.status_code
+~~~
+
+Or, to be even _more_ concise, in such a way that it isn't _too_ unreadable:
+
+~~~py
+def is_url_ok(url):
+    return 200 == requests.head(url).status_code
+~~~
+
+Either way, if all we cared about was testing a bunch of random URLs, here's how this function would be used:
+
+~~~py
+import requests
+def is_url_ok(url):
+    return 200 == requests.head(url).status_code
+
+ARTICLE_NAMES = ['Han_Solo', 'Han_shot_first', 'Greedo', 'Greedo_shot_second']
+for aname in ARTICLE_NAMES:
+    url = 'https://en.wikipedia.org/wiki/' + aname
+    is_ok = is_url_ok(url)
+    print(is_ok, url)
+
+# True https://en.wikipedia.org/wiki/Han_Solo
+# True https://en.wikipedia.org/wiki/Han_shot_first
+# True https://en.wikipedia.org/wiki/Greedo
+# False https://en.wikipedia.org/wiki/Greedo_shot_second
+~~~
+
+
+
+## Incorporating the URL status check in a Flask app
+
+
+Let's forget the HTML part for now. Let's just create a basic Flask app that returns `"YouTube video [youtube ID] exists"` for a valid YouTubeID, and a different message if it does not exist.
+
+Create a skeleton Flask app as we've done many times before with a `/videos` route that can take a variable:
+
+~~~py
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/videos/<id>')
+def videos_page(id):
+    return "YouTube video {video_id} exists".format(video_id=id)
+
+if __name__ == '__main__':
+    app.run(debug=True, use_reloader=True)
+~~~
+
+Obviously, it's always going to return the same message no matter what you put in as `<id>` in the path:
+
+<%= url_alone('http://localhost:5000/videos/blahblah') %>
+
+![image localhost-youtube-test-404-alpha.png](/files/flask-single-page/images/localhost-youtube-test-404-alpha.png)
+
+Now, let's throw in the implementation of the `is_url_ok()` function, including the importing of the Requests library. Again, __app.py__ is just a Python script that has some Flask conventions. We can add non-Flask Python code to it as we wish...though we do need to define the `is_url_ok()` function _before_ it gets referred to:
+
+
+~~~py
+from flask import Flask
+import requests
+
+def is_url_ok(url):
+    return 200 == requests.head(url).status_code
+
+app = Flask(__name__)
+
+@app.route('/videos/<id>')
+def videos_page(id):
+    youtube_url = 'https://www.youtube.com/watch?v={video_id}'.format(video_id=id)
+    if True == is_url_ok(youtube_url):
+        return "YouTube video {video_id} exists".format(video_id=id)
+    else:
+        return "YouTube video {video_id} DOES NOT exist".format(video_id=id)
+
+if __name__ == '__main__':
+    app.run(debug=True, use_reloader=True)
+~~~
+
+(Note: in more advanced web applications, ancillary code will all be in a separate file, not thrown into __app.py__, because throwing everything into a single application file can get messy.)
+
+Now our web app's `/videos` path can respond to valid and invalid YouTube IDs differently:
+
+![image localhost-youtube-test-404-beta.png](/files/flask-single-page/images/localhost-youtube-test-404-beta.png)
+
+### Returning a 404 status code in Flask
+
+Note that while we've configured our web app to return a different message based on the result of the `is_url_ok()` function call...our web app technically returns an "OK" response to the user. You can check this via your browser's dev tools network panel:
+
+![image localhost-youtube-test-200-blahblah.png](/files/flask-single-page/images/localhost-youtube-test-200-blahblah.png)
+
+Or, if you don't know how to use your browser's dev tools yet, you can pop open a new Terminal window and hit up your own web server via __ipython__ and Requests:
+
+~~~py
+import requests
+resp = requests.get("http://localhost:5000/videos/blahblah")
+print(resp.text)
+# => YouTube video blahblah DOES NOT exist
+print(resp.status_code)
+# => 200
+~~~
+
+
+
+Whether our app returns the proper status code is a fairly inconsequential detail at our current level of web app development. But because it's so simple to pick the desired status code to return for a given route, we'll do it:
+
+In a given view function, you can manually specify the status code of the response by return a __second value__. Here's a simplified version:
+
+~~~py
+@app.route('/')
+def homepage():
+    return "Whatever", 404
+~~~
+
+For our current app, this is what that would look like -- note that we don't have to specify `200` for the OK case, because the status code is `200` by default:
+
+~~~py
+@app.route('/videos/<id>')
+def videos_page(id):
+    youtube_url = 'https://www.youtube.com/watch?v={video_id}'.format(video_id=id)
+    if True == is_url_ok(youtube_url):
+        return "YouTube video {video_id} exists".format(video_id=id)
+    else:
+        html = "YouTube video {video_id} DOES NOT exist".format(video_id=id)
+        return html, 404
+~~~
+
+
+Here's what that change looks like in the dev tools network panel:
+
+![image localhost-youtube-test-404-blahblah.png](/files/flask-single-page/images/localhost-youtube-test-404-blahblah.png)
+
+
+Test the change for yourself in ipython:
+
+~~~py
+import requests
+resp = requests.get("http://localhost:5000/videos/blahblah")
+print(resp.text)
+# => YouTube video blahblah DOES NOT exist
+print(resp.status_code)
+# => 404
+~~~
+
+
+# All together
+
+Whew, that was a lot of code and concepts. Let's take what we've written so far, but go back to using __iframes__ to embed YouTube videos...because printing `"YouTube video YQHsXMglC9A exists"` makes for a very boring web app.
+
+See if you can write the entirety of __app.py__ without looking at my solution, which I've changed around to fit my tastes, including having the homepage route render just a simple "Hello world" message for now:
+
+
+~~~py
+from flask import Flask
+from string import Template
+
+IFRAME_TEMPLATE = Template("""
+    <iframe src="https://www.youtube.com/embed/${youtube_id}" width="853" height="480" frameborder="0" allowfullscreen></iframe>"""))
+
+
+app = Flask(__name__)
+@app.route('/')
+def homepage():
+    return "Hello world"
+
+@app.route('/videos/<vid>')
+def videos(vid):
+    return HTML_TEMPLATE.substitute(youtube_id=vid)
+
+if __name__ == '__main__':
+    app.run(debug=True, use_reloader=True)
+~~~
 
 
 
 
 
+https://css-tricks.com/almanac/properties/t/transform/
 
+
+![rick roll](/files/flask-single-page/images/hello-rick-roll-flask-app.gif)
