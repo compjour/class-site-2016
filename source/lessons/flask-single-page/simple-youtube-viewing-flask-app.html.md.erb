@@ -4,11 +4,12 @@ description: |
   Some practice with iframes and dynamic behavior in Flask apps.
 image_url: /files/flask-single-page/images/hello-rick-roll-screen.jpg
 objectives:
-  - How to define multiple routes in a Flask web app.
-  - How to define a route that can generate pages dynamically based on string values in the path string.
+  - How to embed the content of another website using iframes.
+  - Get a brief introduction to how YouTube makes their videos embeddable.
+  - Learn how to tell if a URL actually exists.
+  - Practice all the concepts behind making a Flask web app with dynamic routes that serves up HTML-formatted pages.
 summary: |
   With a snippet of HTML, we can make a webpage that plays a YouTube video. Using Flask and Python, we can add some useful dynamic behavior
-
 sequence:
   previous: /lessons/flask-single-page/multiple-dynamic-routes-in-flask 
   landing: /lessons/flask-single-page
@@ -518,10 +519,13 @@ See if you can write the entirety of __app.py__ without looking at my solution, 
 ~~~py
 from flask import Flask
 from string import Template
+import requests
+
+def is_url_ok(url):
+    return 200 == requests.head(url).status_code
 
 IFRAME_TEMPLATE = Template("""
-    <iframe src="https://www.youtube.com/embed/${youtube_id}" width="853" height="480" frameborder="0" allowfullscreen></iframe>"""))
-
+    <iframe src="https://www.youtube.com/embed/${youtube_id}?autoplay=1" width="853" height="480" frameborder="0" allowfullscreen></iframe>""")
 
 app = Flask(__name__)
 @app.route('/')
@@ -530,7 +534,18 @@ def homepage():
 
 @app.route('/videos/<vid>')
 def videos(vid):
-    return HTML_TEMPLATE.substitute(youtube_id=vid)
+    youtube_url = 'https://www.youtube.com/watch?v=' + vid
+    if True == is_url_ok(youtube_url):
+        hed = """<h2><a href="{url}">YouTube video: {id}</a></h2>""".format(url=youtube_url, id=vid)
+        iframe = IFRAME_TEMPLATE.substitute(youtube_id=vid)
+    else:
+        # when the youtube video id is not found
+        hed = """<h2>Youtube video {id} <strong>does not exist</strong></h2>""".format(id=vid)
+        # note that we substitute a specific YouTube ID for the template
+        iframe = IFRAME_TEMPLATE.substitute(youtube_id='dQw4w9WgXcQ')
+
+    return hed + iframe
+
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
@@ -538,9 +553,227 @@ if __name__ == '__main__':
 
 
 
+## All together, as a full webpage
+
+The app code above works, but let's change it so that it outputs a "proper" webpage, with `<head>` and `<body>` tags, among other common structural tags.
+
+The main change is to make a single Template that has all of the HTML. Here's what it could look like:
+
+~~~py
+HTML_TEMPLATE = Template("""
+<!DOCTYPE html>
+<head>
+   <title>My Video App</title>
+</head>
+<body>
+    <h2>${headline}</h2>
+
+    <iframe src="https://www.youtube.com/embed/${youtube_id}?autoplay=1" frameborder="0" allowfullscreen></iframe>
+</body>""")
+~~~
+
+Note that it has two place holder variables: `${headline}` and `${youtube_id}`. This is because the two different views in our app -- one for a valid YouTube video id and one for the 404-rickroll -- have pretty much the same code except for the headline.
+
+Here's what their view function code looks like, with the use of `HTML_TEMPLATE` as shown above. Note how the _headline_ HTML is processed first, then inserted into the Template referred to by `HTML_TEMPLATE`, which is stuffed into a variable named `all_html`.
+
+~~~py
+@app.route('/videos/<vid>')
+def videos(vid):
+    youtube_url = 'https://www.youtube.com/watch?v=' + vid
+    if True == is_url_ok(youtube_url):
+        hed = """<a href="{url}">YouTube video: {id}</a>""".format(url=youtube_url, id=vid)
+        all_html = HTML_TEMPLATE.substitute(headline=hed, youtube_id=vid)
+    else:
+        hed = """YouTube video <u>{id}</u> does not exist""".format(id=vid)
+        all_html = HTML_TEMPLATE.substitute(headline=hed, youtube_id='dQw4w9WgXcQ')
+
+    return all_html
+~~~
+
+This could be better refactored, but you get the point.
+
+## All together, with CSS
+
+As I've mentioned before, CSS, the language used to style webpages, is, well, its own language, with entirely different syntax from HTML and Python. It's beyond the scope of our lessons, though, Scott Murray has an [excellent primer on CSS in his Interactive Data Visualization book](http://chimera.labs.oreilly.com/books/1230000000345/ch03.html#_css).
+
+CSS is generally kept in files separate from HTML (and most definitely from __app.py__). But for now, we'll add the CSS code into the HTML template, using the `<style>` tag. 
+
+The following CSS code, as inserted into `HTML_TEMPLATE`, sets some style attributes of the `<body>` tag, which is the tag that contains all visible elements in our HTML. The `<style>` tags themselves generally go within the `<head>` tags:
+
+~~~py
+HTML_TEMPLATE = Template("""
+<!DOCTYPE html>
+<head>
+   <title>My Video App</title>
+   <style>
+   body{
+     text-align: center;
+     background-color: pink;
+   }
+   </style>
+</head>
+<body>
+    <h2>${headline}</h2>
+
+    <iframe src="https://www.youtube.com/embed/${youtube_id}?autoplay=1" frameborder="0" allowfullscreen></iframe>
+</body>""")
+~~~
+
+The only new tag in the HTML is `<style>`, which encloses this CSS snippet:
+
+~~~css
+   body{
+     text-align: center;
+     background-color: pink;
+   }
+~~~
+
+Everything else about __app.py__ remains the same. But the addition of style code changes what the webpage _looks like_, even though nothing about the content has changed:
+
+<%= url_alone 'http://127.0.0.1:5000/videos/iYYRH4apXDo' %>
+
+![image space-oddity-pink.jpg](/files/flask-single-page/images/space-oddity-pink.jpg)
+
+Note that because the HTML template is shared across both the `200` and `404` view code, our 404-page will have the same styling:
+
+<%= url_alone 'http://127.0.0.1:5000/videos/thisisbad' %>
+
+![image pink-rick-roll.jpg](/files/flask-single-page/images/pink-rick-roll.jpg)
 
 
-https://css-tricks.com/almanac/properties/t/transform/
+OK, it's not terribly pretty, but we've barely begun to dig into CSS styling.
 
+## All together, spinning around
+
+One more example of how CSS works in practice.
+
+Let's clean up the `<iframe>` tag. Instead of this:
+
+~~~html
+<iframe src="https://www.youtube.com/embed/${youtube_id}?autoplay=1" width="853" height="480" frameborder="0" allowfullscreen></iframe>
+~~~
+
+We remove the `width` and `height` attributes:
+
+~~~html
+<iframe src="https://www.youtube.com/embed/${youtube_id}?autoplay=1" frameborder="0" allowfullscreen></iframe>
+~~~
+
+And we set those properties in the CSS within the `<style>` tag:
+
+~~~css
+      iframe{
+          width: 80%;
+          height: 600px;
+      }
+~~~
+
+It's almost always preferable to set style attributes in the kind of CSS syntax above, rather than inside the actual HTML tag.
+
+And what the heck, we'll add a bunch of (relatively) new CSS style attributes that govern animation of elements. I won't even try to explain their syntax, though here are some relevant links:
+
+- [StackOverflow: webkit css endless rotation-animation. How?](http://stackoverflow.com/questions/6410730/webkit-css-endless-rotation-animation-how)
+- [CSS Tricks: Transform](https://css-tricks.com/almanac/properties/t/transform/)
+
+Here's the complete code for __app.py__ with most of the code now in the HTML template -- and this is why we will eventually move all HTML view code into its own files, out of __app.py__:
+
+~~~py
+from flask import Flask
+from string import Template
+import requests
+
+def is_url_ok(url):
+    return 200 == requests.head(url).status_code
+
+HTML_TEMPLATE = Template("""
+<!DOCTYPE html>
+<head>
+   <title>My Video App</title>
+   <style>
+      body{
+          text-align: center;
+          background-color: #FFAAAA;
+      }
+
+      iframe{
+          width: 80%;
+          height: 600px;
+          -webkit-animation: fun-function 2.5s linear infinite;
+          -webkit-animation-direction: alternate;
+          -moz-animation: fun-function 2.5s linear infinite;
+          -moz-animation-direction: alternate;
+      }
+
+      @-webkit-keyframes fun-function{
+        from{
+          -webkit-transform: rotate(0deg) skew(-30deg);
+        }
+        to{
+          -webkit-transform: rotate(360deg) skew(30deg);
+        }
+      }
+
+      @-moz-keyframes fun-function{
+        from{
+          -moz-transform: rotate(0deg) skew(-30deg);
+        }
+        to{
+          -moz-transform: rotate(360deg) skew(30deg);
+        }
+      }
+   </style>
+</head>
+<body>
+    <h2>${headline}</h2>
+    <iframe src="https://www.youtube.com/embed/${youtube_id}?autoplay=1" frameborder="0" allowfullscreen></iframe>
+</body>""")
+
+app = Flask(__name__)
+@app.route('/')
+def homepage():
+    return "Hello world"
+
+@app.route('/videos/<vid>')
+def videos(vid):
+    youtube_url = 'https://www.youtube.com/watch?v=' + vid
+    if True == is_url_ok(youtube_url):
+        headline_html = """<a href="{url}">YouTube video: {id}</a>""".format(url=youtube_url, id=vid)
+        all_html = HTML_TEMPLATE.substitute(headline=headline_html, youtube_id=vid)
+    else:
+        headline_html = """YouTube video <u>{id}</u> does not exist""".format(id=vid)
+        all_html = HTML_TEMPLATE.substitute(headline=headline_html, youtube_id='dQw4w9WgXcQ')
+    return all_html
+
+if __name__ == '__main__':
+    app.run(debug=True, use_reloader=True)
+~~~
+
+
+Try running this app yourself. And see if you get something that looks like this:
 
 ![rick roll](/files/flask-single-page/images/hello-rick-roll-flask-app.gif)
+
+
+
+# Conclusion
+
+So we've just about hit our limit for how much craziness we can sanely cram into a web app that consists of a single file. The final example in this exercise is _way_ messier than what you will be creating in the real world...because in the real world, you won't be cramming everything into a single file.
+
+If you came out of this confused, it's OK -- there are several months, if not years worth of programming, design, and web architecture concepts that we mostly gloss over.
+
+## Going beyond iframes
+
+Thinking back to our specific web application, which made use of [YouTube's embed code](https://developers.google.com/youtube/player_parameters), one thing that you might have _felt_ is how _limited_ we were in dealing with YouTube content: we can basically determine what video we want to play, the size of the viewer, and whether it should autoplay, among other simple options.
+
+However, we couldn't do something as basic as pull out the video title, which is why our HTML template contains code like this, in which we can only display a YouTube video by ID:
+
+~~~py
+"""<a href="{url}">YouTube video: {id}</a>""".format(url=youtube_url, id=vid)
+~~~
+
+More importantly, we don't have the ability to _query_ YouTube for available video titles. Instead, our users have to _already know_ the YouTube ID of the video that they want to see on our crazy web app; else, they get rick-rolled.
+
+Wouldn't it be nice to be able to conduct a programmatic search from our site for YouTube videos? Or even have an "official" way to tell if a video ID is valid, rather than our generic HTTP status-code-checking function? 
+
+These are all reasons why sites like [YouTube provide an API](https://developers.google.com/youtube/), which is significantly more complicated to use than an embed code. But the tradeoff is much more functionality.
+
