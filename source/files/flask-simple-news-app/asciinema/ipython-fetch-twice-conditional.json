@@ -1,0 +1,162 @@
+{
+  "version": 1,
+  "width": 80,
+  "height": 12,
+  "duration": 12.018154,
+  "command": "/bin/bash",
+  "title": "",
+  "env": {
+    "TERM": "xterm-256color",
+    "SHELL": "/bin/bash"
+  },
+  "stdout": [
+    [
+      0.007053,
+      "\u001b[?1034h"
+    ],
+    [
+      0.000012,
+      "bash-3.2$ "
+    ],
+    [
+      1.186120,
+      "p"
+    ],
+    [
+      0.393969,
+      "y"
+    ],
+    [
+      0.112134,
+      "t"
+    ],
+    [
+      0.112614,
+      "h"
+    ],
+    [
+      0.078397,
+      "o"
+    ],
+    [
+      0.123953,
+      "n"
+    ],
+    [
+      0.078662,
+      " "
+    ],
+    [
+      0.573830,
+      "f"
+    ],
+    [
+      0.112472,
+      "e"
+    ],
+    [
+      0.191255,
+      "tch.py "
+    ],
+    [
+      0.641354,
+      "\r\n"
+    ],
+    [
+      0.178125,
+      "Downloading from http://unitedstates.sunlightfoundation.com/legislators/legislators.csv\r\n"
+    ],
+    [
+      1.217176,
+      "Saving 268767 to: legislators.csv\r\n"
+    ],
+    [
+      0.016037,
+      "bash-3.2$ "
+    ],
+    [
+      0.693312,
+      "p"
+    ],
+    [
+      0.213218,
+      "y"
+    ],
+    [
+      0.157601,
+      "t"
+    ],
+    [
+      0.101226,
+      "h"
+    ],
+    [
+      0.090065,
+      "o"
+    ],
+    [
+      0.101341,
+      "n"
+    ],
+    [
+      0.078889,
+      " "
+    ],
+    [
+      0.089070,
+      "f"
+    ],
+    [
+      0.123870,
+      "e"
+    ],
+    [
+      0.225533,
+      "tch.py "
+    ],
+    [
+      0.584808,
+      "\r\n"
+    ],
+    [
+      0.175595,
+      "Already downloaded legislators.csv\r\n"
+    ],
+    [
+      0.012740,
+      "bash-3.2$ "
+    ],
+    [
+      1.724743,
+      "python fetch.py "
+    ],
+    [
+      0.381876,
+      "\r\n"
+    ],
+    [
+      0.175883,
+      "Already downloaded legislators.csv\r\n"
+    ],
+    [
+      0.015772,
+      "bash-3.2$ "
+    ],
+    [
+      0.405327,
+      "python fetch.py "
+    ],
+    [
+      0.325835,
+      "\r\n"
+    ],
+    [
+      0.179678,
+      "Already downloaded legislators.csv\r\n"
+    ],
+    [
+      0.012682,
+      "bash-3.2$ "
+    ]
+  ]
+}

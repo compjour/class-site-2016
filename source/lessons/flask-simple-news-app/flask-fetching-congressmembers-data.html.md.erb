@@ -1,0 +1,458 @@
+---
+title: Fetching the Congressmember data to make a birthday Flask app
+---
+
+
+The [Sunlight Foundation compiles legislator data](https://sunlightlabs.github.io/congress/index.html#legislator-spreadsheet) in this convenient CSV file:
+
+<%=url_alone 'http://unitedstates.sunlightfoundation.com/legislators/legislators.csv' %>
+
+
+
+Actually, we don't really need to fully understand the CSV. We just need to write the Python code that downloads and saves it to disk.
+
+This should be familiar to you; try running it in interactive Python to make sure you grok all the steps:
+
+~~~py
+import requests
+url = 'http://unitedstates.sunlightfoundation.com/legislators/legislators.csv'
+data_filename = 'legislators.csv'
+
+resp = requests.get(url)
+with open(data_filename, 'w') as wf:
+    wf.write(resp.text)
+~~~
+
+Wherever you run that script on your computer, it should result in a file named `legislators.csv` saved in the current working directory.
+
+
+# Writing fetch.py
+
+This data-fetching routine is one use in our application. So let's save it in a Python file named __fetch.py__, which allows us to run it from the command line:
+
+~~~sh
+$ python fetch.py
+~~~
+
+However, we need to add some `print()` statement...because otherwise the Python code in __fetch.py__ will run silently. Modify it to look like this:
+
+
+~~~py
+import requests
+DATA_URL = 'http://unitedstates.sunlightfoundation.com/legislators/legislators.csv'
+DATA_FILENAME = 'legislators.csv'
+
+print("Downloading from", DATA_URL)
+resp = requests.get(DATA_URL)
+
+with open(DATA_FILENAME, 'w') as wf:
+    msg = "Saving {numchars} to: {filename}"
+    print(msg.format(numchars=len(resp.text), filename=DATA_FILENAME))
+    wf.write(resp.text)
+~~~
+
+
+This is what it looks like when you run `python fetch.py` in your system shell:
+
+<%= asciinema_player( 
+        '/files/flask-simple-news-app/asciinema/run-simple-fetch.json',
+        '$ python fetch.py', :height => 10) %>
+
+
+
+## What is `__name__` and `'__main__'`?
+
+This subsection is a segue for explaining the Python idiom of `__name__` and `'__main__'` -- if you already know it, you can skip this section.
+
+Back when we were learning how to make a basic Flask app, we saw -- and blindly repeated -- this following snippet of code in __app.py__:
+
+
+~~~py
+if __name__ == '__main__':
+    app.run()
+~~~
+
+What does that `if`-statement imply? More specifically, what is that `__name__` variable, and what kind of object does it refer to? And why do we care if it is equivalent to `'__main__'`?
+
+First, the fact that `__name__` is being tested to see if it is equal to the _string_ value  `'__main__'` implies that `__name__` itself is a string. Jump into ipython yourself and test it out:
+
+<%= asciinema_player( 
+        '/files/flask-simple-news-app/asciinema/what-is-__name__.json',
+        '$ ipython', :height => 10) %>
+
+Yep, that `__name__` object is a string. And in ipython, its value is indeed equal to `'__main__'`.
+
+However, the value of `__name__` changes when you import an external file into iPython.
+
+Make a throwaway file named __fooey.py__. In that file, write and save the following Python code.
+
+~~~py
+print("Inside foo.py, the name is:", __name__)
+~~~
+
+Run it from your command-line interpreter:
+
+~~~sh
+$ python foo.py
+~~~
+
+The output should be this:
+
+~~~stdout
+Inside foo.py, the name is: __main__
+~~~
+
+_Now_, launch __ipython__ and __import__ the __foo.py__ file with this statement:
+
+~~~py
+import foo
+~~~
+
+The code inside of __foo.py__ should immediately execute...but note the change in `__name__` value:
+
+~~~stdout
+Inside foo.py, the name is: foo
+~~~
+
+If this isn't clear enough, here's a screencast of me:
+
+1. Running `python foo.py` from the command-line -- i.e. reading foo.py with the Python interpreter.
+2. Jumping into the __ipython__ shell and importing foo.py
+
+<%= asciinema_player( 
+        '/files/flask-simple-news-app/asciinema/foo-python-ipython.json',
+        '$ ipython', :height => 15) %>
+
+
+Recall the contents of __foo.py__; it's a simple print statement:
+
+~~~py
+print("Inside foo.py, the name is:", __name__)
+~~~
+
+When we execute a Python file directly -- i.e. `python foo.py` -- the code in that script has a __top level context__. Or, for the sake of Python convention, its `__name__` is `'__main__'`.
+
+However, if __foo.py__ is _imported_ by another Python script or process, such as jumping into the ipython shell and running `import foo`, then the context, or rather the `__name__`, under which __foo.py__ operates is now `'foo'`. _Not_ `'__main__'`.
+
+
+If you want a more official explanation, you can check these links:
+
+
+- [Stack Overflow: What does `if __name__ == “__main__”:` do?](http://stackoverflow.com/questions/419163/what-does-if-name-main-do)
+- [Python documentation: `__main__`](https://docs.python.org/3/library/__main__.html)
+
+Via the [Python documentation]((https://docs.python.org/3/library/__main__.html):
+
+> A module can discover whether or not it is running in the main scope by checking its own `__name__`, which allows a common idiom for conditionally executing code in a module when it is run as a script or with `python -m` but not when it is imported:
+> 
+> ~~~
+> if __name__ == "__main__":
+>    # execute only if run as a script
+>    main()
+> ~~~
+
+
+
+
+## Refactoring fetch.py
+
+If that `__name__` and `'__main__'` business was hard to swallow, let's see how it applies to our __fetch.py__.
+
+Recall that __fetch.py__ contains this:
+
+~~~py
+import requests
+DATA_URL = 'http://unitedstates.sunlightfoundation.com/legislators/legislators.csv'
+DATA_FILENAME = 'legislators.csv'
+
+print("Downloading from", DATA_URL)
+resp = requests.get(DATA_URL)
+
+with open(DATA_FILENAME, 'w') as wf:
+    msg = "Saving {numchars} to: {filename}"
+    print(msg.format(numchars=len(resp.text), filename=DATA_FILENAME))
+    wf.write(resp.text)
+~~~
+
+We can run __fetch.py__ via the command-line interpreter like so:
+
+~~~sh
+$ python fetch.py
+~~~
+
+Which results in this output:
+
+~~~stdout
+Downloading from http://unitedstates.sunlightfoundation.com/legislators/legislators.csv
+Saving 268767 to: legislators.csv
+~~~
+
+The same thing happens if you go into the ipython shell and run this Python command:
+
+~~~py
+import fetch
+~~~
+
+
+So what does it mean to refactor it to consider the top-level, i.e. `'__main__'` scope?
+
+First, it means separating the code that defines the variables from the code that _does the work_. Typically, we set the latter code off in its own function.
+
+In the example below, the code that downloads/saves the data file is in a function named __fetch_data()__. Refactor `fetch.py` to look the same:
+
+~~~py
+import requests
+DATA_URL = 'http://unitedstates.sunlightfoundation.com/legislators/legislators.csv'
+DATA_FILENAME = 'legislators.csv'
+
+def fetch_data():
+    print("Downloading from", DATA_URL)
+    resp = requests.get(DATA_URL)
+
+    with open(DATA_FILENAME, 'w') as wf:
+        msg = "Saving {numchars} to: {filename}"
+        print(msg.format(numchars=len(resp.text), filename=DATA_FILENAME))
+        wf.write(resp.text)
+~~~
+
+
+So, one difference is that if we now attempt to execute the script via the command line:
+
+~~~sh
+$ python fetch.py
+~~~
+
+...nothing will happen. That's because while the __fetch_data()__ function has been _defined_, it is never _executed_.
+
+Jump into __ipython__ and import __fetch.py__:
+
+~~~py
+import fetch
+~~~
+
+Again, nothing will happen.
+
+But now, at the ipython shell prompt, _execute_ the `fetch.fetch_data()` function:
+
+~~~py
+fetch.fetch_data()
+~~~
+
+And you'll get the following output:
+
+~~~stdout
+Downloading from http://unitedstates.sunlightfoundation.com/legislators/legislators.csv
+Saving 268767 to: legislators.csv
+~~~
+
+Or, if you prefer the more Pythonic way of importing modules and their function names into the space:
+
+~~~py
+from fetch import fetch_data
+fetch_data()
+~~~
+
+## Defining the top-level `'__main__'` routine
+
+OK, so basically we've deferred the fetching data routine to only run when the `fetch.fetch_data()` function is executed.
+
+However, we miss the convenience of getting that functionality when running __fetch.py__ from the command line:
+
+~~~sh
+$ python fetch.py
+~~~
+
+How can we get back that convenience?
+
+That's what the `if __name__ == '__main__':` branch checks. Remember how when we ran `python foo.py` from the command-line, it told us its `__name__` was `'__main__'`? Here's how we use that insight in __fetch.py__ -- note the only change is the addition of two lines at the bottom:
+
+~~~py
+if __name__ == '__main__':
+    fetch_data()
+~~~
+
+The full __fetch.py__ file:
+
+~~~py
+import requests
+DATA_URL = 'http://unitedstates.sunlightfoundation.com/legislators/legislators.csv'
+DATA_FILENAME = 'legislators.csv'
+
+def fetch_data():
+    print("Downloading from", DATA_URL)
+    resp = requests.get(DATA_URL)
+
+    with open(DATA_FILENAME, 'w') as wf:
+        msg = "Saving {numchars} to: {filename}"
+        print(msg.format(numchars=len(resp.text), filename=DATA_FILENAME))
+        wf.write(resp.text)
+
+if __name__ == '__main__':
+    fetch_data()
+~~~
+
+Now running from the command-line will, by default, execute the code in that `__main__` branch:
+
+~~~sh
+$ python fetch.py
+~~~
+
+~~~stdout
+Downloading from http://unitedstates.sunlightfoundation.com/legislators/legislators.csv
+Saving 268767 to: legislators.csv
+~~~
+
+# Caching data files
+
+We're almost done; let's add one more feature to our fetching routine: the logic for _not_ downloading the file when we already have it.
+
+The slowest part of __fetch.py__, by an order of magnitude, is the time it takes to download __legislators.csv__ from the Sunlight Foundation's remote server. Because the composition of Congress changes relatively slowly, why do we need to keep redownloading it over and over?
+
+The Python standard library contains the [__os.path__](https://docs.python.org/3/library/os.path.html) module which contains a set of helpful file-related functions, including [the __exists()__ function](https://docs.python.org/3/library/os.path.html#os.path.exists) which accepts an argument for a string, and then returns `True` or `False` based on whether that string represents a filename that exists.
+
+You can try in ipython. Assuming you're running ipython in the same directory to which you've been running __fetch.py__:
+
+
+
+~~~py
+from os.path import exists
+exists("booobooo123.blahblah")
+# False
+exists("fetch.py")
+# True
+exists("legislators.csv")
+# True
+~~~
+
+See if you can figure out how to include it in __fetch.py__ yourself before checking my answer below.
+
+## fetch.py with a conditional check for file existence
+
+This is what my __fetch.py__ looks like:
+
+~~~py
+from os.path import exists
+import requests
+DATA_URL = 'http://unitedstates.sunlightfoundation.com/legislators/legislators.csv'
+DATA_FILENAME = 'legislators.csv'
+
+def fetch_data():
+    if exists(DATA_FILENAME):
+        print("Already downloaded", DATA_FILENAME)
+    else:
+        print("Downloading from", DATA_URL)
+        resp = requests.get(DATA_URL)
+        with open(DATA_FILENAME, 'w') as wf:
+            msg = "Saving {numchars} to: {fname}"
+            print(msg.format(numchars=len(resp.text), fname=DATA_FILENAME))
+            wf.write(resp.text)
+
+if __name__ == '__main__':
+    fetch_data()
+~~~
+
+
+Let's see if it actually works. __Delete__ the `legislators.csv` file. Then run __fetch.py__ from the command-line _twice_. The first time, it should print out the messages telling us that it's downloading from a URL. The second time, it should tell us that the file has already been downloaded and, more importantly, the program should exit almost _instantaneously_:
+
+<%= asciinema_player( 
+        '/files/flask-simple-news-app/asciinema/ipython-fetch-twice-conditional.json',
+        '$ python fetch.py', :height => 12) %>
+
+
+
+
+
+# Add a read_data() function
+
+OK OK, one more function, the necessity of which won't make sense until the next lesson.
+
+Currently, our `fetch_data()` function in __fetch.py__ _does not return anything_. Instead, it does the work of downloading and saving a file, and notifying us (via `print()`) that the download has happened...but at the end of the function, _nothing is returned_. Which is always the case when there is no `return` statement.
+
+However, other parts of our code base may want access to the raw text data that is in `DATA_FILENAME`, i.e. __legislators.csv__...but those parts of the code base shouldn't care about the `fetch_data()` function...they don't want to worry about downloading data. They just want to get the raw text.
+
+So let's create a little "helper" (also known as a "convenience") function. We'll call it __read_data()__, and whenever someone calls it, it does the following:
+
+- runs `fetch_data()` to ensure that data has been downloaded and that the file exists
+- opens the file at `DATA_FILENAME`, reads it, and simply returns its contents as a big string.
+
+Here's the function definition that you can put into __fetch.py__:
+
+~~~py
+def read_data():
+    fetch_data()
+    with open(DATA_FILENAME, 'r') as rf:
+        txt = rf.read()
+    return txt
+~~~
+
+Or, more concisely:
+
+~~~py
+def read_data():
+    fetch_data()
+    with open(DATA_FILENAME, 'r') as rf:
+        return rf.read()
+~~~
+
+
+Pop open your ipython shell. Then let's test out the difference between `fetch_data()` and `read_data()`:
+
+~~~python
+from fetch import fetch_data, read_data
+f_result = fetch_data()
+type(f_result)
+# NoneType
+f_result
+# None
+
+r_result = read_data()
+type(r_result)
+# str
+len(r_result)
+# 268767
+r_result[0:50]
+# 'title,firstname,middlename,lastname,name_suffix,ni'
+len(r_result.splitlines())
+~~~
+
+Here's an interactive demonstration of what that looks like:
+
+
+<%= asciinema_player( 
+        '/files/flask-simple-news-app/asciinema/ipython-fetch-read-resultvals.json',
+        '$ python fetch.py', :height => 20) %>
+
+
+
+# All together
+
+The final version of __fetch.py__ before moving on:
+
+~~~py
+from os.path import exists
+import requests
+DATA_URL = 'http://unitedstates.sunlightfoundation.com/legislators/legislators.csv'
+DATA_FILENAME = 'legislators.csv'
+
+def fetch_data():
+    if exists(DATA_FILENAME):
+        print("Already downloaded", DATA_FILENAME)
+    else:
+        print("Downloading from", DATA_URL)
+        resp = requests.get(DATA_URL)
+        with open(DATA_FILENAME, 'w') as wf:
+            msg = "Saving {numchars} to: {fname}"
+            print(msg.format(numchars=len(resp.text), fname=DATA_FILENAME))
+            wf.write(resp.text)
+
+def read_data():
+    fetch_data()
+    with open(DATA_FILENAME, 'r') as rf:
+        return rf.read()
+
+if __name__ == '__main__':
+    fetch_data()
+~~~
+
+
+
