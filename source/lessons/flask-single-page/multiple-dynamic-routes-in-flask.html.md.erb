@@ -6,12 +6,24 @@ objectives:
   - How to define multiple routes in a Flask web app.
   - How to define a route that can generate pages dynamically based on string values in the path string.
 summary: |
-  Up to this point, the kind of Flask apps we've built literally do nothing more than just respond with HTML-shaped text, which means they haven't done anything that we couldn't do by just writing HTML and saving it as a text file and skipping the whole Python part.  
+  Up to this point, the kind of Flask apps we've built literally do nothing more than just respond with HTML-shaped text. Which means we haven't created any kind of web experience that a simple HTML text file could provide on its own. 
+
+  In this lesson, we learn how to create routes that can dynamically respond to whatever kind of URL patterns we need.
 sequence:
   previous: /lessons/flask-single-page/serving-simple-html-response/
   next: /lessons/flask-single-page/simple-youtube-viewing-flask-app
   landing: /lessons/flask-single-page
 ---
+
+# Getting started
+
+
+At the end of this lesson, you'll be able to create an app that acts like this:
+
+![dynamic demo](/files/flask-single-page/images/flask-dynamic-places-demo.gif)
+
+
+
 
 Let's revisit the __app.py__ for the most basic Flask app. Try to rewrite it from scratch, just from memory:
 
@@ -70,6 +82,12 @@ def stanford_page():
 The resulting page when visiting <%=url_alone 'http://localhost:5000/stanford' %> looks like:
 
 ![image stanford-maps.jpg](/files/flask-single-page/images/stanford-maps.jpg)
+
+Or, if you have a wide enough screen:
+
+![image stanford-places-horizontal.jpg](/files/flask-single-page/images/stanford-places-horizontal.jpg)
+
+
 
 With just a few lines of code, we've got a couple of neat visuals of a place named "stanford". Sure, Google is doing 99.999% of the work, but using a company's work for our own purposes and amusement is why we take the (tedious) time to read through their API documentation.
 
@@ -317,6 +335,11 @@ if __name__ == '__main__':
 <p>
 Now, put <em>any</em> name you'd like in your web app's path, e.g. <%= url_alone 'http://127.0.0.1/chicago' %>, <%= url_alone 'http://127.0.0.1/hong+kong' %>, <%= url_alone 'http://127.0.0.1/moscow' %>, <%= url_alone 'http://127.0.0.1/zimbabwe' %> 
 </p>
+
+
+![dynamic demo](/files/flask-single-page/images/flask-dynamic-places-demo.gif)
+
+
 
 
 ## Mixing constants and variables in path names

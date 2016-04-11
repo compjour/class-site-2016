@@ -10,6 +10,304 @@ summary: |
   With a snippet of HTML, we can make a webpage that plays a YouTube video. Using Flask and Python, we can add some useful dynamic behavior
 
 sequence:
-  previous: /lessons/flask-single-page/simple-youtube-viewing-flask-app
+  previous: /lessons/flask-single-page/multiple-dynamic-routes-in-flask 
   landing: /lessons/flask-single-page
 ---
+
+
+
+# Simple
+
+~~~py
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def homepage():
+    return """
+    <h1>Hello world!</h1>
+
+    <iframe src="https://www.youtube.com/embed/YQHsXMglC9A" width="853" height="480" frameborder="0" allowfullscreen></iframe>
+    """
+
+if __name__ == '__main__':
+    app.run(debug=True, use_reloader=True)
+~~~
+
+Here's what <%= url_alone 'http://localhost:5000' %> looks like:
+
+![image youtube-basic-hello-embed.jpg](/files/flask-single-page/images/youtube-basic-hello-embed.jpg)
+
+
+# Hello, embeds
+
+
+<%=url_alone 'https://www.youtube.com/watch?v=YQHsXMglC9A'%>
+
+Look for the menu of sharing options. Click the __Embed__ option to reveal an HTML snippet that you copy and paste into a webpage:
+
+![image youtube-embed-hello.png](/files/flask-single-page/images/youtube-embed-hello.png)
+
+This is the code YouTube provides
+
+~~~html
+<iframe width="853" height="480" src="https://www.youtube.com/embed/YQHsXMglC9A" frameborder="0" allowfullscreen></iframe>
+~~~
+
+I like to rearrange the _attributes_, so that the `src` attribute comes first:
+
+~~~html
+<iframe src="https://www.youtube.com/embed/YQHsXMglC9A" width="853" height="480" frameborder="0" allowfullscreen></iframe>
+~~~
+
+Either way, when that snippet is rendered by the web browser, it looks like this:
+
+<iframe src="https://www.youtube.com/embed/YQHsXMglC9A" width="853" height="480" frameborder="0" allowfullscreen></iframe>
+
+
+## YouTube's embed URL pattern
+
+Note the value of the `src` attribute is a URL; visiting it will take you to what basically amounts as a full-page view of the video:
+
+<%=url_alone 'https://www.youtube.com/embed/YQHsXMglC9A' %>
+
+Note how the last component of the URL -- `YQHsXMglC9A` -- seems to be a unique identifier for the video. The following standard YouTube video URL uses it as the value to the URL attribute, `id`:
+
+<%=url_alone 'https://www.youtube.com/watch?v=YQHsXMglC9A'%>
+
+
+So the pattern for embed __URL__ for any YouTube video is this:
+
+      https://www.youtube.com/embed/UNIQUE_YOUTUBE_ID
+
+Just replace `UNIQUE_YOUTUBE_ID` with any embeddable YouTube video.
+
+
+## The <iframe> tag
+
+This is a segue; if you already know what iframes are, feel free to skip to the next section.
+
+
+[An __iframe__ is a HTML tag](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe) that basically embeds a _remote_ webpage inside the current webpage. The source of the embedded webpage is at the URL specified in the `src` attribute. 
+
+The video site Vimeo has a similar design. For example, the video at this following Vimeo URL:
+
+<%=url_alone 'https://vimeo.com/105955605' %>
+
+
+Can be embedded with this HTML snippet, which is an `<iframe>` tag as well as some extra HTML to show a hyperlink:
+
+~~~html
+<iframe src="https://player.vimeo.com/video/105955605" width="500" height="281" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+<p><a href="https://vimeo.com/105955605">Mary live-codes a JavaScript game from scratch &ndash; Mary Rose Cook at Front-Trends 2014</a> from <a href="https://vimeo.com/fronttrends">Front-Trends</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+~~~
+
+Note its `src` attribute is also a URL:
+
+<%=url_alone 'https://player.vimeo.com/video/105955605' %>
+
+
+Or you could opt to include much simpler pages:
+
+~~~html
+<iframe src="http://www.example.com/" width="500" height="300" frameborder="0"></iframe>
+~~~
+
+Note that some websites will block this behavior -- try embedding <%=url_alone 'https://www.google.com' %> onto a webpage.
+
+The problem with iframes that, when they work, you have to load all of the HTML specified by that other website. On the other hand, for complex things such as, well videos, they are often the easiest way to show that kind of content on your webpages without actually hosting it and/or developing the video-player code yourself.
+
+We're using iframes for now just because it's fun; don't think that you can easily build useful applications just by clobbing together other sites via iframes.
+ 
+
+
+# Adding a dynamic `/videos` path
+
+Let's a `/videos` path with a [variable part at the end](http://flask.pocoo.org/docs/0.10/quickstart/#variable-rules): the YouTube video ID. It can return nearly the same HTML as the homepage code, except we'll use the `string.Template` class to create a templated string, and then  use `substitute()` to add in the variable part.
+
+Remember to include `string.Template` via an import statement at the top.
+
+All together:
+
+~~~py
+from flask import Flask
+from string import Template
+app = Flask(__name__)
+
+@app.route('/')
+def homepage():
+    return """
+    <h1>Hello world!</h1>
+
+    <iframe src="https://www.youtube.com/embed/YQHsXMglC9A" width="853" height="480" frameborder="0" allowfullscreen></iframe>
+    """
+
+@app.route('/videos/<vid>')
+def videos(vid):
+    vidtemplate = Template("""
+      <h2>
+        YouTube video link: 
+        <a href="https://www.youtube.com/watch?v=${youtube_id}">
+          ${youtube_id}
+        </a>
+      </h2>
+    
+      <iframe src="https://www.youtube.com/embed/${youtube_id}" width="853" height="480" frameborder="0" allowfullscreen></iframe>
+    """)
+
+    return vidtemplate.substitute(youtube_id=vid)
+
+
+if __name__ == '__main__':
+    app.run(debug=True, use_reloader=True)
+~~~
+
+And now visiting `localhost:5000/videos/` with a YouTube video ID appended to it will show a page with the embed:
+
+![image youtube-charlie-bit.jpg](/files/flask-single-page/images/youtube-charlie-bit.jpg)
+
+
+
+
+
+Before moving on, let's refactor that redundant HTML code and move it to the top, e.g. to a variable named `HTML_TEMPLATE`
+
+
+~~~py
+from flask import Flask
+from string import Template
+app = Flask(__name__)
+
+HTML_TEMPLATE = Template("""
+      <h2>
+        YouTube video link: 
+        <a href="https://www.youtube.com/watch?v=${youtube_id}">
+          ${youtube_id}
+        </a>
+      </h2>
+    
+      <iframe src="https://www.youtube.com/embed/${youtube_id}" width="853" height="480" frameborder="0" allowfullscreen></iframe>""")
+
+@app.route('/')
+def homepage():
+    vidhtml =  HTML_TEMPLATE.substitute(youtube_id='YQHsXMglC9A')
+    return """<h1>Hello world!</h1>""" + vidhtml
+
+@app.route('/videos/<vid>')
+def videos(vid):
+    return HTML_TEMPLATE.substitute(youtube_id=vid)
+
+if __name__ == '__main__':
+    app.run(debug=True, use_reloader=True)
+~~~
+
+
+## Adding YouTube URL embed parameters
+
+Generally, you have very limited ways to customize the appearance of an iframe. YouTube has a few options you can add to the `src` URL's __query string__, documented on its page, [YouTube Embedded Players and Player Parameters](https://developers.google.com/youtube/player_parameters)
+
+<% content_card('URL query strings') do %>
+
+Note: If you're unfamiliar with the concept of a URL __query string__, [read up on their basics at Wikipedia](https://en.wikipedia.org/wiki/Query_string). This is a HTTP concept, _not_ anything to do with the Python language
+
+<% end %>
+
+
+For example, if you want a video to start 30 seconds in, you can include the `start` parameter and set it to a value of `30`:
+
+For example, if you want a video to __autoplay__, add the `autoplay` parameter to the embed URL and set it to a value of `1`:
+
+<%=url_alone 'https://www.youtube.com/embed/mP1cRqZ8JGw?autoplay=1' %>  
+
+
+<% content_card('Restrictions on embedding YouTube video') do %>
+
+Note: the `autoplay` parameter, among others, won't work for the [Adelle "Hello" video](https://www.youtube.com/watch?v=YQHsXMglC9A): 
+
+<%=url_alone 'https://www.youtube.com/embed/YQHsXMglC9A?autoplay=1' %>  
+
+&ndash; as apparently its publisher does not want its embeddable videos to autoplay. You'll find this restriction on a lot of commercial video. So in subsequent examples, I'm going to be using this [public domain video from the White House](https://www.youtube.com/embed/YQHsXMglC9A).
+
+<% end %>
+
+
+To make a video autoplay, and start at 90 seconds in, and loop continuously, tack on the `start` and `loop` parameters: 
+
+<%=url_alone 'https://www.youtube.com/embed/mP1cRqZ8JGw?autoplay=1&start=90&loop=1' %>  
+
+You can read about [the other options at YouTube's documentation](https://developers.google.com/youtube/player_parameters#Overview). Note that these only work with YouTube embeds. I'm showing this as just an example of the kind of _limited_ customization you can do -- anything more complex requires [working programatically with the YouTube API](https://developers.google.com/youtube/), something that is its own topic.
+
+
+
+# How to deal with missing/non-existent YouTube videos
+
+Right now, our app isn't too exciting. I mean, why go to:
+
+<%=url_alone 'http://localhost:5000/videos/mP1cRqZ8JGw' %>
+
+When you could just go straight to YouTube itself:
+
+<%=url_alone 'https://www.youtube.com/embed/mP1cRqZ8JGw' %>
+
+&ndash; and forgo the trouble of creating a mini-web app?
+
+Fair question. So let's first differentiate our app by customizing how it acts when you refer to a non-existent video ID, i.e. try to embed a video URL that doesn't exist.
+
+Here's how YouTube does it:
+
+<%= url_alone 'https://www.youtube.com/embed/BLAHBLAHBLAH' %>
+
+![image youtube-embed-404.png](/files/flask-single-page/images/youtube-embed-404.png)
+
+Let's try to do something different, such as sending the user to some _other_ video that _does_ work.
+
+
+## Detecting a 404
+
+So, how do we tell if a given YouTube video ID actually refers to a real video?
+
+First, it's important to realize that everything we do in this subsection is just "regular" Python scripting. __Nothing__ about it has _anything_ inherent to do with building a Flask app. This section will make more sense to you if you know a bit about how HTTP works or have done web scraping before. If you haven't, just follow along.
+
+By now, you _should_ be familiar with the [Requests library](http://docs.python-requests.org/en/master/), which is a library we use to download files from the Internet:
+
+~~~py
+import requests
+resp = requests.get('http://www.example.com')
+~~~
+
+
+
+Inherent to "downloading" a file is the process of making a HTTP _request_, and getting a _response_. But usually, when people talk about "downloading" a file, they mean to make a request for a URL and save the _content_ (or _body_) of its response to the hard drive.
+
+For example, the following snippet will save the (text) content of <%= url_alone 'http://www.example.com' %> to a local file named `example.html`:
+
+~~~py
+import requests
+resp = requests.get('http://www.example.com')
+with open('example.html', 'w') as f:
+    f.write(resp.text)
+~~~
+
+### The status code of a HTTP response
+
+But there's more to a HTTP response than its content. The requests.Response object (`resp`, in the variable name above) contains plenty of other attributes, the most relevant one to us being `status_code`.
+
+Try the following from the interactive Python shell:
+
+~~~py
+import requests
+resp = requests.get('https://www.youtube.com/watch?v=mP1cRqZ8JGw')
+resp.status_code
+# 200
+~~~
+
+
+<%= asciinema_player '/files/flask-single-page/asciinema/request-youtube-200.json', '$ ipython', height: 15 %>
+
+The status code of `200` amounts to the webserver saying everything is "OK". So what is the status code when a video
+
+
+
+
+
+
