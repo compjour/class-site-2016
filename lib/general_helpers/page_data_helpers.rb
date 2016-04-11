@@ -55,7 +55,7 @@ module GeneralHelpers
     end
 
     def page_url
-      page_data_attr(:url) || 'http://www.example.com/'
+      page_data_attr(:url) || current_page.url
     end
 
     def page_title

@@ -1,3 +1,4 @@
+require 'lib/general_helpers/banner_helpers'
 require 'lib/general_helpers/metadata_helpers'
 require 'lib/general_helpers/page_custom_meta_helpers'
 require 'lib/general_helpers/page_data_helpers'
@@ -6,6 +7,7 @@ require 'lib/general_helpers/markup_helpers'
 
 
 module GeneralHelpers
+    include GeneralHelpers::BannerHelpers
     include GeneralHelpers::MarkupHelpers
     include GeneralHelpers::MetadataHelpers
     include GeneralHelpers::PageCustomMetaHelpers
