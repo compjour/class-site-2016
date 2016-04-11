@@ -2,6 +2,16 @@
 title: Introduction to Simple Web Applications with Flask
 description: |
   A series on learning how to make simple, one-file Flask apps.
+summary: |
+  These set of Flask-making guides are meant for those who have had very little experience with web application development, including all the fun bits that make up web dev, such as HTML, CSS, JS -- (which are all separate languages, BTW) -- and such essential concepts as HTTP and HTTP status codes.
+
+  Nevermind the whole [Flask app architecture](http://flask.pocoo.org/).
+
+  So this series takes it _slow_, with lots and _lots_ of repetition that you are meant to type out manually. Because there is no quicker way to get you up to speed than to mechanically suss out the patterns.
+
+  I also try to remove as many moving parts as possible. Thus, every Flask app in this series consists of a single file -- __app.py__. This is _not_ how things are typically done, and there are a lot of not-best practices in this series. But I want to keep things grounded as much as possible in standard Python syntax before we start including things like Jinja2 templating.
+
+
 hide_toc: true
 mymeta:
   articles:
@@ -11,12 +21,25 @@ mymeta:
     - /lessons/flask-single-page/simple-youtube-viewing-flask-app/
 ---
 
+# The articles 
+
 <section class="uniform-content-resource-listing">
   <% page_mymeta.articles.each do |slug| %>
     <%= content_resource_element slug %>
   <% end %>
 </section>
 
+# Things you should know about Python
+
+If you're still figuring out Python, [the series of Python fundamentals articles I created for my CompCiv class](http://www.compciv.org/articles/) is relevant here. In particular, you should understand these parts of the Python syntax:
+
+- [What a String is](http://www.compciv.org/guides/python/fundamentals/text-as-strings/)
+- [How to define a function in Python](http://www.compciv.org/guides/python/fundamentals/function-definitions/)
+- [For-loops](http://www.compciv.org/guides/python/fundamentals/for-loops/)
+- [If/else statements](http://www.compciv.org/guides/python/fundamentals/conditional-branching/)
+- You should also be aware that [Python has lots of different ways to format ](https://docs.python.org/3/library/string.html)text strings, including the substitution of values into placeholder variables. I interchange between [__format()__](https://docs.python.org/3/library/stdtypes.html#str.format) and [__string.Template()__](https://docs.python.org/3/library/string.html#template-strings). I try to make it clear what's going on, but part of not being confused is just knowing this is one area in which Python has many ways to do the same kind of thing. And also, how ubiquitous and important the concept of data as text.
+
+I'm assuming you know very little about HTML. This series covers very little of HTML, other than its just text that can be represented as Python strings. f you're really fascinated by the specifics of Hypertext Markup Language, [one of the best introductions to HTML (and CSS and JS) can be found in Chapter 3 of Scott Murray's *Interactive Data Visualization*](http://chimera.labs.oreilly.com/books/1230000000345/ch03.html#_the_web), which can be read online for free.
 
 
 <!-- 

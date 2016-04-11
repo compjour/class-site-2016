@@ -9,15 +9,19 @@ objectives:
   - Learn how to tell if a URL actually exists.
   - Practice all the concepts behind making a Flask web app with dynamic routes that serves up HTML-formatted pages.
 summary: |
-  With a snippet of HTML, we can make a webpage that plays a YouTube video. Using Flask and Python, we can add some useful dynamic behavior
+  With a snippet of HTML, we can make a webpage that plays a YouTube video. Using Flask and Python, we can add some useful dynamic behavior. OK, maybe not so "useful", but we can practice what we've learned so far. 
 sequence:
   previous: /lessons/flask-single-page/multiple-dynamic-routes-in-flask 
+  next: /lessons/flask-simple-news-app/
   landing: /lessons/flask-single-page
 ---
 
 
+# Create a simple page
 
-# Simple
+As in previous exercises, we start off by creating a simple Flask app in a single __app.py__ file.
+
+For this exercise, though, I'm including an `<iframe>` tag which will bring in a YouTube video:
 
 ~~~py
 from flask import Flask
@@ -39,11 +43,13 @@ Here's what <%= url_alone 'http://localhost:5000' %> looks like:
 
 ![image youtube-basic-hello-embed.jpg](/files/flask-single-page/images/youtube-basic-hello-embed.jpg)
 
+Basically, a webpage with an embedded YouTube video on it. YouTube will be doing the neat part -- supplying entertaining video -- and for the rest of this lesson, we'll practice what we've learned about basic Flask apps and HTML so far.
 
 # Hello, embeds
 
+You might already know how to get the [embed code for a YouTube video](https://support.google.com/youtube/answer/171780?hl=en). But let's walk through it.
 
-<%=url_alone 'https://www.youtube.com/watch?v=YQHsXMglC9A'%>
+Go to any YouTube video page: <%=url_alone 'https://www.youtube.com/watch?v=YQHsXMglC9A'%>
 
 Look for the menu of sharing options. Click the __Embed__ option to reveal an HTML snippet that you copy and paste into a webpage:
 
@@ -68,21 +74,31 @@ Either way, when that snippet is rendered by the web browser, it looks like this
 
 ## YouTube's embed URL pattern
 
-Note the value of the `src` attribute is a URL; visiting it will take you to what basically amounts as a full-page view of the video:
+There are two kind of YouTube URLs to be aware of (for now):
+
+The URL for the standard video page:
+
+      https://www.youtube.com/watch?v=VIDEOID
+
+And the embed URL for that same video:
+
+      https://www.youtube.com/embed/VIDEOID
+
+
+In the `<iframe>` HTML tag, note the value of the `src` attribute is a URL. For a YouTube video, that's where you use the __embed__ version. However, you can visit the embed URL just as if it were any other URL, and it will take you to what basically amounts as a full-page view of the video:
 
 <%=url_alone 'https://www.youtube.com/embed/YQHsXMglC9A' %>
 
-Note how the last component of the URL -- `YQHsXMglC9A` -- seems to be a unique identifier for the video. The following standard YouTube video URL uses it as the value to the URL attribute, `id`:
+The last component of the URL -- `YQHsXMglC9A` -- is YouTube's unique identifier for the video. And the standard YouTube video URL uses that identifier as well, as the value to the URL attribute of `v`, e.g. `v=YQHsXMglC9A`:
 
 <%=url_alone 'https://www.youtube.com/watch?v=YQHsXMglC9A'%>
 
 
-So the pattern for embed __URL__ for any YouTube video is this:
+So basically, given that the pattern for an embed __URL__ for any YouTube video is this:
 
       https://www.youtube.com/embed/UNIQUE_YOUTUBE_ID
 
-Just replace `UNIQUE_YOUTUBE_ID` with any embeddable YouTube video.
-
+Just replace `UNIQUE_YOUTUBE_ID` with the YouTube unique identifier for any YouTube video you like.
 
 ## The <iframe> tag
 
