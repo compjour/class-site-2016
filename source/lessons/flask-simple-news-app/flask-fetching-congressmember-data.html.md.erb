@@ -4,41 +4,59 @@ sequence:
   previous: /lessons/flask-simple-news-app/flask-parsing-congressmember-data
   next: /lessons/flask-simple-news-app/flask-parsing-congressmember-data
   landing: /lessons/flask-simple-news-app
+objectives:
+    - Review how to download a file from the Internet and save it to disk
+    - Understanding what `'__main__'` and `__name__` refer to
+    - Understand the difference (especially when it comes to `__name__`) between executing a Python file directly and importing a Python file in another program.
+    - Learn how to use `os.path.exists()` to determine if a file already exists before trying to save another file to that destination
+summary: |
+    Even though we intend to build a Flask app, our first set of scripts is going to have nothing to do with the Flask library. Instead, we need to do the work of just getting the data and organizing it. These are steps that we can perform -- and then put into their own scripts -- before we get to the Flask-app making part.
 ---
 
+
+# Downloading the data
 
 The [Sunlight Foundation compiles legislator data](https://sunlightlabs.github.io/congress/index.html#legislator-spreadsheet) in this convenient CSV file:
 
 <%=url_alone 'http://unitedstates.sunlightfoundation.com/legislators/legislators.csv' %>
 
 
+In this step, we're just downloading the data. We don't need to understand its full contents, other than that it's a text file. If you're interested in perusing its contents -- which we'll do in the next lesson -- [I've uploaded it to Gist](https://gist.github.com/dannguyen/fabe9bfc57d0aa3ad4431bb77c37b207).
 
-Actually, we don't really need to fully understand the CSV. We just need to write the Python code that downloads and saves it to disk.
+## Using Requests to download from a URL
 
 This should be familiar to you; try running it in interactive Python to make sure you grok all the steps:
 
 ~~~py
 import requests
 url = 'http://unitedstates.sunlightfoundation.com/legislators/legislators.csv'
-data_filename = 'legislators.csv'
-
 resp = requests.get(url)
+~~~
+
+## Saving data to disk
+
+Remember that in programming, requesting data from a remote URL is a separate step from _saving_ it to your computer. Once the `requests.get()` call above finishes, and assuming that it worked, we can save the contents of the response object, `resp`, to a file named `legislators.csv`:
+
+~~~
+data_filename = 'legislators.csv'
 with open(data_filename, 'w') as wf:
     wf.write(resp.text)
 ~~~
 
-Wherever you run that script on your computer, it should result in a file named `legislators.csv` saved in the current working directory.
+At the end of this process, you should have a file named `legislators.csv` saved in the current working directory. 
 
 
 # Writing fetch.py
 
-This data-fetching routine is one use in our application. So let's save it in a Python file named __fetch.py__, which allows us to run it from the command line:
+This data-fetching routine is going to be used in our main application. So let's save it in a Python file named __fetch.py__, which allows us to run it from the command line:
 
 ~~~sh
 $ python fetch.py
 ~~~
 
-However, we need to add some `print()` statement...because otherwise the Python code in __fetch.py__ will run silently. Modify it to look like this:
+So, create a new file named __fetch.py__, and start writing code.
+
+We can use the code from the previous example, but we need to add some `print()` statements... otherwise the Python code in __fetch.py__ will run silently. Modify it to look like this:
 
 
 ~~~py
@@ -63,10 +81,17 @@ This is what it looks like when you run `python fetch.py` in your system shell:
         '$ python fetch.py', :height => 10) %>
 
 
+# Separating code into functions, away from the "main" action
+
+
+Sometimes when running a Python script, we don't want to necessarily execute everything in it. Sometimes we want to just store variable and functions ina  script file, and let other scripts refer to those variables and functions. In fact, we've already been doing that in most of our code when we use the __import__ statement.
+
+
+This subsection is a segue for explaining the Python idiom of `__name__` and `'__main__'` -- and to just push you through a Python convention for organizing code. If you already know it, you can skip this section. If you don't know it, you probably won't totally understand it, but it's enough to know that the pattern exists.
+
 
 ## What is `__name__` and `'__main__'`?
 
-This subsection is a segue for explaining the Python idiom of `__name__` and `'__main__'` -- if you already know it, you can skip this section.
 
 Back when we were learning how to make a basic Flask app, we saw -- and blindly repeated -- this following snippet of code in __app.py__:
 

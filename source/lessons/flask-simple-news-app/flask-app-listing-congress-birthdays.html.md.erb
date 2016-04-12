@@ -1,5 +1,5 @@
 ---
-title: Creating a Flask app for listing Congressmembers' birthdays
+title: "[DRAFT] Creating a Flask app for listing Congressmembers' birthdays"
 description: Creating a birthday listing is easy after we've fetched and parsed the data.
 sequence:
   previous: /lessons/flask-simple-news-app/flask-parsing-congressmember-data 
@@ -7,4 +7,38 @@ sequence:
   landing: /lessons/flask-simple-news-app
 ---
 
+
+Just a draft.
+
+# Simple app.py
+
+Note how the code here doesn't even refer to the __fetch.py__ script. The web application depends only on the __filter.py__ methods to get the data:
+
+~~~py
+from filter import get_birthday_rows_by_month_day
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def homepage():
+    todays_date = '2015-12-31'
+    todays_mthday = todays_date[5:]
+    data_rows = get_birthday_rows_by_month_day(todays_mthday)
+
+    h = "<h1>Today is {today}</h1>".format(today=todays_date)
+    h += "<p>{num} Congressmembers have birthdays today:</p>".format(num=len(data_rows))
+    h += "<ul>"
+    for d in data_rows:
+        fullname = d['firstname'] + " "  + d['lastname']
+        tstr = "<li>{title} {full_name}, {party} from {state}</li>"
+        h += tstr.format(title=d['title'], full_name=fullname,
+                                party=d['party'], state=d['state'])
+    h += "</ul>"
+    return h
+
+
+if __name__ == '__main__':
+    app.run(debug=True, use_reloader=True)
+
+~~~
 

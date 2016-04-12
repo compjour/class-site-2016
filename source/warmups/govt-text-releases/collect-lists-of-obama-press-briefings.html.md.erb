@@ -1,0 +1,274 @@
+---
+title: Collect the lists of White House press briefings
+objectives: 
+  - Practice (again) downloading webpages and saving them to disk.
+  - Download and save all the pages that list the White House press briefings; we'll download individual press briefings in the next exercise.
+  - Get acquainted with URL query strings and how they're used on the White House site to jump from page to page of entries.
+  - Instead of hand-coding query strings ourselves, learn to pass a dictionary into `params` argument of the `requests.get()` method call.
+  - (Optional) use HTML-parsing to programatically determine the last page number of entries.
+---
+
+
+# Browsing the White House Press Briefings website
+
+This is a little warmup before we get into real web-scraping.
+
+The landing page for the White House press briefings can be found here:
+
+<%=url_alone "https://www.whitehouse.gov/briefing-room/press-briefings" %>
+
+The page features the annoyance of JavaScript-powered-infinite scroll, in which the only way to get to the next page of press briefings is to keep scrolling down, down, down the page. 
+
+Luckily, the website does have affordances for old-fashioned navigation, which I only remember [from last year when we scraped the site](http://2015.compciv.org/homework/assignments/wh-briefings-pup-parse/).
+
+To get to the 50th page of the press briefings, just take the landing page URL and append `page=50` as its [__query string__](https://en.wikipedia.org/wiki/Query_string):
+
+
+## A little about query strings
+
+You can read more about [query strings on Wikipedia](https://en.wikipedia.org/wiki/Query_string), but basically, they're the key-value pairs (e.g. `page=50`) that are separated from the URL by a __question mark__. You've seen them in YouTube URLs:
+
+<%=url_alone 'https://www.youtube.com/watch?v=LyONt_ZH_aw&t=4s' %>
+
+The key-value pairs in that YouTube URL are:
+
+- `v=LyONt_ZH_aw` - the `v` key specifies the YouTube video ID to play.
+- `t=4s` - the `t` key specifies the number of seconds to start playing from.
+
+Query strings are a way for a website to add more options to how a URL endpoint is processed. In the case of the White House press briefings, the `page` key let's us jump from page to page rather than killing our wrists trying to mouse-scroll through the list.
+
+## Finding the last page
+
+Before we consider the "correct" way to do this, let's just do it the most obvious way. Open up your browser and assign large numbers to the query string's `page` parameter. I like to start off with just a medium value, such as `100`, just to make sure things are working as expected:
+
+<%=url_alone 'https://www.whitehouse.gov/briefing-room/press-briefings?page=100' %>
+
+As of April 2016, the dates of the briefings on page 100 of President Obama's press briefings page are in the September 2011 range. So page 100 is more than halfway there.
+
+### Testing the website's limits
+
+I like to pick an extreme number -- e.g. `page=1000` just to see how the site behaves. Does it return a 404 error? Does it return any kind of warning or error to the user, such as, _"Sorry, you've reached the end of our content"_? Or is there no error, just a blank page of entries? The most annoying situation is when you get to the purported "end" of a website's content and it keeps repeatedly showing you the very last page because it doesn't know what to do when you've gone beyond its page limits -- it's difficult to design an automated web crawler that won't just keep on going and going and going...
+
+
+Let's see how the White House press briefings reacts to a request for __page 1000__:
+
+<%=url_alone 'https://www.whitehouse.gov/briefing-room/press-briefings?page=1000' %>
+
+The site returns a normal webpage, except with nothing in its content area:
+
+![image whitehouse-pr-page-1000.jpg](/files/govt-text-releases/images/whitehouse-pr-page-1000.jpg)
+
+It doesn't take long to eventually find the last page of entries -- for me, in April 2016, it was [page 161](https://www.whitehouse.gov/briefing-room/press-briefings?page=161). In another month or so, that last page number will increase. So in the long run, it's best to code a solution that can detect when it's reached the final page of entries. But for now, let's just plan on hardcoding a loop that increments from page `0` to `161`.
+
+
+# Fetching and saving each index page
+
+This part should be old hat. Import the [__Requests__ library](http://docs.python-requests.org/en/master/) and do a `get()` request for one of the pages:
+
+~~~py
+import requests
+url = 'https://www.whitehouse.gov/briefing-room/press-briefings?page=0'
+resp = requests.get(url)
+~~~
+
+Then pick a place (i.e think of a _filename_) to save the `text` contents of the webserver response to disk. Given that this is page number `0`, it makes sense to save it as a file named __0.html__:
+
+~~~py
+with open("0.html", "w") as wf:
+    wf.write(resp.text)
+~~~
+
+
+## Making a quick loop
+
+If you were in a hurry and had to get all those lists of press briefings right now, you could be forgiven for doing this:
+
+~~~py
+import requests
+THE_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings?page='
+MAX_PAGE_NUM = 162
+for pagenum in range(0, MAX_PAGE_NUM):
+    url = THE_URL + str(pagenum)
+    print("Downloading", url)
+    resp = requests.get(url)
+
+    fname = str(pagenum) + '.html'
+    print("Saving to", fname)
+    with open(fname, "w") as wf:
+        wf.write(resp.text)
+~~~
+
+The White House site is pretty fast, so you'd see your script's output fly pretty quickly:
+
+~~~stdout
+Downloading https://www.whitehouse.gov/briefing-room/press-briefings?page=0
+Saving to 0.html
+Downloading https://www.whitehouse.gov/briefing-room/press-briefings?page=1
+Saving to 1.html
+Downloading https://www.whitehouse.gov/briefing-room/press-briefings?page=2
+Saving to 2.html
+...
+Downloading https://www.whitehouse.gov/briefing-room/press-briefings?page=160
+Saving to 160.html
+Downloading https://www.whitehouse.gov/briefing-room/press-briefings?page=161
+Saving to 161.html
+~~~
+
+
+Actually, this task is simple enough that there's not much more to do here. However, since this web-crawl job is so easy, it's a good chance to slow down and practice more advanced techniques and good habits that are necessary for more difficult tasks.
+
+
+# Organizing the collected files
+
+Our bigger job is to not just to collect the pages that _list_ press briefing _headlines_ -- we want to collect each press briefing page itself, and then analyze the text of each press briefing. That last task becomes fairly annoying if we make no effort to keep the press briefing list pages from the individual press briefing pages, nevermind the problem of keeping our Python script files separate from the _thousands_ of webpages we'll be downloading.
+
+So instead of just downloading the webpages right into the local directory, let's create a subdirectory named __index-pages__, and then adjust our script to save the files there.
+
+The least-effort approach would simply be to change the line where the `fname` variable is assigned:
+
+~~~py
+    # ...
+    resp = requests.get(url)
+    fname = "index-pages/" + str(pagenum) + '.html'
+    print("Saving to", fname)
+    #...
+~~~
+
+This little fix ends up creating several problems, the most prominent being that the script will fail _unless_ a directory named `index-pages` already exists...which it probably doesn't at this point.
+
+## Using `makedirs()` to create a directory
+
+If you're in a hurry, you might create the `index-pages` subdirectory using your operating system and a combination of pointing-and-clicking. But let's try it the programmatic way -- it will be a little inconvenient at first, but it's a habit that will pay off very quickly. Typos in file path names are the cause of a huge number of bugs, and they become much more frequent (and harder to track down) if you create path names outside of your programming environment.
+
+Python's [__os__ module](https://docs.python.org/3/library/os.html) provides a [function named __makedirs()__](https://docs.python.org/3/library/os.html#os.makedirs)
+
+We provide it with a (string) name of the directory we hope to create and it will do it:
+
+~~~py
+from os import makedirs
+makedirs('index-pages')
+~~~
+
+One of the problems with the `makedirs()` function is that it will throw an error if a directory or file already exists at the specified path:
+
+~~~py
+# for the second time
+makedirs('index-pages')
+~~~
+
+Here's what it looks like in my interactive recording:
+
+<%= asciinema_player(
+    '/files/govt-text-releases/asciinema/bad-makedirs.json', 
+    '$ ipython', 
+    :height => 15) %>
+
+
+However, by passing in a second named argument, `exist_ok=True`, we can prevent the `makedirs()` function from barking at us just because we didn't know whether a directory already existed:
+
+~~~py
+makedirs('index-pages', exist_ok=True)
+~~~
+
+It may seem strange that we write extra code to prevent an error message instead of just deleting the `makedirs()` call so that it doesn't run again. But in __production environments__, it's not a good idea to add/remove setup code -- including the code that sets up subdirectories -- on a manual basis.
+
+The web-crawling code we've written may seem simple enough to just paste into __ipython__ and run as a one-off...but, that's because it's a small job. For most real, complex tasks, the web-crawling/scraping code will be saved in a Python script. And it may have to be run again, over and over again. It's not fun to have to go in and remove the `makedirs()` calls by hand -- or to add it back in if we've decided to move our work to another directory or new computer entirely.
+
+The `exist_ok` argument makes it so that we can use a `makedirs()` call and let it do its job -- or to stay silent if the job is already done. When we're dealing with much bigger code complexity, that "silence is golden" mentality is nice when there's generally no problem with a subdirectory already existing.
+
+
+[You can try this other exercise](http://www.compciv.org/practicum/shakefiles/a-creating-a-directory-idempotently/) that uses the makedirs() function _idempotently_. Otherwise, it's enough to remember its basic functionality and `exist_ok` argument.
+
+
+It's best to add the `makedirs()` call early in the script, so that the `index-pages` directory is created before anything else happens:
+
+~~~py
+import requests
+from os import makedirs
+makedirs('index-pages', exist_ok=True)
+THE_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings?page='
+MAX_PAGE_NUM = 162
+
+for pagenum in range(0, MAX_PAGE_NUM):
+    url = THE_URL + str(pagenum)
+    # ...
+    fname = "index-pages/" + str(pagenum) + '.html'
+~~~
+
+
+## Assigning the literal path of `index-pages` to a variable
+
+How hard is it to remember that the string `'index-pages'` represents the subdirectory that we save downloaded pages into? Not hard at all, but only because our code is just a few lines.
+
+Generally, when you have some kind of _constant_ value -- i.e. the name of a directory that you plan on referring to on several different occasions -- it's best to assign it to a variable. And for variables on relatively _constant_ values -- are we really going to rename the `index-pages` directory later on? (I hope not!) -- the [Python style guide recommends](https://www.python.org/dev/peps/pep-0008/#constants) using all-caps letters and underscores for the variable name:
+
+~~~py
+INDEX_PAGES_DIR = 'index-pages'
+a = INDEX_PAGES_DIR + '/' + 'hello.html'
+b = INDEX_PAGES_DIR + '/' + 'world.html'
+~~~
+
+### Using variables gives you early protection from your dumb stupid clumsy fingers
+
+The snippet above probably didn't seem particularly economical. After all, typing `INDEX_PAGES_DIR` requires typing several more characters than `index-pages`. 
+
+However, one main advantage of using variable names is that when you mistype a variable name, Python will immediately throw an error:
+
+~~~py
+from os import makedirs
+INDEX_PAGES_DIR = 'index-pages'
+makedirs(INDEXPAGES_DIR, exist_ok=True)
+~~~
+
+~~~
+NameError: name 'INDEXPAGES_DIR' is not defined
+~~~
+
+Getting an error message is usually unpleasant. But at least you were notified of a very fundamental error before the rest of your program did their thing.
+
+Compare that to just trying to type `'index-pages'` manually:
+
+~~~py
+from os import makedirs
+makedirs('index_pages', exist_ok=True)
+~~~
+
+That `makedirs()` call isn't going to throw an error because it assumes you know what you're doing, that you really want a subdirectory named `index_pages` instead of `index-pages`. But what if you don't? How far along will this subtle naming error go undetected? And how much are you going to regret not spending the two seconds it takes to assign a variable name, compared to the potential hours of debugging the kind of error that heavily depends on the acuity of your _eyesight_?
+
+
+## Let os.path.join() do the work of joining file paths
+
+This use of code is going to seem _really_ unnecessary.
+
+Let's say we have a subdirectory named `index-pages` and we want to save a file named `42.html` inside of it. What will that file's path name be? Well, if you're on a Unix-like system -- including Mac OS X and Linux -- that file path is simply:
+
+      index-pages/42.html
+
+And to dynamically generate that path, just add the index-pages directory name, plus a __forward-slash__, plus the base filename together:
+
+~~~py
+INDEX_PAGES_DIR = 'index-pages'
+for i in range(30, 50):
+    bn = str(i) + '.html'
+    fname = INDEX_PAGES_DIR + '/' + bn
+~~~
+
+That seems straightforward. But what if you have a friend who is on a PC? And that PC uses Windows? And [Windows uses its own version of a file path delimiter](http://stackoverflow.com/questions/2227925/path-separator-for-windows-and-unix) -- which is the __backwards-slash__, `\`? Now your simple script could end up in a major headache for anyone running it on a different platform.
+
+So let's import the __os.path__ submodule and use its __join()__ function.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+If you know how to parse HTML, it's possible to 

@@ -1,5 +1,6 @@
 ---
-title: Parsing the Congressmember Data for our birthday Flask app
+title: "[DRAFT] Parsing the Congressmember Data for our birthday Flask app"
+description: After fetching the raw text data, we need to convert it to a data
 sequence:
   previous: /lessons/flask-simple-news-app/flask-fetching-congressmember-data
   next: /lessons/flask-simple-news-app/flask-app-listing-congress-birthdays
@@ -7,6 +8,76 @@ sequence:
 ---
 
 
-It's worth browsing the data file in a spreadsheet to get a feel for what it contains. I've embedded [it in a Gist below](https://gist.github.com/dannguyen/fabe9bfc57d0aa3ad4431bb77c37b207):
+# Note: Explanation in process
+
+
+# Parsing the data
+
+It's worth browsing the legislator data file in a spreadsheet to get a feel for what it contains. I've embedded [it in a Gist below](https://gist.github.com/dannguyen/fabe9bfc57d0aa3ad4431bb77c37b207):
 
 <script src="https://gist.github.com/dannguyen/fabe9bfc57d0aa3ad4431bb77c37b207.js"></script>
+
+
+
+# Basic `filter.py` script with a parsing function
+
+This script uses the `read_data()` method from `fetch.py` to download the data -- if it doesn't already exist -- then provide it as raw text. The `csv.DictReader` class is used to turn the lines of text into a list of dictionaries:
+
+~~~py
+from fetch import read_data
+from csv import DictReader
+
+def parse_data():
+    """
+    Returns a list of dictionaries from the raw text
+    based on what fetch.read_data() returns
+    """
+    txt = read_data()
+    lines = txt.splitlines()
+    return list(DictReader(lines))
+~~~
+
+
+
+
+# Final version of filter.py
+
+
+~~~py
+from fetch import read_data
+from csv import DictReader
+
+def parse_data():
+    """
+    Returns a list of dictionaries from the raw text
+    based on what fetch.read_data() returns
+    """
+    txt = read_data()
+    lines = txt.splitlines()
+    return list(DictReader(lines))
+
+
+def get_birthday_rows_by_month_day(mth_day):
+    """
+    Calls parse_data to get a list of dicts
+
+    Expects mth_day to be a string in this format:
+
+        MM-DD, e.g. "05-12", (May 12)
+
+    Returns a list of dicts that includes:
+
+    - dicts with 'in_office' == '1' (legislators still in office)
+    - dicts with the month and day components of 'birthdate'
+        equal to the mth_day string
+    """
+    newrows = []
+    original_rows = parse_data()
+    for row in original_rows:
+        if row['in_office'] == '1':
+            rbdate = row['birthdate'][5:]
+            if rbdate == mth_day:
+                newrows.append(row)
+    # all done
+    return newrows
+~~~
