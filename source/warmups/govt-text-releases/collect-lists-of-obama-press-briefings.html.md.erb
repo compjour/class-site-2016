@@ -24,6 +24,8 @@ Luckily, the website does have affordances for old-fashioned navigation, which I
 To get to the 50th page of the press briefings, just take the landing page URL and append `page=50` as its [__query string__](https://en.wikipedia.org/wiki/Query_string):
 
 
+<%= 'https://www.whitehouse.gov/briefing-room/press-briefings?page=50' %>
+
 ## A little about query strings
 
 You can read more about [query strings on Wikipedia](https://en.wikipedia.org/wiki/Query_string), but basically, they're the key-value pairs (e.g. `page=50`) that are separated from the URL by a __question mark__. You've seen them in YouTube URLs:
@@ -35,7 +37,13 @@ The key-value pairs in that YouTube URL are:
 - `v=LyONt_ZH_aw` - the `v` key specifies the YouTube video ID to play.
 - `t=4s` - the `t` key specifies the number of seconds to start playing from.
 
-Query strings are a way for a website to add more options to how a URL endpoint is processed. In the case of the White House press briefings, the `page` key let's us jump from page to page rather than killing our wrists trying to mouse-scroll through the list.
+Query strings are a way for a website to add more options to how a URL is interpreted. In the case of the White House press briefings, the `page` attribute is used to specify which "page" in the back log of entries to show. As users of the websites, we can jump from page to page just by modifying that part of the URL.
+
+Later in this guide, we'll cover how to use Python to handle URLs and query strings more _generally_ -- for now, it's enough to know that a URL query string refers to any text that is on the _right side_ of a delimiting question mark:
+
+      https://www.example.com?hello=42&world=apples
+
+
 
 ## Finding the last page
 
@@ -115,12 +123,19 @@ Saving to 161.html
 ~~~
 
 
-Actually, this task is simple enough that there's not much more to do here. However, since this web-crawl job is so easy, it's a good chance to slow down and practice more advanced techniques and good habits that are necessary for more difficult tasks.
+
+# Taking time to practice best practices
 
 
-# Organizing the collected files
+Actually, this particular task is straightforward enough that there's not much more to do here. However, since this web-crawl job is so easy, it's a good chance to slow down and practice more advanced techniques and good habits that are necessary for more difficult tasks.
 
 Our bigger job is to not just to collect the pages that _list_ press briefing _headlines_ -- we want to collect each press briefing page itself, and then analyze the text of each press briefing. That last task becomes fairly annoying if we make no effort to keep the press briefing list pages from the individual press briefing pages, nevermind the problem of keeping our Python script files separate from the _thousands_ of webpages we'll be downloading.
+
+The rest of this guide will touch on patterns and techniques that will, to be honest, seem like programming for programming's sake, if not clinically anal-retentive. But they'll make more sense as the programming work gets more complicated, so it's best to start practicing them for small tasks.
+
+
+
+# Automate the decluttering of clutter
 
 So instead of just downloading the webpages right into the local directory, let's create a subdirectory named __index-pages__, and then adjust our script to save the files there.
 
@@ -255,20 +270,224 @@ for i in range(30, 50):
 
 That seems straightforward. But what if you have a friend who is on a PC? And that PC uses Windows? And [Windows uses its own version of a file path delimiter](http://stackoverflow.com/questions/2227925/path-separator-for-windows-and-unix) -- which is the __backwards-slash__, `\`? Now your simple script could end up in a major headache for anyone running it on a different platform.
 
-So let's import the __os.path__ submodule and use its __join()__ function.
+So let's import the __os.path__ submodule and use its __join()__ function to create file pathnames. Try it out in __ipython__ -- make sure you understand that all it does it takes in arguments and returns a __string__.
+
+~~~py
+from os.path import join
+join('index-pages', '42.html')
+# 'index-pages/42.html'
+join("this", "is", "a", "really", "nested", "file.txt")
+# 'this/is/a/really/nested/file.txt'
+~~~
+
+It doesn't seem like much -- in fact, it seems not much different than the [Python string object's _own_ join() method](https://docs.python.org/3/library/stdtypes.html#str.join)...but the key difference is that it knows how to formulate the appropriate path string based on the operating system from which your program is being executed.
+
+But even if you plan to never, ever write code that will be executed by a Windows machine, in day-to-day programming, it is not uncommon to make this kind of typo:
+
+~~~py
+a = 'somedirectory/'
+b = '/myfile.txt'
+fullpath = a + b
+~~~
+
+&ndash; so, let `os.path.join()` do that work for us:
+
+~~~py
+import requests
+from os import makedirs
+from os.path import join
+makedirs('index-pages', exist_ok=True)
+THE_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings?page='
+MAX_PAGE_NUM = 162
+
+for pagenum in range(0, MAX_PAGE_NUM):
+    url = THE_URL + str(pagenum)
+    # ...
+    fname = join("index-pages", str(pagenum) + '.html')
+~~~
 
 
+## Proper string formatting with format()
+
+In many of my early examples, when we need to join a literal string pattern -- such as:
+
+          "http://www.example.com?person="
+
+&ndash; to a set of values, such as:
+
+          names = ["larry", "curly", "moe"]
 
 
+&ndash; I'll sometimes show the most "common sense" way of accomplishing the task:
+
+~~~py
+names = ["larry", "curly", "moe"]
+for n in names:
+    url = "http://www.example.com?person=" + n
+~~~
+
+However, as you've started to surmise by now, "common sense" does not always scale.
+
+Python has a [confusing number of ways to format strings](http://stackoverflow.com/questions/28204936/python-format-best-practices)...I'm not even sure which PEP I'm supposed to link to ([this one?](https://www.python.org/dev/peps/pep-3101/)).
+
+For now, I advise using the string's __format()__ method. You can read about [the syntax and examples in the official documentation](https://docs.python.org/3/library/string.html#format-string-syntax)...though I find those docs to be confusing. However, the site [pyformat.info](https://pyformat.info/#simple) -- yes, Python string formatting is so ubiquitous _and_ so confusing that someone's made a specialty site just for that topic -- is a pretty readable reference.
+
+For our purposes, instead of typecasting the loop integer (i.e. `pagenum`) to a string and then adding `'.html'`: 
+
+~~~py
+THE_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings?page='
+# ...
+for pagenum in range(0, MAX_PAGENUM):
+    url = THE_URL + str(pagenum)
+    fname = join("index-pages", str(pagenum) + '.html')
+~~~
 
 
+&ndash; try this instead:
+
+~~~py
+THE_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings?page={}'
+# ...
+for pagenum in range(0, MAX_PAGENUM):
+    url = THE_URL.format(pagenum)
+    fname = join("index-pages", '{}.html'.format(pagenum))
+~~~
+
+Again, it doesn't save us much in terms of verbosity or readability of code. But in more complex scenarios, it will prove to be much more maintainable.
 
 
+## Let Requests generate URL query strings
+
+Using string formatting to generate the URL <%=url_alone 'https://www.whitehouse.gov/briefing-room/press-briefings?page=42'%> is actually _not recommended_. Yes, all URLs are just strings. But the structure of a URL follows a _specification_, which means that there are URL-parsing/generating libraries that we can use.
+
+In particular, the part of a URL that is prone to be affected by human error is the [query string](https://en.wikipedia.org/wiki/Query_string). The White House press briefings URLs have a very simple query string:
+      
+      page=42
+
+But query strings can get very complicated. Consider [Google's Street View API](https://developers.google.com/maps/documentation/streetview/intro#introduction), which uses URL query strings as a way to provide Street View imagery via URL.
+
+At a minimum, the Street View API's query string requires a `size` parameter to specify the width and height of imagery:
+
+<%= url_alone 'https://maps.googleapis.com/maps/api/streetview?size=600x300' %>
+
+Because the default location is in the middle of an ocean, however, the API returns a blank image:
+
+<a href="https://maps.googleapis.com/maps/api/streetview?size=600x300">img src="https://maps.googleapis.com/maps/api/streetview?size=600x300" alt='street view google api'></a>
+
+So we can provide a `location` parameter; here's what `Stanford,CA` looks like:
+
+<%= url_alone 'https://maps.googleapis.com/maps/api/streetview?size=600x300&location=Stanford,CA' %>
+
+<a href="https://maps.googleapis.com/maps/api/streetview?size=600x300&location=Stanford,CA">img src="https://maps.googleapis.com/maps/api/streetview?size=600x300&location=Stanford,CA" alt='street view google api'></a>
+
+And if we want to turn around, we can supply a value -- `30` (degrees) -- for the `heading` parameter:
 
 
+<%= url_alone 'https://maps.googleapis.com/maps/api/streetview?size=600x300&location=Stanford,CA&heading=30' %>
+
+<a href="https://maps.googleapis.com/maps/api/streetview?size=600x300&location=Stanford,CA&heading=180">img src="https://maps.googleapis.com/maps/api/streetview?size=600x300&location=Stanford,CA&heading=30" alt='street view google api'></a>
 
 
+So let's try to abstract the URL pattern using the string's `format()` method with named arguments:
+
+~~~py
+URL_ENDPOINT = 'https://maps.googleapis.com/maps/api/streetview'
+QUERY_STRING = 'size={size}&location={location}&heading={heading}'
+
+q_str = QUERY_STRING.format(size='400x400', location='New York', heading=0)
+url = URL_ENDPOINT + '?' + q_str
+print(url)
+# https://maps.googleapis.com/maps/api/streetview?size=400x400&location=New York&heading=0
+~~~
+
+This is not an _illogical_ approach...though if you know a bit about the URL spec, you know that there are a _lot_ of caveats involved -- for example, URLs aren't supposed to have space characters in them, so officially, `New York`, won't fly -- though most modern browsers know how to deal with that.
+
+The bigger issue is, besides the overall tediousness of writing out the `format()` call, is properly delimiting (using `&`) the key/value pairs. Can you see the typos in the example below?
 
 
+~~~py
+URL_ENDPOINT = 'https://maps.googleapis.com/maps/api/streetview'
+QUERY_STRING = '?size={size}location={location}&heading={heading}'
+q_str = QUERY_STRING.format(size='400x400', location='Chicago', heading="")
+url = URL_ENDPOINT + '?' + q_str
+print(url)
+~~~
 
-If you know how to parse HTML, it's possible to 
+### Providing the params argument to requests.get()
+
+The [Requests library](http://docs.python-requests.org/en/master/) earns its subtitle: *HTML for Humans*. When we want to `get()` a URL that requires a query string, we can supply a __dictionary__ of key-value pairs to the `params` argument.
+
+In the case of Google Street View:
+
+~~~py
+import requests
+URL_ENDPOINT = 'https://maps.googleapis.com/maps/api/streetview'
+resp = requests.get(URL_ENDPOINT, params={'size': '600x300', 'location': 'Stanford, CA'})
+print(resp.url)
+# https://maps.googleapis.com/maps/api/streetview?location=Stanford%2C+CA&size=600x300
+~~~
+
+Note several of its conveniences:
+
+1. It properly encodes characters that either can't be part of a URL, or have a special meaning, hence, the translation of the space and comma characters to `+` and `%2C`, respectively.
+2. It properly joins the key-pairs using `&`
+3. It adds the `?` delimiter between URL and query string
+4. It only includes the parameters that we specify in the dictionary, something that is not possible if you define a string with placeholder variables.
+
+This is such a useful feature of the Requests library that you should use it _whenever possible_, even for simple query strings as in the case of the White House press briefings pages:
+
+~~~py
+import requests
+URL_ENDPOINT = 'https://www.whitehouse.gov/briefing-room/press-briefings'
+# ...
+# ...
+for pagenum in range(0, MAX_PAGENUM):
+    resp = requests.get(URL_ENDPOINT, params={'page': pagenum})
+    print("Downloaded", resp.url)
+~~~
+
+Note: If we use `requests.get()` in the most straightforward way, we don't actually get a reference to the URL it formulates until the `get()` action is completed and we have a Response object, i.e. `resp` and `resp.url`. 
+
+That's a minor inconvenience...it's nice to know the URL before the remote request is made in some debugging situations. But it's not a big deal here. If you want more details on ways to [generate URL query strings with Python, check out this lesson](http://www.compciv.org/guides/python/how-tos/creating-proper-url-query-strings/).
+
+
+# All together
+
+
+## Quick and dirty and, eventually, dangerous
+
+~~~py
+import requests
+THE_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings?page='
+MAX_PAGE_NUM = 162
+for pagenum in range(0, MAX_PAGE_NUM):
+    url = THE_URL + str(pagenum)
+    print("Downloading", url)
+    resp = requests.get(url)
+
+    fname = str(pagenum) + '.html'
+    print("Saving to", fname)
+    with open(fname, "w") as wf:
+        wf.write(resp.text)
+~~~
+
+## More syntax + more planning == more safety and scalability
+
+~~~py
+import requests
+from os import makedirs
+from os.path import join
+URL_ENDPOINT = 'https://www.whitehouse.gov/briefing-room/press-briefings'
+MAX_PAGE_NUM = 162
+INDEX_PAGES_DIR = 'index_pages'
+makedirs(INDEX_PAGES_DIR, exist_ok=True)
+
+for pagenum in range(0, MAX_PAGE_NUM):
+    resp = requests.get(URL_ENDPOINT, params={'page': pagenum})
+    print("Downloaded", resp.url)
+
+    fname = join(INDEX_PAGES_DIR, '{}.html'.format(pagenum))
+    print("Saving to", fname)
+    with open(fname, "w") as wf:
+        wf.write(resp.text)
+~~~
