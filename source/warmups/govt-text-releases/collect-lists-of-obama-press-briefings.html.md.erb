@@ -1,5 +1,13 @@
 ---
 title: Collect the lists of White House press briefings
+description: |
+  Let's batch download a list of White House press briefings URL using Python and Requests.
+summary: |
+  The first step in downloading and parsing White House press briefings is to download and parse the list of press briefings.
+
+  This series of lessons is meant to give an overview of all the parts that go into the task that is commonly referred to as "web scraping", including understanding how URLs work and how HTML parsing is different from the text parsing we've done so far.
+
+  As in previous lessons, we start out as if we knew nothing more than how to deal with plain text, which works just fine when it comes to URLs themselves. The batch download of 100+ webpages is pretty simple, so we'll also practice some best practices in Python programming and data organization.
 objectives: 
   - Practice (again) downloading webpages and saving them to disk.
   - Download and save all the pages that list the White House press briefings; we'll download individual press briefings in the next exercise.
@@ -248,7 +256,7 @@ from os import makedirs
 makedirs('index_pages', exist_ok=True)
 ~~~
 
-That `makedirs()` call isn't going to throw an error because it assumes you know what you're doing, that you really want a subdirectory named `index_pages` instead of `index-pages`. But what if you don't? How far along will this subtle naming error go undetected? And how much are you going to regret not spending the two seconds it takes to assign a variable name, compared to the potential hours of debugging the kind of error that heavily depends on the acuity of your _eyesight_?
+Do you see the typo? That `makedirs()` call isn't going to throw an error because it assumes you know what you're doing, that you really want a subdirectory named `index_pages` instead of `index-pages`. But what if you don't? How far along will this subtle naming error go undetected? And how much are you going to regret not spending the two seconds it takes to assign a variable name, compared to the potential hours of debugging the kind of error that heavily depends on the acuity of your _eyesight_?
 
 
 ## Let os.path.join() do the work of joining file paths
@@ -479,7 +487,7 @@ from os import makedirs
 from os.path import join
 URL_ENDPOINT = 'https://www.whitehouse.gov/briefing-room/press-briefings'
 MAX_PAGE_NUM = 162
-INDEX_PAGES_DIR = 'index_pages'
+INDEX_PAGES_DIR = 'index-pages'
 makedirs(INDEX_PAGES_DIR, exist_ok=True)
 
 for pagenum in range(0, MAX_PAGE_NUM):

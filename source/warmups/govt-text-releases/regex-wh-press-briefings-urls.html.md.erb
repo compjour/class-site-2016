@@ -1,0 +1,51 @@
+---
+title: Regex HTML parsing
+---
+
+http://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags
+
+> Regex queries are not equipped to break down HTML into its meaningful parts...Parsing HTML with regex summons tainted souls into the realm of the living. HTML and regex go together like love, marriage, and ritual infanticide.
+
+
+https://docs.python.org/3/library/re.html
+
+http://www.thegeekstuff.com/2014/07/python-regex-examples/
+
+http://www.regular-expressions.info/
+
+http://regex.alf.nu/
+
+
+
+~~~py
+from glob import glob
+from os.path import join
+import re
+INDEX_PAGES_DIR = 'index-pages'
+URL_REGEX_PATTERN = '/the-press-office/[^"]+'
+
+alltheurls = []
+for fname in glob(join(INDEX_PAGES_DIR, '*.html')):
+    with open(fname, 'r') as rf:
+        # open the file, read its contents as text
+        pagetxt = rf.read()
+        alltheurls.extend(re.findall(URL_REGEX_PATTERN, pagetxt))
+~~~
+
+
+
+
+
+~~~py
+import requests
+import re
+TRANSCRIPT_TEXT_URL = 'http://stash.compjour.org/samples/webpages/transcript-repub-pres-debate-2015-11-11-nytimes.txt'
+resp = requests.get(TRANSCRIPT_TEXT_URL)
+names = re.findall('^[A-Z]{4,20}:', resp.text, re.MULTILINE)
+
+# resp = requests.get(TRANSCRIPT_URL)
+# hdoc = html.fromstring(resp.text)
+# hdoc.cssselect('p.story-body-text')
+
+
+~~~

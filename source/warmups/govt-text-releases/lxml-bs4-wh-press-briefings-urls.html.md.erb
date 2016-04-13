@@ -1,0 +1,76 @@
+
+
+~~~py
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin
+WH_PB_HOMEPAGE_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings'
+
+soup = BeautifulSoup(pagetxt, 'lxml')
+
+heds = soup.find_all('h3', {'class': 'field-content'})
+for h in heds:
+    atag = h.find('a')
+    url = urljoin(WH_PB_HOMEPAGE_URL, atag['href'])
+    print(url)
+~~~
+
+
+~~~py
+from glob import glob
+from os.path import join
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin
+WH_PB_HOMEPAGE_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings'
+INDEX_PAGES_DIR = 'index-pages'
+
+alltheurls = []
+for fname in glob(join(INDEX_PAGES_DIR, '*.html')):
+    with open(fname, 'r') as rf:
+        # open the file, read its contents as text
+        soup = BeautifulSoup(rf.read(), 'lxml')
+    for hed in soup.find_all('h3', {'class': 'field-content'}):
+        a = hed.find('a')
+        alltheurls.append(a['href'])
+~~~
+
+
+~~~py
+from glob import glob
+from os.path import join
+from lxml import html
+from urllib.parse import urljoin
+WH_PB_HOMEPAGE_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings'
+INDEX_PAGES_DIR = 'index-pages'
+
+alltheurls = []
+for fname in glob(join(INDEX_PAGES_DIR, '*.html')):
+    with open(fname, 'r') as rf:
+        # open the file, read its contents as text
+        hdoc = html.fromstring(rf.read())
+        atags = hdoc.cssselect('h3.field-content a')
+        alltheurls.extend(a.attrib['href'] for a in atags)
+~~~
+
+
+
+
+# With xpath
+
+
+~~~py
+from glob import glob
+from os.path import join
+from lxml import html
+from urllib.parse import urljoin
+WH_PB_HOMEPAGE_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings'
+INDEX_PAGES_DIR = 'index-pages'
+
+alltheurls = []
+for fname in glob(join(INDEX_PAGES_DIR, '*.html')):
+    with open(fname, 'r') as rf:
+        # open the file, read its contents as text
+        hdoc = html.fromstring(rf.read())
+        hrefs = hdoc.xpath('//h3[@class="field-content"]/a/@href')
+        urls = [urljoin(WH_PB_HOMEPAGE_URL, href) for href in hrefs]
+        alltheurls.extend(a.attrib['href'] for a in atags)
+~~~

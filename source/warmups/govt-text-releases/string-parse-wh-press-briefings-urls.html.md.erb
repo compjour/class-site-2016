@@ -1,0 +1,330 @@
+---
+title: Extracting White House press briefing URLs using old-fashioned string parsing
+objectives:
+  - Learn some basic strategies for interpreting a webpage's raw source code.
+  - Use plain string parsing methods, such as split(), to extract URLs from HTML, just in case you've hit your head and forgotten all about HTML parsing and have lost your common sense.
+  - Derive absolute URLs from relative URLs extracted from a remote webpage.
+  - Keep practicing Python programming, including iterating across lists, comparing strings, and (eventually) mastering list comprehensions.
+---
+
+
+# Scouting out HTML as a string
+
+
+
+<%=url_alone 'http://stash.compjour.org/samples/webpages/whitehouse-press-briefings-page-50.html' %>
+
+~~~py
+import requests
+url = 'http://stash.compjour.org/samples/webpages/whitehouse-press-briefings-page-50.html' 
+resp = requests.get(url)
+pagetxt = resp.text
+~~~
+
+~~~py
+for linetxt in txt.splitlines():
+    if 'Jay Carney, 12/6/2013' in linetxt:
+        print(linetxt)
+~~~
+
+The resulting line of output:
+
+~~~stdout
+  <div class="views-field views-field-title">        <h3 class="field-content"><a href="https://www.whitehouse.gov/the-press-office/2013/12/06/press-briefing-press-secretary-jay-carney-1262013">Press Briefing by Press Secretary Jay Carney, 12/6/2013</a></h3>  </div>  </div>
+~~~
+
+Here's a syntax-highlighted version of that HTML:
+
+~~~html
+  <div class="views-field views-field-title">        <h3 class="field-content"><a href="https://www.whitehouse.gov/the-press-office/2013/12/06/press-briefing-press-secretary-jay-carney-1262013">Press Briefing by Press Secretary Jay Carney, 12/6/2013</a></h3>  </div>  </div>
+~~~
+
+Note that in the actual source code of the webpage, that is all one long string. But here's a "prettified" version of that HTML code, in which I've added whitespace and indentation and new line characters just to show you all the different tags that are in the document element that represents that specific press briefing:
+
+
+~~~html
+<div class="views-field views-field-title">
+  <h3 class="field-content">
+      <a href="https://www.whitehouse.gov/the-press-office/2013/12/06/press-briefing-press-secretary-jay-carney-1262013">
+          Press Briefing by Press Secretary Jay Carney, 12/6/2013
+      </a>
+  </h3>
+</div>
+~~~
+
+There's a lot more to each press briefing link than just the standard link tag, `<a>`.
+
+
+
+
+# A horrible, horrible way to extract URLs
+
+For any given press briefing link, we need to extract the __URL__, i.e. the value of the `href` attribute. Let's focus our attention on just the link tag, i.e. `<a>`:
+
+~~~html
+<a href="https://www.whitehouse.gov/the-press-office/2013/12/06/press-briefing-press-secretary-jay-carney-1262013">Press Briefing by Press Secretary Jay Carney, 12/6/2013</a>
+~~~
+
+Let's pretend that HTML snippet is a Python string assigned to a variable named `link`:
+
+~~~py
+link = """<a href="https://www.whitehouse.gov/the-press-office/2013/12/06/press-briefing-press-secretary-jay-carney-1262013">Press Briefing by Press Secretary Jay Carney, 12/6/2013</a>"""
+~~~
+
+Pretend we only know the standard Python string methods; how might we describe the _algorithm_ for extracting the URL?
+
+1. _Split_ `link` by the string pattern of `'href="'`
+2. Ignore the first half of that split (`'<a '`)
+3. But hang on to the second half, which begins with `'https://'`
+4. So with the result from Step 3, split _that_ string by the pattern `">`.
+5. Keep the first half of that split, and ignore everything after it, i.e. `'Press Briefing...'`
+
+
+<a id="mark-hacky-url-extract"></a>
+
+And we end up with the URL:
+
+~~~py
+"https://www.whitehouse.gov/the-press-office/2013/12/06/press-briefing-press-secretary-jay-carney-1262013"
+~~~
+
+What does that look like in terms of Python code? Try it out in ipython:
+
+~~~py
+itemtxt = """<a href="https://www.whitehouse.gov/the-press-office/2013/12/06/press-briefing-press-secretary-jay-carney-1262013">Press Briefing by Press Secretary Jay Carney, 12/6/2013</a>"""
+a = itemtxt.split('href="')
+b = a[1].split('">')
+url = b[0]
+print(url)
+~~~
+
+## Abstracting that
+
+OK, the real challenge is to use apply that hacky algorithm to all relevant HTML snippets on a given page, i.e. we can't hard code the `itemtxt` variable.
+
+Take a look at the source HTML of the sample page and see if you notice common string patterns for each press briefing HTML element. Or, just look at the HTML for one such element and predict what might be the common string patterns:
+
+~~~html
+  <div class="views-field views-field-title">        <h3 class="field-content"><a href="https://www.whitehouse.gov/the-press-office/2013/12/06/press-briefing-press-secretary-jay-carney-1262013">Press Briefing by Press Secretary Jay Carney, 12/6/2013</a></h3>  </div>  </div>
+~~~
+
+Here's one hypothesis: every relevant line of HTML includes the partial string of `'press-briefing'`, e.g.
+
+<pre>
+  &lt;a href="https://www.whitehouse.gov/the-press-office/2013/12/06/<strong>press-briefing</strong>-press-secretary-jay-carney-1262013"&gt;
+</pre>
+
+Only one way to find out:
+
+~~~py
+the_pattern = 'press-briefing'
+the_lines = []
+for linetxt in pagetxt.splitlines():
+    if the_pattern in linetxt:
+        the_lines.append(linetxt)
+~~~
+
+If our guess is correct, then the list referred to by `the_lines` should contain exactly __10__ elements. A quick use of the `len()` function will show that our guess is wrong:
+
+~~~py
+len(the_lines)
+# 38
+~~~
+
+Let's try a more verbose and specific pattern -- without knowing much about HTML (or Drupal, the White House's favored content management system) -- this tag _seems_ like it might be used _just_ for the press briefings on each page:
+
+~~~
+   <div class="views-field views-field-title">
+~~~
+
+Only one way to find out:
+
+~~~py
+the_pattern = """<div class="views-field views-field-title">"""
+the_lines = []
+for linetxt in pagetxt.splitlines():
+    if the_pattern in linetxt:
+        the_lines.append(linetxt)
+~~~
+
+Using the `len()` function on `the_lines` will show that there are exactly 10 elements. Seems like we made the right guess. If you're in the ipython shell, you should check out each element in the list.
+
+# Extracting each link
+
+OK, now time for the real test. Recall our [hacky URL extracting algorithm earlier](#mark-hacky-url-extract). If every member in `the_lines` list corresponds to HTML code for each press briefing item, then we should be able to use our hacky algorithm on _each_ member of `the_lines`. 
+
+Assuming that the variable `the_lines` points to the 10 HTML text strings gathered above, here's a sloppy way to see if each of its strings has what we want; and appreciate how using a __for-loop__ does the job of populating the `itemtxt` variable that we used in our hacky algorithm -- the rest of the code is the same:
+
+~~~py
+for itemtxt in the_lines:
+    a = itemtxt.split('href="')
+    b = a[1].split('">')
+    url = b[0]
+    print(url)
+~~~
+
+
+Or, if you prefer the use of functions to encapsulate that ugly hacky algorithm:
+
+~~~py
+def hack_n_grab_url(t):
+    a = t.split('href="')
+    b = a[1].split('">')
+    return b[0]
+    
+for itemtxt in the_lines:
+    url = hack_n_grab_url(itemtxt)
+    print(url)
+~~~
+
+Either way, the output will look like this -- looks pretty good to me!
+
+~~~
+https://www.whitehouse.gov/the-press-office/2013/12/06/press-briefing-press-secretary-jay-carney-1262013
+https://www.whitehouse.gov/the-press-office/2013/12/05/daily-briefing-press-secretary-1252013
+https://www.whitehouse.gov/the-press-office/2013/12/05/press-briefing-senior-administration-officials-fact-sheet-strengthening-
+https://www.whitehouse.gov/the-press-office/2013/12/04/press-briefing-press-secretary-1232013
+https://www.whitehouse.gov/the-press-office/2013/12/02/press-briefing-press-secretary-jay-carney-1222013
+https://www.whitehouse.gov/the-press-office/2013/11/26/press-gaggle-principal-deputy-press-secretary-josh-earnest-los-angeles-c
+https://www.whitehouse.gov/the-press-office/2013/11/25/press-gaggle-principal-deputy-press-secretary-josh-earnest-aboard-air-fo
+https://www.whitehouse.gov/the-press-office/2013/11/22/daily-briefing-press-secretary-112213
+https://www.whitehouse.gov/the-press-office/2013/11/21/briefing-principal-deputy-press-secretary-josh-earnest-112113
+https://www.whitehouse.gov/the-press-office/2013/11/20/press-briefing-press-secretary-jay-carney-11192013
+~~~
+
+
+# Let's test it out
+
+OK, let's move past the canned webpage example that I've provided and get on to the real-world data.
+
+I assume you've completed the previous lesson, which means you have a subfolder named `index-pages`, the contents of which looks like this:
+
+![image wh-press-briefings-index-pages-dir-finder.jpg](/files/govt-text-releases/wh-press-briefings-index-pages-dir-finder.jpg)
+
+## Use glob() to get a list of files
+
+All of the files in the `index-pages` directory have an extension of `.html`...and while you'd _think_ there wouldn't be any other kinds of files in that directory...sometimes your operating system will add hidden metadata files. So to be safe, we don't want _all_ of the files in `index-html`, just the ones that have an extension of `.html`.
+
+There's several ways to get a list of filenames that match a wildcard pattern; I like using [__glob()__, which is part of the __glob__ module](https://docs.python.org/3/library/glob.html). Here's how to use it in excruciating step-by-step detail:
+
+~~~py
+from glob import glob
+from os.path import join
+INDEX_PAGES_DIR = 'index-pages'
+gp = join(INDEX_PAGES_DIR, '*.html')
+index_pages_filenames = glob(gp)
+type(index_pages_filenames)
+# list
+len(index_pages_filenames)
+# 162
+index_pages_filenames[42]
+# 'index-pages/136.html'
+~~~
+
+Slightly more condensed:
+
+~~~py
+from glob import glob
+from os.path import join
+INDEX_PAGES_DIR = 'index-pages'
+ip_fnames = glob(join(INDEX_PAGES_DIR, '*.html'))
+~~~
+
+
+~~~py
+from glob import glob
+from os.path import join
+INDEX_PAGES_DIR = 'index-pages'
+ITEM_PATTERN = """<div class="views-field views-field-title">"""
+
+def grab_items(pagetxt):
+    items = []
+    for linetxt in pagetxt.splitlines():
+        if ITEM_PATTERN in linetxt:
+            items.append(linetxt)
+    return items
+
+def hack_n_grab_url(t):
+    a = t.split('href="')
+    b = a[1].split('">')
+    return b[0]
+    
+alltheurls = []
+ip_fnames = glob(join(INDEX_PAGES_DIR, '*.html'))
+for fname in ip_fnames:
+    with open(fname, 'r') as rf:
+        # open the file, read its contents as text
+        pagetxt = rf.read()
+    # extract the items
+    page_items = grab_items(pagetxt)
+    for item in page_items:
+        url = hack_n_grab_url(item)
+        alltheurls.append(url)
+~~~
+
+
+~~~py
+len(alltheurls)
+# 1614
+alltheurls[42]
+# '/the-press-office/2011/08/15/press-gaggle-press-secretary-jay-carney-aboard-air-force-one-en-route-st'
+alltheurls[1000]
+# '/the-press-office/2014/04/01/daily-briefing-press-secretary-4114'
+~~~
+
+
+## Absolute to relative URLs
+
+
+### Using urllib.parse.urljoin()
+
+
+
+
+# List comprehensions
+
+~~~py
+def grab_items(ptxt):
+    items = []
+    for linetxt in ptxt.splitlines():
+        if ITEM_PATTERN in linetxt:
+            items.append(linetxt)
+    return items
+~~~
+
+~~~py
+def grab_items(pagetxt):
+    lines = pagetxt.splitlines()
+    return [x for x in lines if ITEM_PATTERN in x]
+~~~
+
+#### grab_items() as a one-liner
+
+~~~py
+def grab_items(pagetxt):
+    return [x for x in pagetxt.splitlines() if ITEM_PATTERN in x]
+~~~
+
+-----------
+
+
+~~~py
+    for item in page_items:
+        url = hack_n_grab_url(item)
+        alltheurls.append(url)
+~~~
+
+
+~~~py
+  urls = [hack_n_grab_url(item) for item in page_items]
+  alltheurls.extend(urls)
+~~~
+
+~~~py
+  alltheurls.extend([hack_n_grab_url(i) for i in page_items])
+~~~
+
+
+# All together
+
+
