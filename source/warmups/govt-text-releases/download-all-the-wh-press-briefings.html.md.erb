@@ -1,0 +1,140 @@
+---
+title: Downloading and saving each and every White House press briefings
+---
+
+# Making a "safe" filename
+
+It was easy to come up with filenames for each of the index page URLs -- the number of each page could serve as the "unique id":
+
+- from: `https://www.whitehouse.gov/briefing-room/weekly-address?page=1`
+- to: `index-pages/1.html`
+
+But what about each individual press briefing URL? Not only are there 1,600+ of them, the directory structure used by `whitehouse.gov` has changed a few times -- which is not unusual over a time of 8 or so years.
+
+All the press briefing URLs start out like this:
+
+      https://www.whitehouse.gov/the-press-office
+
+So let's examine the latter parts of their paths. From what I can tell, the White House website has had at least 2 changes in how it structured its URLs. Early URLs were all just stuffed into the `/the-press-office` path:
+
+
+- /press-briefing-presidents-upcoming-trip-guadalajara-8-6-09
+- /press-briefing-2609
+
+And some of them get _awfully_ close to being the _same_ path:
+
+- /briefing-white-house-press-secretary-robert-gibbs-8409
+- /briefing-white-house-press-secretary-robert-gibbs-8309
+
+At some point, the presidential web developers realized that they were going to have some name collisions, so URLs now are prefaced with `YYYY/MM/DD` paths -- which is really nice for when we need to extract the date of given URL:
+
+
+- /2016/04/02/weekly-address-securing-world-nuclear-terrorism
+- /2011/09/11/gaggle-principal-deputy-press-secretary-josh-earnest-aboard-air-force-on
+
+However, it makes things _complicated_ when saving to disk. Ideally, we want to preserve the directory structure in the URL when saving it to our `briefs/` subdirectory, e.g.
+
+    briefs/2016/04/02/weekly-address-securing-world-nuclear-terrorism.html
+
+But your operating system will _not_ let you save a filename that refers to yet-uncreated subdirectories. To save a file at the given filename above, we have to create all of the intermediary subdirectories, e.g. `briefs/2016/04/02`
+
+
+## Using a regex to save
+
+
+
+~~~py
+from glob import glob
+from lxml import html
+from os.path import join
+from os import makedirs
+from urllib.parse import urljoin
+import re
+import requests
+
+WH_PB_HOME_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings'
+INDEX_PAGES_DIR = 'index-pages'
+BRIEFS_DIR = 'briefs'
+makedirs(BRIEFS_DIR, exist_ok=True)
+
+# Gather up all the index pages
+html_filenames = glob(join(INDEX_PAGES_DIR, '*.html'))
+
+# for each index page
+for hname in html_filenames:
+    # open and parse it as HTML
+    with open(hname, 'r') as rf:
+        txt = rf.read()
+        hdoc = html.fromstring(txt)
+    
+    # now select for <a> tags nested within <h3 class="field-content"> tags
+    for a in hdoc.cssselect('h3.field-content a'):
+        print(a['href'])
+        # get an absolute URL
+        url = urljoin(WH_PB_HOME_URL, a['href'])
+        # Download it
+        print("Downloading", url)
+        resp = requests.get(url)
+        # base the filename off of the relative URL, a['href'], 
+        # but remove all non-word characters
+        fn = re.sub('\W+', '-', a['href']).strip('-')
+        fname = join(BRIEFS_DIR, '{}.html'.format(fn))
+        # write to disk
+        with open(fname, 'w') as wf:
+            wf.write(resp.text)
+            print("...saved to", fname)
+~~~
+
+
+
+
+Breaking it up to pieces:
+
+~~~py
+from glob import glob
+from lxml import html
+from os.path import join
+from os import makedirs
+from urllib.parse import urljoin, urlparse
+import re
+import requests
+
+WH_PB_HOME_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings'
+INDEX_PAGES_DIR = 'index-pages'
+BRIEFS_DIR = 'briefs'
+makedirs(BRIEFS_DIR, exist_ok=True)
+
+# fname is the name of some HTML page
+def parse_html_file(fname):
+    with open(fname, 'r') as rf:
+        txt = rf.read()
+    return html.fromstring(txt)
+
+def get_briefs_urls(hdoc):
+    hrefs = [a.attrib['href'] for a in hdoc.cssselect('h3.field-content a')]
+    return [urljoin(WH_PB_HOME_URL, h) for h in hrefs]
+
+def url_to_bfname(url):
+    u = urlparse(url)
+    # we extract the relative URL using urlparse and getting its `path`
+    rel_url = u.path
+    fn = re.sub('\W+', '-', rel_url).strip('-')
+    return join(BRIEFS_DIR, '{}.html'.format(fn))
+
+alltheurls = []
+for fn in glob(join(INDEX_PAGES_DIR, '*.html')):
+    hdoc = parse_html_file(fn)
+    alltheurls.extend(get_briefs_urls(hdoc))
+
+
+for url in alltheurls:
+    print("Downloading...\n", url)
+    resp = requests.get(url)
+    # base the filename off of the relative URL,  href,
+    # but remove all non-word characters
+    fname = url_to_bfname(url)
+    with open(fname, 'w') as wf:
+        wf.write(resp.text)
+        print("Saving...\n", fname)
+        print("\n")
+~~~

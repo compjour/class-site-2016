@@ -16,10 +16,21 @@ objectives:
   - (Optional) use HTML-parsing to programatically determine the last page number of entries.
 ---
 
+# The Task
 
-# Browsing the White House Press Briefings website
+This is the first part of a series of lessons for doing web-scraping and a little text-mining. Our dataset here is all the press releases currently hosted on the White House's website:
 
-This is a little warmup before we get into real web-scraping.
+<%=url_alone "https://www.whitehouse.gov/briefing-room/press-briefings" %>
+
+![image wh-press-briefings-landing.page.jpg](/files/govt-text-releases/wh-press-briefings-landing.page.jpg)
+
+
+
+In this lesson, we won't be downloading each press release page, _yet_. Instead, we will be downloading and saving each of the index pages that _lists_ the press releases. That allows us in the next lessons to try out text/HTML parsing without hitting up the White House webserver every time.
+
+
+
+# Browsing the White House website for press briefings 
 
 The landing page for the White House press briefings can be found here:
 
@@ -32,7 +43,7 @@ Luckily, the website does have affordances for old-fashioned navigation, which I
 To get to the 50th page of the press briefings, just take the landing page URL and append `page=50` as its [__query string__](https://en.wikipedia.org/wiki/Query_string):
 
 
-<%= 'https://www.whitehouse.gov/briefing-room/press-briefings?page=50' %>
+<%= url_alone 'https://www.whitehouse.gov/briefing-room/press-briefings?page=50' %>
 
 ## A little about query strings
 
@@ -464,6 +475,8 @@ That's a minor inconvenience...it's nice to know the URL before the remote reque
 
 ## Quick and dirty and, eventually, dangerous
 
+This isn't a terrible approach, but all the little shortcuts, especially _not_ creating a separate directory to save all the downloaded files, will bite us in the near term:
+
 ~~~py
 import requests
 THE_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings?page='
@@ -480,6 +493,10 @@ for pagenum in range(0, MAX_PAGE_NUM):
 ~~~
 
 ## More syntax + more planning == more safety and scalability
+
+The script below does virtually the same thing as before, but it creates a subfolder to save the files, and uses a lot of Python functions to keep the programmer (i.e. _us_) from having to be extra careful with typos.
+
+In practice, you'll find yourself having a mix of emotions between "just-get-er-done" and "oh-wait-will-this-hurt-me?" -- the snippet below isn't _always_ best practice. But it's a good idea to at least be mindful of the difference between "It works!" and "It could be better":
 
 ~~~py
 import requests
