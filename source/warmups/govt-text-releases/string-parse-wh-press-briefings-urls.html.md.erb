@@ -275,13 +275,67 @@ alltheurls[1000]
 
 ## Absolute to relative URLs
 
+On the canned page, the URLs are _absolute_ (because of the way that I saved the webpage via browser):
+
+    https://www.whitehouse.gov/the-press-office/2013/12/06/press-briefing-press-secretary-jay-carney-1262013
+
+On the actual White House press releases site, they are _relative_:
+
+    /the-press-office/2013/12/06/press-briefing-press-secretary-jay-carney-1262013
+
+This is a standard convention -- which you can read about in the [HTML spec](https://www.w3.org/TR/WD-html40-970708/htmlweb.html) -- and a web browser will assume that the base of the relative URL -- in this case, `https://www.whitehouse.gov` -- is the same as it is for the page on which the relative URL is found.
+
+However, we're _not_ using a web browser. Our Python script has no sense of where a webpage came from -- it's just reading a text file and parsing the HTML. 
+
+So we need to explicitly provide the base URL. And then join it to relative URL.
+
 
 ### Using urllib.parse.urljoin()
 
+Your first instinct may be to concatenate the base part of the URL and its relative URLs manually, as you would two ordinary strings:
+
+~~~py
+BASE_URL = 'https://www.whitehouse.gov'
+url = BASE_URL + '/the-press-office/2013/12/06/press-briefing-press-secretary-jay-carney-1262013'
+~~~
+
+However, similar to the reasons of why we use `os.path.join()` to join file system paths, manually adding strings together can lead to "one-off" errors (spot the extra forward-slash below):
+
+~~~py
+BASE_URL = 'https://www.whitehouse.gov/'
+url = BASE_URL + '/the-press-office/2013/12/06/press-briefing-press-secretary-jay-carney-1262013'
+~~~
+
+And so, this is a task that we delegate to one of Python's standard libraries: [urllib.parse.urljoin](https://docs.python.org/3/library/urllib.parse.html):
+
+~~~py
+from urllib.parse import urljoin
+BASE_URL = 'https://www.whitehouse.gov/'
+url = urljoin(BASE_URL, '/the-press-office/2013/12/06/press-briefing-press-secretary-jay-carney-1262013')
+~~~
+
+It's not evident in the above example, but one convenience of `urljoin()` is that it will properly resolve the relative path, whether `BASE_URL` is the domain of the URL, or the absolute URL of the webpage that the relative URL came from.
+
+In other words, the two `urljoin()` calls below produce the same URL:
+
+~~~py
+from urllib.parse import urljoin
+URL_A = 'http://www.example.com'
+URL_B = 'http://www.example.com/some/fun/page.html'
+
+urljoin(URL_A, '/helpme')
+# http://www.example.com/helpme
+urljoin(URL_B, '/helpme')
+# http://www.example.com/helpme
+~~~
+
+The importance of this will be evident in situations when your automated script needs to resolve a URL but you don't know at the time that you write the program exactly what website your script is visiting -- e.g. a script that extracts URLs from multiple websites.
 
 
 
 # List comprehensions
+
+T
 
 ~~~py
 def grab_items(ptxt):
