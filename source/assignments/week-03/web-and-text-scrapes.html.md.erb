@@ -1,27 +1,134 @@
 ---
-title: Scrape and Count 
+title: Scrape and Count Webpages
 ---
 
+Due: __2016-04-20 (Wednesday)__
+
+Send scripts/answers by email: __dun@stanford.edu__
+
+You can also upload it to Github if you wish, and just send me the links.
+
+
+
+# 1. The first White House press briefings to mention ISIS or ISIL?
+
+Run through the following lessons -- at the end, you should have a `briefs` subdirectory with 1,600+ files.
 
 Lesson: <%=link_cro '/warmups/govt-text-releases/press-briefings-overview' %>
 
+Then, do a search for "ISIS" or "ISIL", as a string.
+
+#### Hints
+
+Use `glob()` to get a list of filenames:
+
+~~~py
+from glob import glob
+from os.path import join
+BRIEFS_DIR = 'briefs'
+filenames = glob(join(BRIEFS_DIR, '*.html'))
+~~~
+
+Given a filename, find if either `ISIS` or `ISIL` exists _anywhere_ in the file:
+
+~~~py
+with open(fname, 'r') as rf:
+    txt = rf.read()
+    if 'ISIS' in txt or 'ISIL' in txt:
+        print(fname, "mentions ISIS/ISIL")
+~~~
+
+Put the two snippets together and you have a crude script that will print out the filename of any file that contains either of those strings. Among the files that mention it, find what seems to be the earliest file/reference to ISIS/ISIL.
+
+However...are we sure if they spell `"ISIS"` or `"ISIL"` in all-caps? We don't know for sure, so let's upper/lower-case the entire text string of the file before doing the comparison:
+
+~~~py
+with open(fname, 'r') as rf:
+    txt = rf.read()
+    txt = txt.upper()
+    if 'ISIS' in txt or 'ISIL' in txt:
+        print(fname, "mentions ISIS/ISIL")
+~~~
+
+However, you'll find that you'll get a lot of false positives, e.g. 
+
+~~~py
+'ISIS' in 'WE ARE IN CRISIS MODE'
+# True
+~~~
+
+
+This is where you'll need to use __regular expressions__. Here's a nice lesson on them before I write up my own summary:
+
+[Automate the Boring Stuff with Python: Pattern Matching with Regular Expressions](https://automatetheboringstuff.com/chapter7/)
+
+The "pattern" that we want to match is `'ISIS'` or `'ISIL'` in which those strings are standalone, i.e. not part of `'CRISIS'`.
+
+Regex is its own syntax, but here's one way to test it:
+
+~~~py
+import re
+re.search(r'\bISIS\b', 'WE ARE IN CRISIS MODE')
+# None
+re.search(r'\bISIS\b', 'WE WERE ATTACKED BY ISIS.')
+# <_sre.SRE_Match object; span=(20, 24), match='ISIS'>
+~~~
+
+
+You can throw the regex search in the conditional:
+
+~~~py
+import re
+with open(fname, 'r') as rf:
+    txt = rf.read()
+    txt = txt.upper()
+    if re.search(r'\bISIS\b', txt) or re.search(r'\bISIL\b', txt):
+        print(fname, "mentions ISIS/ISIL")
+~~~
+
+
+This also works, and is a more adroit use of regex:
+
+~~~py
+import re
+with open(fname, 'r') as rf:
+    txt = rf.read()
+    txt = txt.upper()
+    if re.search(r'\bISI[LS]\b', txt):
+        print(fname, "mentions ISIS/ISIL")
+~~~
 
 
 
 
-# Assignments
-
-## 1. The first White House press briefings to mention ISIS or ISIL?
-
-## 2. Count the number of mentions (including all variations in spelling) of ISIS, ISIL, Osama 
-
-## 3. List the name of every executed Texas inmate who did not mention religion in their final words
+# 2. List the name of every executed Texas inmate who did not mention religion in their final words
 
 The execution list is here: 
 
 <%= url_alone 'http://www.tdcj.state.tx.us/death_row/dr_executed_offenders.html' %>
 
-## 4. Count the number of times each Supreme Court justice spoke during 2015 oral arguments
+#### Hints
+
+This is a simpler version of the White House briefings, but you can approach it in the same fashion:
+
+1. Download and save the listing page ([there's only one](http://www.tdcj.state.tx.us/death_row/dr_executed_offenders.html))
+2. Extract and download the URLs that correspond to the Last Statement links; here's [Gustavo Garcia's](http://www.tdcj.state.tx.us/death_row/dr_info/garciagustavolast.html)
+3. Glob through the downloaded URLs, come up with your own filter for "religious"/"non-religious" statements, e.g. does it contain "God"?
+
+Try to use HTML parsing on each file to extract text from the relevant tags...e.g. paragraph tags.
+
+
+
+
+-----------
+
+
+# (Nixed exercises)
+
+#### XXX. Count the number of times each Supreme Court justice spoke during 2015 oral arguments
 
 <%= url_alone 'http://www.supremecourt.gov/oral_arguments/argument_transcript/2015' %>
 
+
+
+#### XXX. Count the number of mentions (including all variations in spelling) of ISIS, ISIL, Osama, and Al Qaeda
