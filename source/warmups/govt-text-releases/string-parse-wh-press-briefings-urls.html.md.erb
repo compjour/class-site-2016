@@ -1,5 +1,11 @@
 ---
 title: Extracting White House press briefing URLs using old-fashioned string parsing
+description: |
+  This is less an 
+summary: |
+  This is not meant to be an example of real-world web-scraping, but just a demonstration of how painful web-scraping _would be_ if you didn't bother to learn the proper HTML-parsing libraries. But fundamentally, HTML is just plain text that can be transformed like any other string object. 
+
+  This lesson is more of a practice of Python syntax, as well as an introduction to some other Web-specific concepts, such as how URLs are constructed.  
 objectives:
   - Learn some basic strategies for interpreting a webpage's raw source code.
   - Use plain string parsing methods, such as split(), to extract URLs from HTML, just in case you've hit your head and forgotten all about HTML parsing and have lost your common sense.
@@ -7,12 +13,23 @@ objectives:
   - Keep practicing Python programming, including iterating across lists, comparing strings, and (eventually) mastering list comprehensions.
 ---
 
-
 # Scouting out HTML as a string
 
-
+Check out a canned White House examples page that I've posted here:
 
 <%=url_alone 'http://stash.compjour.org/samples/webpages/whitehouse-press-briefings-page-50.html' %>
+
+Here's a screenshot of what the page looks like:
+
+![image whitehouse-pr-page-50.png](/files/govt-text-releases/images/whitehouse-pr-page-50.png)
+
+So how do we find the code behind any of those URLs? Let's focus on the first link, the one represented by the text:
+
+> Press Briefing by Press Secretary Jay Carney, 12/6/2013
+
+Given that an HTML file is just plain text, we should be able to find the  literal string of `"Jay Carney, 12/6/2013"`.
+
+So let's download the page:
 
 ~~~py
 import requests
@@ -21,10 +38,18 @@ resp = requests.get(url)
 pagetxt = resp.text
 ~~~
 
+And then split the text into lines: 
+
 ~~~py
-for linetxt in txt.splitlines():
-    if 'Jay Carney, 12/6/2013' in linetxt:
-        print(linetxt)
+txtlines = pagetxt.splitlines()
+~~~
+
+And then iterate through each line, printing the line to screen if it contains the string, `'Jay Carney, 12/6/2013'`
+
+~~~py
+for x in txtlines:
+    if 'Jay Carney, 12/6/2013' in x:
+        print(x)
 ~~~
 
 The resulting line of output:
@@ -52,12 +77,21 @@ Note that in the actual source code of the webpage, that is all one long string.
 </div>
 ~~~
 
-There's a lot more to each press briefing link than just the standard link tag, `<a>`.
+There's a lot more to each press briefing link than just the standard link tag, `<a>`. So how do we get just the URL, i.e. the `href` attribute?
 
+
+~~~stdout
+https://www.whitehouse.gov/the-press-office/2013/12/06/press-briefing-press-secretary-jay-carney-1262013
+~~~
 
 
 
 # A horrible, horrible way to extract URLs
+
+Note: As mentioned in the intro, this is not the proper way to do things -- while HTML is just text, we almost never want to deal with it as just plain text, and the length of the following section should demonstrate why. 
+
+
+------------
 
 For any given press briefing link, we need to extract the __URL__, i.e. the value of the `href` attribute. Let's focus our attention on just the link tag, i.e. `<a>`:
 
@@ -335,7 +369,24 @@ The importance of this will be evident in situations when your automated script 
 
 # List comprehensions
 
-T
+[List comprehensions](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions) are a form of _syntactic sugar_ -- a shorter way to write a loop-statement.
+
+The following trivial loop statement (add the same things in `some_collection` into `items`):
+
+~~~py
+items = []
+for x in some_collection:
+    items.append(x)
+~~~
+
+&ndash; can be expressed as a one-liner:
+
+~~~py
+items = [x for x in some_collection]
+~~~
+
+They take some time to get used to, but the main thing to understand is that there's no difference in functionality, it's just a more concise way to express what a loop does. Sometimes I'll use it to make things more readable; check out the [Python documentation for more examples](https://docs.python.org/3/tutorial/datastructures.html#list-comprehensions).
+
 
 ~~~py
 def grab_items(ptxt):

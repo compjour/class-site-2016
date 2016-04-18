@@ -1,0 +1,451 @@
+---
+title: Using BeautifulSoup and/or lxml to parse HTML
+---
+
+
+
+# Converting HTML text into a data object
+
+A webpage is just a text file in HTML format. And HTML-formatted text is ultimately just text. So, let's write our own HTML from scratch, without worrying yet about "the Web":
+
+~~~py
+htmltxt = "<p>Hello World</p>"
+~~~
+
+The point of HTML-parsing is to be able to efficiently extract the _text_ values in an HTML document -- e.g. `Hello World` -- _apart_ from the HTML markup -- e.g. `<p></p>`.
+
+We'll start out by using [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/), one of Python's most popular HTML-parsing libraries.
+
+
+
+## Importing the BeautifulSoup constructor function
+
+This is the standard import statement for using Beautiful Soup:
+
+~~~py
+from bs4 import BeautifulSoup
+~~~
+
+The `BeautifulSoup` constructor function takes in two string arguments:
+
+1. The HTML string to be parsed.
+2. Optionally, the name of a __parser__. Without getting into the background of why there are multiple implementations of HTML parsing, for our purposes, we will _always_ be using `'lxml'`.
+
+So, let's parse some HTML:
+
+
+~~~py
+from bs4 import BeautifulSoup
+htmltxt = "<p>Hello World</p>"
+soup = BeautifulSoup(htmltxt, 'lxml')
+~~~
+
+## The "soup" object
+
+What is `soup`? As always, use the `type()` method to inspect an unknown object:
+
+~~~py
+type(soup)
+# bs4.BeautifulSoup
+~~~
+
+OK, at least we know that `soup` is not just plain text. The more complicated answer is that `soup` is now an object with much more complexity and methods than just a Python string. However, this complexity is worth diving into, because the `BeautifulSoup`-type object has specific methods designed for efficiently working with HTML.
+
+## Extracting text from soup
+
+The `BeautifulSoup` object has a `text` attribute that returns the plain text of a HTML string _sans the tags_. Given our simple soup of `<p>Hello World</p>`, the `text` attribute returns:
+
+~~~py
+soup.text
+# 'Hello World'
+~~~
+
+Let's try a more complicated HTML string:
+
+~~~py
+soup = BeautifulSoup("""<h1>Hello</h1><p>World</p>""", 'lxml')
+soup.text
+# 'HelloWorld'
+~~~
+
+And here's a HTML string that contains a URL:
+
+~~~py
+mytxt = """
+<h1>Hello World</h1>
+<p>This is a <a href="http://example.com">link</a></p>"""
+
+soup = BeautifulSoup(mytxt, 'lxml')
+soup.text
+# 'Hello World\nThis is a link'
+~~~
+
+Basically, the `BeautifulSoup`'s `text` attribute will return a string stripped of any HTML tags and metadata.
+
+
+# Finding a tag with `find()`
+
+Generally, we don't want to just spit all of the tag-stripped text of an HTML document. Usually, we want to extract text from just a few specific elements.
+
+Let's re-use our "complicated" HTML string from above:
+
+~~~py
+mytxt = """
+<h1>Hello World</h1>
+<p>This is a <a href="http://example.com">link</a></p>
+"""
+~~~
+
+It contains 3 HTML tags:
+
+1. A headline, `<h1>`
+2. A paragraph, `<p>`
+3. Within that paragraph, a hyperlink, `<a>`
+
+To find the _first_ element by tag, we use the `BeautifulSoup` object's `find()` method, which takes a tag's _name_ as the first argument:
+
+~~~py
+soup = BeautifulSoup(mytxt, 'lxml')
+soup.find('a')
+# <a href="http://example.com">link</a>
+~~~
+
+Again, use `type()` to figure out what exactly is being returned:
+
+
+~~~py
+type(soup.find('a'))
+# bs4.element.Tag
+~~~
+
+What's the difference between a `Tag` and `BeautifulSoup` object? I don't really know, but what's important to us is their _similarities_. A `Tag` object also has a `text` attribute:
+
+~~~py
+soup.find('a').text
+# link
+~~~
+
+Try `find()` with the other tags:
+
+~~~py
+soup.find('p')
+# <p>This is a <a href="http://example.com">link</a></p>
+soup.find('p').text
+# 'This is a link'
+~~~
+
+## Extracting attributes from a tag with `attrs`
+
+For the White House press briefings -- and other HTML-parsing exercises -- we want more than just the rendered text of the HTML. We'll want some of the meta attributes of the HTML, such as the `href` values for link tags.
+
+The `Tag` object has the `attrs` attribute, which returns a _dictionary_ of key-value pairs. Let's start from the top:
+
+~~~py
+from bs4 import BeautifulSoup
+mytxt = """
+<h1>Hello World</h1>
+<p>This is a <a href="http://example.com">link</a></p>
+"""
+soup = BeautifulSoup(mytxt, 'lxml')
+mylink = soup.find('a')
+~~~
+
+To extract the value of the `href` attribute from the `mylink` object, use `attrs`:
+
+~~~py
+type(mylink.attrs)
+# dict
+mylink.attrs
+# {'href': 'http://example.com'}
+mylink.attrs['href']
+# 'http://example.com'
+~~~
+
+What about the other tags in our HTML snippet? They have no attributes and thus will have blank dictionaries for their `attrs` attributes:
+
+~~~py
+soup.find('h1').attrs
+# {}
+~~~
+
+
+# Finding multiple elements with `find_all`
+
+OK, let's step up the complexity; what if there are multiple `<a>` tags from which we want to extract `href` and text values? We use the `find_all()` method which returns a _collection_ of elements:
+
+~~~py
+moretxt = """
+<p>Visit the <a href='http://www.nytimes.com'>New York Times</a></p>
+<p>Visit the <a href='http://www.wsj.com'>Wall Street Journal</a></p>
+"""
+soup = BeautifulSoup(moretxt, 'lxml')
+tags = soup.find_all('a')
+type(tags)
+# bs4.element.ResultSet
+~~~
+
+A `ResultSet` acts very much like other kinds of Python sequence, such as a __list__:
+
+~~~py
+len(tags)
+# 2
+tags[0].text
+# New York Times
+tags[0].attrs['href']
+'http://www.nytimes.com'
+for t in tags:
+    print(t.text, t.attrs['href'])
+# New York Times http://www.nytimes.com
+# Wall Street Journal http://www.wsj.com
+~~~
+
+
+However, be careful not to treat the `ResultSet` as if it were a `Tag` -- try to understand why the following doesn't make much sense (nevermind results in an error):
+
+~~~py
+tags.attrs['href']
+# AttributeError: 'ResultSet' object has no attribute 'attrs'
+~~~
+
+The HTML attributes exist at a per-tag level -- what would you expect it to return for a collection of tags? The designer of BeautifulSoup has no idea, thus, the error message.
+
+If what you want is the `href` value for each of the tags, then you have to do it the old fashioned way with a for-loop:
+
+~~~py
+hrefs = []
+for t in tags:
+    hrefs.append(t)
+~~~
+
+
+# Finding nested elements
+
+What happens when there is more than one "group" of link tags that we want? In the snippet below, the `<a>` tags we care about are nested within `<h1>` tags:
+
+~~~py
+evenmoretxt = """
+<h1><a href="http://www.a.com">Awesome</a></h1>
+<h1><a href="http://www.b.com">Really Awesome</a></h1>
+
+<div><a href="http://na.com">Ignore me</a></div>
+<div><a href="http://127.0.0.1">Ignore me again</a></div>
+"""
+
+soup = BeautifulSoup(evenmoretxt, 'lxml')
+~~~
+
+First, we can collect all of the `<h1>` tags using `find_all()`:
+
+~~~py
+heds = soup.find_all('h1')
+~~~
+
+Each of the members of `heds` is a `Tag` object, and each `Tag` object has a `find()` method, which we can use to select just the nested `<a>` tag:
+
+~~~py
+links = []
+for h in heds:
+    a = h.find('a')
+    links.append(a)
+~~~
+
+Or, more concisely:
+
+~~~py
+links = []
+for h in heds:
+    links.append(h.find('a'))
+~~~
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Converting real-world HTML into a data object
+
+~~~py
+import requests
+url = 'http://stash.compjour.org/samples/webpages/whitehouse-press-briefings-page-50.html' 
+resp = requests.get(url)
+pagetxt = resp.text
+~~~
+
+
+## Making "soup"
+
+~~~py
+from bs4 import BeautifulSoup
+soup = BeautifulSoup(pagetxt, 'lxml')
+
+~~~
+
+Type `soup.` and hit Tab to get a list of methods. For the most part, we'll want to use the methods that are prefixed with `find`:
+
+~~~
+soup.find                    soup.findParent              soup.find_next_sibling
+soup.findAll                 soup.findParents             soup.find_next_siblings
+soup.findAllNext             soup.findPrevious            soup.find_parent
+soup.findAllPrevious         soup.findPreviousSibling     soup.find_parents
+soup.findChild               soup.findPreviousSiblings    soup.find_previous
+soup.findChildren            soup.find_all                soup.find_previous_sibling
+soup.findNext                soup.find_all_next           soup.find_previous_siblings
+soup.findNextSibling         soup.find_all_previous       
+soup.findNextSiblings        soup.find_next               
+~~~
+
+### Testing out the `find_all` method
+
+The `find_all()` method takes in a string argument representing the _name_ of a HTML tag that we want to find. Let's simply collect the `<title>` tag of the page (there should only be one):
+
+~~~py
+soup.find_all('title')
+#  [<title>Press Briefings | whitehouse.gov</title>]
+~~~
+
+Even though there is only one `<title>` tag on the page, we end up with a _collection_ of results. While the resulting object looks very much like a basic Python collection, such as a `list`, but it's actually a BeautifulSoup-specific collection:
+
+~~~py
+type(soup.find_all('title'))
+# bs4.element.ResultSet
+~~~
+
+But we can still access individual members of a `ResultSet` with numerical indexing, just like we can with regular lists:
+
+~~~py
+soup.find_all('title')[0]
+# <title>Press Briefings | whitehouse.gov</title>
+~~~
+
+But note that we still don't have a plain Python string --  each element in that `ResultSet` is a BeautifulSoup specific object:
+
+~~~py
+el = soup.find_all('title')[0]
+type(el)
+# bs4.element.Tag
+~~~
+
+To get the text of a `bs4.element.Tag`, we have to refer to its `text` attribute -- which is coincidentally similar to how we get the text of a `requests,Response` object:
+
+~~~py
+el.text
+# 'Press Briefings | whitehouse.gov'
+~~~
+
+### Finding the links
+
+OK, let's walkthrough using `find_all()` again, but this time, let's look for the link tags.
+
+Just in case you've forgotten how this began, remember that we have to:
+
+~~~py
+import requests
+url = 'http://stash.compjour.org/samples/webpages/whitehouse-press-briefings-page-50.html' 
+resp = requests.get(url)
+pagetxt = resp.text
+~~~
+
+Link tags are just `<a>`, so let's start with that:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+~~~py
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin
+WH_PB_HOMEPAGE_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings'
+
+soup = BeautifulSoup(pagetxt, 'lxml')
+
+heds = soup.find_all('h3', {'class': 'field-content'})
+for h in heds:
+    atag = h.find('a')
+    url = urljoin(WH_PB_HOMEPAGE_URL, atag['href'])
+    print(url)
+~~~
+
+
+~~~py
+from glob import glob
+from os.path import join
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin
+WH_PB_HOMEPAGE_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings'
+INDEX_PAGES_DIR = 'index-pages'
+
+alltheurls = []
+for fname in glob(join(INDEX_PAGES_DIR, '*.html')):
+    with open(fname, 'r') as rf:
+        # open the file, read its contents as text
+        soup = BeautifulSoup(rf.read(), 'lxml')
+    for hed in soup.find_all('h3', {'class': 'field-content'}):
+        a = hed.find('a')
+        alltheurls.append(a['href'])
+~~~
+
+
+~~~py
+from glob import glob
+from os.path import join
+from lxml import html
+from urllib.parse import urljoin
+WH_PB_HOMEPAGE_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings'
+INDEX_PAGES_DIR = 'index-pages'
+
+alltheurls = []
+for fname in glob(join(INDEX_PAGES_DIR, '*.html')):
+    with open(fname, 'r') as rf:
+        # open the file, read its contents as text
+        hdoc = html.fromstring(rf.read())
+        atags = hdoc.cssselect('h3.field-content a')
+        alltheurls.extend(a.attrib['href'] for a in atags)
+~~~
+
+
+
+
+# With xpath
+
+
+~~~py
+from glob import glob
+from os.path import join
+from lxml import html
+from urllib.parse import urljoin
+WH_PB_HOMEPAGE_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings'
+INDEX_PAGES_DIR = 'index-pages'
+
+alltheurls = []
+for fname in glob(join(INDEX_PAGES_DIR, '*.html')):
+    with open(fname, 'r') as rf:
+        # open the file, read its contents as text
+        hdoc = html.fromstring(rf.read())
+        hrefs = hdoc.xpath('//h3[@class="field-content"]/a/@href')
+        urls = [urljoin(WH_PB_HOMEPAGE_URL, href) for href in hrefs]
+        alltheurls.extend(a.attrib['href'] for a in atags)
+~~~

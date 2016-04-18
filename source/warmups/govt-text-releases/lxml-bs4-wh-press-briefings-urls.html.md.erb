@@ -1,3 +1,108 @@
+---
+title: Using BeautifulSoup and/or lxml to parse HTML
+---
+
+
+
+
+# Converting real-world HTML into a data object
+
+~~~py
+import requests
+url = 'http://stash.compjour.org/samples/webpages/whitehouse-press-briefings-page-50.html' 
+resp = requests.get(url)
+pagetxt = resp.text
+~~~
+
+
+## Making "soup"
+
+~~~py
+from bs4 import BeautifulSoup
+soup = BeautifulSoup(pagetxt, 'lxml')
+
+~~~
+
+Type `soup.` and hit Tab to get a list of methods. For the most part, we'll want to use the methods that are prefixed with `find`:
+
+~~~
+soup.find                    soup.findParent              soup.find_next_sibling
+soup.findAll                 soup.findParents             soup.find_next_siblings
+soup.findAllNext             soup.findPrevious            soup.find_parent
+soup.findAllPrevious         soup.findPreviousSibling     soup.find_parents
+soup.findChild               soup.findPreviousSiblings    soup.find_previous
+soup.findChildren            soup.find_all                soup.find_previous_sibling
+soup.findNext                soup.find_all_next           soup.find_previous_siblings
+soup.findNextSibling         soup.find_all_previous       
+soup.findNextSiblings        soup.find_next               
+~~~
+
+### Testing out the `find_all` method
+
+The `find_all()` method takes in a string argument representing the _name_ of a HTML tag that we want to find. Let's simply collect the `<title>` tag of the page (there should only be one):
+
+~~~py
+soup.find_all('title')
+#  [<title>Press Briefings | whitehouse.gov</title>]
+~~~
+
+Even though there is only one `<title>` tag on the page, we end up with a _collection_ of results. While the resulting object looks very much like a basic Python collection, such as a `list`, but it's actually a BeautifulSoup-specific collection:
+
+~~~py
+type(soup.find_all('title'))
+# bs4.element.ResultSet
+~~~
+
+But we can still access individual members of a `ResultSet` with numerical indexing, just like we can with regular lists:
+
+~~~py
+soup.find_all('title')[0]
+# <title>Press Briefings | whitehouse.gov</title>
+~~~
+
+But note that we still don't have a plain Python string --  each element in that `ResultSet` is a BeautifulSoup specific object:
+
+~~~py
+el = soup.find_all('title')[0]
+type(el)
+# bs4.element.Tag
+~~~
+
+To get the text of a `bs4.element.Tag`, we have to refer to its `text` attribute -- which is coincidentally similar to how we get the text of a `requests,Response` object:
+
+~~~py
+el.text
+# 'Press Briefings | whitehouse.gov'
+~~~
+
+### Finding the links
+
+OK, let's walkthrough using `find_all()` again, but this time, let's look for the link tags.
+
+Just in case you've forgotten how this began, remember that we have to:
+
+~~~py
+import requests
+url = 'http://stash.compjour.org/samples/webpages/whitehouse-press-briefings-page-50.html' 
+resp = requests.get(url)
+pagetxt = resp.text
+~~~
+
+Link tags are just `<a>`, so let's start with that:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ~~~py
