@@ -1,0 +1,20 @@
+---
+title: Scraping the White House Press Briefings
+hide_toc: true
+mymeta:
+  articles:
+    - /warmups/govt-text-releases/collect-lists-of-obama-press-briefings
+    - /warmups/govt-text-releases/intro-to-bs4-lxml-parsing-wh-press-briefings
+    - /warmups/govt-text-releases/extracting-absolute-wh-press-briefings-urls
+    - /warmups/govt-text-releases/download-all-the-wh-press-briefings
+---
+
+
+# The articles
+
+<section class="uniform-content-resource-listing">
+  <% page_mymeta.articles.each do |slug| %>
+    <%= content_resource_element slug %>
+  <% end %>
+</section>
+

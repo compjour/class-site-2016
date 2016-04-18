@@ -1,6 +1,12 @@
 ---
 title: Downloading and saving each and every White House press briefings
+description: |
+    Basically, mass web-scraping and file-management, all in one exercise.
+sequence: 
+  landing: /warmups/govt-text-releases/press-briefings-overview
 ---
+
+
 
 # Making a "safe" filename
 
@@ -39,24 +45,51 @@ However, it makes things _complicated_ when saving to disk. Ideally, we want to 
 But your operating system will _not_ let you save a filename that refers to yet-uncreated subdirectories. To save a file at the given filename above, we have to create all of the intermediary subdirectories, e.g. `briefs/2016/04/02`
 
 
-## Using a regex to save
+## Replacing slashes with hyphens with replace()
+
+For now, the easiest way to create a filename from the _relative_ URLs is to simply replace all of the slash characters, `/`, with hyphens (or any character of your choice).
+
+Here it is in isolation:
+
+~~~py
+"/the/path/to/fun/".replace('/', '-')
+# '-the-path-to-fun-'
+~~~
+
+I like throwing in the __strip()__ function, which takes an optional string argument to remove a given character at the beginning and end of a string:
+
+~~~py
+"/the/path/to/fun/".replace('/', '-').strip('-')
+# 'the-path-to-fun'
+~~~
+
+This works, too:
+
+~~~py
+"/the/path/to/fun/".strip('/').replace('/', '-')
+# 'the-path-to-fun'
+~~~
 
 
+
+
+
+# All together
+
+
+## Dry-run
+
+The following is code that simply prints the extracted URLs and the filenames that will be created. Run it to make sure it prints sensical URLs and file paths:
 
 ~~~py
 from glob import glob
-from lxml import html
+from bs4 import BeautifulSoup
 from os.path import join
-from os import makedirs
 from urllib.parse import urljoin
-import re
-import requests
 
 WH_PB_HOME_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings'
 INDEX_PAGES_DIR = 'index-pages'
 BRIEFS_DIR = 'briefs'
-makedirs(BRIEFS_DIR, exist_ok=True)
-
 # Gather up all the index pages
 html_filenames = glob(join(INDEX_PAGES_DIR, '*.html'))
 
@@ -65,76 +98,85 @@ for hname in html_filenames:
     # open and parse it as HTML
     with open(hname, 'r') as rf:
         txt = rf.read()
-        hdoc = html.fromstring(txt)
-    
-    # now select for <a> tags nested within <h3 class="field-content"> tags
-    for a in hdoc.cssselect('h3.field-content a'):
-        print(a['href'])
-        # get an absolute URL
-        url = urljoin(WH_PB_HOME_URL, a['href'])
-        # Download it
-        print("Downloading", url)
-        resp = requests.get(url)
-        # base the filename off of the relative URL, a['href'], 
-        # but remove all non-word characters
-        fn = re.sub('\W+', '-', a['href']).strip('-')
-        fname = join(BRIEFS_DIR, '{}.html'.format(fn))
-        # write to disk
-        with open(fname, 'w') as wf:
-            wf.write(resp.text)
-            print("...saved to", fname)
+        soup = BeautifulSoup(txt, 'lxml')
+    # now select for <a> tags nested within <h3> tags
+    for hed in soup.find_all('h3'):
+        href = hed.find('a').attrs['href']
+        url = urljoin(WH_PB_HOME_URL, href)
+        print("Downloading from...\n", url)
+    # create a filename from the relative href path
+        fn = href.replace('/', '-').strip('-') + '.html'
+        full_fname = join(BRIEFS_DIR, fn)
+        print("Saving to...\n", full_fname)
+~~~
+
+Note that adding the `.html` to the end of the saved filename isn't necessary...
+
+~~~py
+    fn = href.replace('/', '-').strip('-') + '.html'
 ~~~
 
 
+...but we do it just so that it's easier to recognize the file as HTML on our own file system.
 
 
-Breaking it up to pieces:
+You should get output that looks like this:
+
+~~~stdout
+Downloading from...
+ https://www.whitehouse.gov/the-press-office/press-briefing-press-secretary-robert-gibbs-7262010
+Saving to...
+ briefs/the-press-office-press-briefing-press-secretary-robert-gibbs-7262010.html
+Downloading from...
+ https://www.whitehouse.gov/the-press-office/press-briefing-press-secretary-robert-gibbs-7222010
+Saving to...
+ briefs/the-press-office-press-briefing-press-secretary-robert-gibbs-7222010.html
+~~~
+
+
+## Actual downloading
+
+Now construct the script so that it does the following:
+
+1. Actually creates the `briefs` subdirectory
+2. Uses `requests` to actually fetch the individual press briefings webpages
+3. Actually saves the downloaded webpage to the appropriate file in `briefs`
+
+This should just take a few more lines of code. Here's my answer:
 
 ~~~py
+from bs4 import BeautifulSoup
 from glob import glob
-from lxml import html
-from os.path import join
 from os import makedirs
-from urllib.parse import urljoin, urlparse
-import re
+from os.path import join
+from urllib.parse import urljoin
 import requests
 
 WH_PB_HOME_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings'
 INDEX_PAGES_DIR = 'index-pages'
 BRIEFS_DIR = 'briefs'
 makedirs(BRIEFS_DIR, exist_ok=True)
+# Gather up all the index pages
+html_filenames = glob(join(INDEX_PAGES_DIR, '*.html'))
 
-# fname is the name of some HTML page
-def parse_html_file(fname):
-    with open(fname, 'r') as rf:
+# for each index page
+for hname in html_filenames:
+    # open and parse it as HTML
+    with open(hname, 'r') as rf:
         txt = rf.read()
-    return html.fromstring(txt)
-
-def get_briefs_urls(hdoc):
-    hrefs = [a.attrib['href'] for a in hdoc.cssselect('h3.field-content a')]
-    return [urljoin(WH_PB_HOME_URL, h) for h in hrefs]
-
-def url_to_bfname(url):
-    u = urlparse(url)
-    # we extract the relative URL using urlparse and getting its `path`
-    rel_url = u.path
-    fn = re.sub('\W+', '-', rel_url).strip('-')
-    return join(BRIEFS_DIR, '{}.html'.format(fn))
-
-alltheurls = []
-for fn in glob(join(INDEX_PAGES_DIR, '*.html')):
-    hdoc = parse_html_file(fn)
-    alltheurls.extend(get_briefs_urls(hdoc))
-
-
-for url in alltheurls:
-    print("Downloading...\n", url)
-    resp = requests.get(url)
-    # base the filename off of the relative URL,  href,
-    # but remove all non-word characters
-    fname = url_to_bfname(url)
-    with open(fname, 'w') as wf:
-        wf.write(resp.text)
-        print("Saving...\n", fname)
-        print("\n")
+        soup = BeautifulSoup(txt, 'lxml')
+    # now select for <a> tags nested within <h3> tags
+    for hed in soup.find_all('h3'):
+        href = hed.find('a').attrs['href']
+        url = urljoin(WH_PB_HOME_URL, href)
+        print("Downloading from...\n", url)
+        resp = requests.get(url)
+    # create a filename from the relative href path
+        fn = href.replace('/', '-').strip('-') + '.html'
+        full_fname = join(BRIEFS_DIR, fn)
+        print("Saving to...\n", full_fname)
+        with open(full_fname, 'w') as wf:
+            wf.write(resp.text)
 ~~~
+
+
