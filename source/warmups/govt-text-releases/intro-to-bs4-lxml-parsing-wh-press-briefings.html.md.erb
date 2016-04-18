@@ -1,5 +1,5 @@
 ---
-title: Using BeautifulSoup and/or lxml to parse HTML
+title: Using BeautifulSoup to parse HTML and extract press briefings URLs
 ---
 
 
@@ -258,6 +258,157 @@ for h in heds:
 ~~~
 
 
+# Real world example.com
+
+Parsing our own hand-constructed HTML is not much fun. So let's get a "real" HTML document from the web.
+
+This part should be familiar:
+
+~~~py
+import requests
+resp = requests.get('http://www.example.com')
+txt = resp.text
+~~~
+
+Whether the contents of `txt` is a hand-constructed string or something that came from the Web doesn't matter when we're working with Beautiful Soup -- we only care about converting a string into a BeautifulSoup object:
+
+~~~py
+from bs4 import BeautifulSoup
+soup = BeautifulSoup(txt, 'lxml')
+~~~
+
+Look at the webpage at <%=url_alone 'http://www.example.com/' %>. Inspect its source. Then see if you can write the Python code that extracts:
+
+1. The number of `<p>` tags.
+2. The text in the first `<p>` tag
+3. The length of the text of the first `<h1>` tag
+4. The text of the first (and only) `<a>` tag
+5. The `href` of the first `<a>` tag
+
+
+My answers below:
+
+~~~py
+# 1. The number of `<p>` tags.
+len(soup.find_all('p'))
+# 2. The text in the first `<p>` tag
+soup.find_all('p')[0].text
+# 3. The length of the text of the first `<h1>` tag
+len(soup.find('h1').text)
+# 4. The text of the first `<a>` tag
+soup.find('a').text
+# 5. The href of the first `<a>` tag
+soup.find('a').attrs['href']
+~~~
+
+
+
+# Extracting individual press briefings URLs from the White House press briefings list
+
+Now see if you can extract each press briefing URL from this sample White House press briefings page:
+
+<%= url_alone 'http://stash.compjour.org/samples/webpages/whitehouse-press-briefings-page-50.html' %>
+
+![image wh-press-briefings-landing.page.jpg](/files/govt-text-releases/wh-press-briefings-landing.page.jpg)
+
+## Examining the source HTML behind each press release tag
+
+Let's look at that first URL.
+
+Its __text__ is: 
+
+`Press Briefing by Press Secretary Jay Carney, 12/6/2013`
+
+Its `href` value is:
+
+`https://www.whitehouse.gov/the-press-office/2013/12/06/press-briefing-press-secretary-jay-carney-1262013`
+
+
+If you inspect the source and search for the specific tag, you'll find this HTML:
+
+~~~html
+  <div class="views-field views-field-title">        <h3 class="field-content"><a href="https://www.whitehouse.gov/the-press-office/2013/12/06/press-briefing-press-secretary-jay-carney-1262013">Press Briefing by Press Secretary Jay Carney, 12/6/2013</a></h3>  </div>  </div>
+~~~
+
+For this page, a link is more than just an `<a>` tag; it's nested within several other tags. Here's a pretty-formatted version of that one link and its parent tags:
+
+~~~html
+<div class="views-field views-field-title">
+  <h3 class="field-content">
+      <a href="https://www.whitehouse.gov/the-press-office/2013/12/06/press-briefing-press-secretary-jay-carney-1262013">
+          Press Briefing by Press Secretary Jay Carney, 12/6/2013
+      </a>
+  </h3>
+</div>
+~~~
+
+## Processing the press briefings page as soup
+
+Let's turn this convoluted HTML into soup. See if you can remember the steps for downloading the webpage and converting it to a soup object well enough to type them by memory:
+
+~~~py
+import requests
+from bs4 import BeautifulSoup
+url = 'http://stash.compjour.org/samples/webpages/whitehouse-press-briefings-page-50.html'
+resp = requests.get(url)
+soup = BeautifulSoup(resp.text, 'lxml')
+~~~
+
+There are 10 press briefings per page, but it should be evident that there are more than 10 link tags. That's easy enough to find out:
+
+~~~py
+len(soup.find_all('a'))
+# 263
+~~~
+
+So how do we get just the URLs for the actual press briefings? From the HTML that we inspected previously, we want `<a>` tags that are nested within `<h3>` tags. 
+
+So let's find and count the number of `h3` tags:
+
+~~~py
+len(soup.find_all('h3'))
+# 10
+~~~
+
+Hey, what a coincidence -- there are exactly as many `h3` tags as links to press briefings. This is just a lucky result of how the White House webdevs decided to build this page.
+
+Here's one way to extract all the URLs of the nested link tags into a list:
+
+~~~py
+urls = []
+for h in soup.find_all('h3'):
+    a = h.find('a')
+    urls.append(a.attrs['href'])
+~~~
+
+Here's a more concise -- albeit harder to read -- version:
+
+~~~py
+urls = []
+for h in soup.find_all('h3'):
+    urls.append(h.find('a').attrs['href'])
+~~~
+
+
+Either way, this is the contents of `urls`:
+
+~~~py
+['https://www.whitehouse.gov/the-press-office/2013/12/06/press-briefing-press-secretary-jay-carney-1262013',
+ 'https://www.whitehouse.gov/the-press-office/2013/12/05/daily-briefing-press-secretary-1252013',
+ 'https://www.whitehouse.gov/the-press-office/2013/12/05/press-briefing-senior-administration-officials-fact-sheet-strengthening-',
+ 'https://www.whitehouse.gov/the-press-office/2013/12/04/press-briefing-press-secretary-1232013',
+ 'https://www.whitehouse.gov/the-press-office/2013/12/02/press-briefing-press-secretary-jay-carney-1222013',
+ 'https://www.whitehouse.gov/the-press-office/2013/11/26/press-gaggle-principal-deputy-press-secretary-josh-earnest-los-angeles-c',
+ 'https://www.whitehouse.gov/the-press-office/2013/11/25/press-gaggle-principal-deputy-press-secretary-josh-earnest-aboard-air-fo',
+ 'https://www.whitehouse.gov/the-press-office/2013/11/22/daily-briefing-press-secretary-112213',
+ 'https://www.whitehouse.gov/the-press-office/2013/11/21/briefing-principal-deputy-press-secretary-josh-earnest-112113',
+ 'https://www.whitehouse.gov/the-press-office/2013/11/20/press-briefing-press-secretary-jay-carney-11192013']
+~~~
+
+
+
+
+
 
 
 
@@ -285,167 +436,4 @@ pagetxt = resp.text
 ~~~
 
 
-## Making "soup"
-
-~~~py
-from bs4 import BeautifulSoup
-soup = BeautifulSoup(pagetxt, 'lxml')
-
-~~~
-
-Type `soup.` and hit Tab to get a list of methods. For the most part, we'll want to use the methods that are prefixed with `find`:
-
-~~~
-soup.find                    soup.findParent              soup.find_next_sibling
-soup.findAll                 soup.findParents             soup.find_next_siblings
-soup.findAllNext             soup.findPrevious            soup.find_parent
-soup.findAllPrevious         soup.findPreviousSibling     soup.find_parents
-soup.findChild               soup.findPreviousSiblings    soup.find_previous
-soup.findChildren            soup.find_all                soup.find_previous_sibling
-soup.findNext                soup.find_all_next           soup.find_previous_siblings
-soup.findNextSibling         soup.find_all_previous       
-soup.findNextSiblings        soup.find_next               
-~~~
-
-### Testing out the `find_all` method
-
-The `find_all()` method takes in a string argument representing the _name_ of a HTML tag that we want to find. Let's simply collect the `<title>` tag of the page (there should only be one):
-
-~~~py
-soup.find_all('title')
-#  [<title>Press Briefings | whitehouse.gov</title>]
-~~~
-
-Even though there is only one `<title>` tag on the page, we end up with a _collection_ of results. While the resulting object looks very much like a basic Python collection, such as a `list`, but it's actually a BeautifulSoup-specific collection:
-
-~~~py
-type(soup.find_all('title'))
-# bs4.element.ResultSet
-~~~
-
-But we can still access individual members of a `ResultSet` with numerical indexing, just like we can with regular lists:
-
-~~~py
-soup.find_all('title')[0]
-# <title>Press Briefings | whitehouse.gov</title>
-~~~
-
-But note that we still don't have a plain Python string --  each element in that `ResultSet` is a BeautifulSoup specific object:
-
-~~~py
-el = soup.find_all('title')[0]
-type(el)
-# bs4.element.Tag
-~~~
-
-To get the text of a `bs4.element.Tag`, we have to refer to its `text` attribute -- which is coincidentally similar to how we get the text of a `requests,Response` object:
-
-~~~py
-el.text
-# 'Press Briefings | whitehouse.gov'
-~~~
-
-### Finding the links
-
-OK, let's walkthrough using `find_all()` again, but this time, let's look for the link tags.
-
-Just in case you've forgotten how this began, remember that we have to:
-
-~~~py
-import requests
-url = 'http://stash.compjour.org/samples/webpages/whitehouse-press-briefings-page-50.html' 
-resp = requests.get(url)
-pagetxt = resp.text
-~~~
-
-Link tags are just `<a>`, so let's start with that:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-~~~py
-from bs4 import BeautifulSoup
-from urllib.parse import urljoin
-WH_PB_HOMEPAGE_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings'
-
-soup = BeautifulSoup(pagetxt, 'lxml')
-
-heds = soup.find_all('h3', {'class': 'field-content'})
-for h in heds:
-    atag = h.find('a')
-    url = urljoin(WH_PB_HOMEPAGE_URL, atag['href'])
-    print(url)
-~~~
-
-
-~~~py
-from glob import glob
-from os.path import join
-from bs4 import BeautifulSoup
-from urllib.parse import urljoin
-WH_PB_HOMEPAGE_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings'
-INDEX_PAGES_DIR = 'index-pages'
-
-alltheurls = []
-for fname in glob(join(INDEX_PAGES_DIR, '*.html')):
-    with open(fname, 'r') as rf:
-        # open the file, read its contents as text
-        soup = BeautifulSoup(rf.read(), 'lxml')
-    for hed in soup.find_all('h3', {'class': 'field-content'}):
-        a = hed.find('a')
-        alltheurls.append(a['href'])
-~~~
-
-
-~~~py
-from glob import glob
-from os.path import join
-from lxml import html
-from urllib.parse import urljoin
-WH_PB_HOMEPAGE_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings'
-INDEX_PAGES_DIR = 'index-pages'
-
-alltheurls = []
-for fname in glob(join(INDEX_PAGES_DIR, '*.html')):
-    with open(fname, 'r') as rf:
-        # open the file, read its contents as text
-        hdoc = html.fromstring(rf.read())
-        atags = hdoc.cssselect('h3.field-content a')
-        alltheurls.extend(a.attrib['href'] for a in atags)
-~~~
-
-
-
-
-# With xpath
-
-
-~~~py
-from glob import glob
-from os.path import join
-from lxml import html
-from urllib.parse import urljoin
-WH_PB_HOMEPAGE_URL = 'https://www.whitehouse.gov/briefing-room/press-briefings'
-INDEX_PAGES_DIR = 'index-pages'
-
-alltheurls = []
-for fname in glob(join(INDEX_PAGES_DIR, '*.html')):
-    with open(fname, 'r') as rf:
-        # open the file, read its contents as text
-        hdoc = html.fromstring(rf.read())
-        hrefs = hdoc.xpath('//h3[@class="field-content"]/a/@href')
-        urls = [urljoin(WH_PB_HOMEPAGE_URL, href) for href in hrefs]
-        alltheurls.extend(a.attrib['href'] for a in atags)
-~~~
+Now all we have to do is repeat this for every page of press briefings listings...
