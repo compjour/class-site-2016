@@ -1,38 +1,12 @@
-import requests
 from bs4 import BeautifulSoup
 from os.path import join, basename, splitext, exists
 from os import makedirs
 from urllib.parse import urljoin
 from glob import glob
 
-SOURCE_URL_BASE = 'https://www.tdcj.state.tx.us/death_row/'
-SOURCE_URL_PAGES = ['dr_offenders_on_dr.html', 'dr_executed_offenders.html']
+from settings import *
 
 
-DATA_DIR = 'mydata'
-INDEX_PAGES_DIR = join(DATA_DIR, 'index-pages')
-INMATE_PAGES_DIR = join(DATA_DIR, 'inmate-pages')
-MUGSHOT_PAGES_DIR = join(DATA_DIR, 'mugshots')
-LASTWORDS_PAGES_DIR = join(DATA_DIR, 'lastwords')
-
-
-makedirs(INDEX_PAGES_DIR, exist_ok=True)
-makedirs(INMATE_PAGES_DIR, exist_ok=True)
-makedirs(MUGSHOT_PAGES_DIR, exist_ok=True)
-makedirs(LASTWORDS_PAGES_DIR, exist_ok=True)
-
-
-def ez_fetch(url, filename):
-    print("---------")
-    if exists(filename):
-        print("Already downloaded:", url)
-        print("Into:", filename)
-    else:
-        print("Currently downloading:", url)
-        print("Into:", filename)
-        resp = requests.get(url)
-        with open(filename, 'wb') as wf:
-            wf.write(resp.content)
 
 # Download the index pages first
 for _pg in SOURCE_URL_PAGES:
@@ -56,7 +30,7 @@ for fn in glob(join(INDEX_PAGES_DIR, '*.html')):
                idcol = inmate_row.find_all('td')[tdcj_col_idx]
                inmate_id = idcol.text
                for atag in inmate_row.find_all('a'):
-                    if 'Offender Information' in atag.text:
+                    if 'Offender Information' in atag.text and 'no_info_available' not in atag['href']:
                         url = urljoin(SOURCE_URL_BASE, atag['href'])
                         _n, filetype = splitext(basename(url))
                         # ignore the name of the file

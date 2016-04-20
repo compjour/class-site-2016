@@ -1,0 +1,71 @@
+---
+title: A primer on using regular expressions in Python
+---
+
+
+
+
+# Compiling a regex
+
+
+https://docs.python.org/3/howto/regex.html
+
+~~~py
+import re
+ptrn = re.compile(r'\b\w{4,5}\b')
+ptrn.search("This is funny moneys")
+ptrn.findall("This is funny moneys")
+~~~
+
+~~~py
+import re
+ptrn = re.compile(r'\b\w{4,5}\b')
+ptrn.search("This is funny moneys")
+ptrn.findall("This is funny moneys")
+~~~
+
+
+
+## About raw strings
+
+
+
+
+~~~py
+s = r'hello'
+type(s)
+# str
+s
+# 'hello'
+~~~
+
+
+~~~py
+x = 'hey\byou'
+y = r'hey\byou'
+
+x
+# 'hey\x08you'
+print(x)
+# heyou
+y
+# 'hey\\byou'
+print(y)
+# hey\byou
+~~~
+
+
+http://stackoverflow.com/questions/2081640/what-exactly-do-u-and-r-string-flags-do-in-python-and-what-are-raw-string-l
+
+> A "raw string literal" is a slightly different syntax for a string literal, in which a backslash, \, is taken as meaning "just a backslash" (except when it comes right before a quote that would otherwise terminate the literal) -- no "escape sequences" to represent newlines, tabs, backspaces, form-feeds, and so on. In normal string literals, each backslash must be doubled up to avoid being taken as the start of an escape sequence.
+
+> This syntax variant exists mostly because the syntax of regular expression patterns is heavy with backslashes (but never at the end, so the "except" clause above doesn't matter) and it looks a bit better when you avoid doubling up each of them -- that's all. It also gained some popularity to express native Windows file paths (with backslashes instead of regular slashes like on other platforms), but that's very rarely needed (since normal slashes mostly work fine on Windows too) and imperfect (due to the "except" clause above).
+> 
+
+
+
+
+# Exercises
+
+
+> Taxes help the United States produce U.S. airplanes which can then be flown by U.S citizens. The aircraft is bought with US-based currency, paid for by us, the U.S. taxpayers.

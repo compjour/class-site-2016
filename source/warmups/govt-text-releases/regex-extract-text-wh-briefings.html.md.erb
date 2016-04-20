@@ -1,0 +1,25 @@
+
+# Getting set up
+
+~~~py
+from urllib.parse import urljoin
+import requests
+BASE_URL = 'http://stash.compjour.org/samples/whitehouse.gov/wh-press-briefings/'
+for fname in ['2016-04-02-content.txt', '2016-04-02-webpage.html']:
+    resp = requests.get(urljoin(BASE_URL, fname))
+    with open(fname, 'w') as wf:
+        wf.write(resp.text)
+~~~
+
+
+# A review of Counter
+
+
+
+# Word tokenization
+
+
+# Tokenizing raw HTML
+
+
+# Tokenizing the text content of parsed HTML

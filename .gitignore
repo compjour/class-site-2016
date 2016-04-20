@@ -23,3 +23,8 @@ creds_*
 scratchnotes*
 .s3_sync
 __pycache__/
+
+
+
+
+/source/files/**/mydata
