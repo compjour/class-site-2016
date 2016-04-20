@@ -3,7 +3,6 @@ from os import makedirs
 import requests
 
 SOURCE_URL_BASE = 'https://www.tdcj.state.tx.us/death_row/'
-SOURCE_URL_PAGES = ['dr_offenders_on_dr.html', 'dr_executed_offenders.html']
 
 DATA_DIR = 'mydata'
 INDEX_PAGES_DIR = join(DATA_DIR, 'index-pages')
