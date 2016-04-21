@@ -5,7 +5,8 @@ require "lib/site_config"
 helpers SiteHelpers
 config[:site_config] = SiteConfig.load_site_config("./site_config.yaml")
 
-
+ignore 'files/**/code/**/mydata/**/*'
+ignore '__pycache__'
 
 # General configuration
 
@@ -47,8 +48,6 @@ page '/*.csv', layout: false
 page '/slides', layout: '/layouts/slides'
 set :layout, :default_page_layout
 
-ignore '/files/**/mydata
-'
 
 # Proxy pages (http://middlemanapp.com/basics/dynamic-pages/)
 # proxy "/this-page-has-no-template.html", "/template-file.html", locals: {

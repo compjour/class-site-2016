@@ -1,13 +1,64 @@
 ---
 title: A walkthrough of HTML scraping and regexes
+description: Texas and HTML parsing and regexing and religion
 ---
 
-Here's the religion-filtering-Texas-death-row script on a Gist:
+
+# Sample code
+
+The following section contains scripts that all tackle the same homework problems: <%= link_cro '/assignments/week-03/web-and-text-scrapes' %>
+
+They don't _solve_ the exact requirement, but are just meant to show different ways to think about the problem, or at least get you more acquainted with the web-scraping libraries and techniques.
+
+
+## Religion-testing Texas in one big script
+
+Here's the religion-filtering-Texas-death-row script on a Gist; I've tried to clean it up to the point where it might be hard to untangle how things work from the abstractions. Also I decided to make it spit out colorful text:
 
 <%=url_alone 'https://gist.github.com/dannguyen/b35713b4751272fc6346dc312f3cf470' %>
 
 
-# Let's focus on last words of Texas death penalty inmates
+## On the site's Github repo
+
+
+### Standalone
+
+I wrote a few scripts that are meant to just be run independently of each other in the context of the death row pages.
+
+- [lastwords/single_page_basic.py](https://github.com/compjour/class-site-2016/blob/master/source/files/texas-death-penalty/code/standalone-scrapes/lastwords/single_page_basic.py) - a standalone scrape of a single HTML page, demonstrating the use of Beautiful Soup in targeting an element based on the value of its text, e.g. `"Last Statement:"`
+- [lastwords/fetch_pages_basic.py](https://github.com/compjour/class-site-2016/blob/master/source/files/texas-death-penalty/code/standalone-scrapes/lastwords/fetch_pages_basic.py) - A script that will fetch all of the last-statement pages and dump them into `mydata/lastwordpages`. You can then __glob__ these files when evaluating for religiosity, rather than continually pinging the Texas live site.
+- [lastwords/extract_text_basic.py](https://github.com/compjour/class-site-2016/blob/master/source/files/texas-death-penalty/code/standalone-scrapes/lastwords/extract_text_basic.py) - another standalone script that's just meant to show BeautifulSoup in action, along with the use of a regex pattern to match text values that _include_ `'Last Statement:'`, not just match its value _exactly._
+
+
+### Fetch and re-organize
+
+I had hoped to do a quick lesson on how to build a different/better death penalty site. And then got caught up in all the different ways there are to just download the Texas site.
+
+Here's [the root folder for scripts that work in tandem](https://github.com/compjour/class-site-2016/tree/master/source/files/texas-death-penalty/code/mirror-tdcj-dp-site).
+
+The hard part isn't downloading the files. It's organizing them on your end. My approach was to save individual inmate files by their Texas ID number. So, for example, given this URL:
+
+<%=url_alone 'https://www.tdcj.state.tx.us/death_row/dr_info/jacobsjesselast.html' %>
+
+Instead of saving it locally at:
+
+      mydata/lastwords/jacobsjesselast.html
+
+Creating a new filename based on Mr. Jacobs' Texas system ID of __872__:
+
+      mydata/lastwords/872.html
+
+And for that matter, saving his biographical information at:
+
+      mydata/inmate-pages/872.jpg
+
+
+
+---------------------
+
+
+
+# Class notes: Let's focus on last words of Texas death penalty inmates
 
 The index page of offenders can be found here:
 
@@ -30,6 +81,14 @@ The site github repo has various files stashed away -- I'll link to them later:
 <%=url_alone 'https://github.com/compjour/class-site-2016/tree/master/source/files/texas-death-penalty/code' %>
 
 
+So the code in this ["mirror-tdcj-dp-site" repo](https://github.com/compjour/class-site-2016/tree/master/source/files/texas-death-penalty/code/mirror-tdcj-dp-site) is meant to collect and "glue together" the Texas death penalty site in such a way that we can then transform its data into a different site of our own. One that has, for example, faces on the index view. Or one that focuses on education level and age of the convicts, or on other datapoints that are currently buried in the official design.
+
+This is a long way of saying: the ["mirror-tdcj-dp-site" repo](https://github.com/compjour/class-site-2016/tree/master/source/files/texas-death-penalty/code/mirror-tdcj-dp-site) contains way more code than needed to do a simple scrape job. But you might find some insights from it.
+
+
+
+
+### Class example
 
 
 Some code to fetch and parse a single page:
