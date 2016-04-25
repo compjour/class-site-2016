@@ -14,7 +14,8 @@
     {% for recall in recalls_list %}
     <tr>
       <td>
-        <a class="product-image" href="{{recall['url']}}"><img src="{{recall['image_url']}}"></a>
+        <a class="product-image" href="{{recall['url']}}">
+        <img class="product-image" src="{{recall['image_url']}}"></a>
       </td>
       <td>
         <a class="recall-title" href="{{recall['url']}}">{{recall['title']}}</a>

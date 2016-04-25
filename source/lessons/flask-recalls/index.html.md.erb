@@ -1,20 +1,30 @@
 ---
-title: Introduction to Simple News Apps based on Recall Data
+title: Introduction to Simple News Apps based on CSPC Recall Data
 description: |
-  A series on learning how to make a news app
-
-
-
+  Learning to make a news app by trying to make a better Recalls page
 hide_toc: true
 mymeta:
   articles:
     - /lessons/flask-recalls/bringing-in-recall-data
     - /lessons/flask-recalls/intro-to-jinja2-templating
-    - /lessons/flask-recalls/formatting-recall-data-with-jinja2
-    - /lessons/flask-recalls/wrangling-recall-data-for-flask
-    - /lessons/flask-recalls/layingout-recall-data-for-flask
-    - /lessons/flask-recalls/product-categorize-recall-data-flask
+#    - /lessons/flask-recalls/formatting-recall-data-with-jinja2
+#    - /lessons/flask-recalls/wrangling-recall-data-for-flask
+#    - /lessons/flask-recalls/layingout-recall-data-for-flask
+#    - /lessons/flask-recalls/product-categorize-recall-data-flask
 ---
+
+# Class objectives
+
+- Parse the CSPC Recall data as JSON
+- Create a Flask app that uses Jinja templating
+- Create a better view of the Recall data
+
+## In-class
+
+Follow the articles on how to create a Flask app with Jinja templating. Then get to the point where you can create a page that lists the __title__ of every recall in 2016, with a clickable link to the official URL, and a photo of the recalled product.
+
+It just has to be a one page-Flask app for now. But get a good understanding of how the data is structured.
+
 
 
 
@@ -25,3 +35,23 @@ mymeta:
     <%= content_resource_element slug %>
   <% end %>
 </section>
+
+
+# The Consumer Product Safety Commission  recalls data
+
+The consumer-friendly recalls notice site can be found here:
+
+<%=url_alone 'http://www.cpsc.gov/en/Recalls/' %>
+
+<a href="http://www.cpsc.gov/en/Recalls/"><img src="/files/flask-recalls/recalls-homepage.jpg" alt="recalls-homepage.jpg"></a>
+
+
+
+
+## The API
+
+The homepage for the CPSC API can be found [here](http://www.cpsc.gov/en/Recalls/CPSC-Recalls-Application-Program-Interface-API-Information/).
+
+The [PDF manual](http://www.cpsc.gov/Global/info/Recall/CPSC-Recalls-Retrieval-Web-Services-Programmers-Guide_3-25-2015.pdf)
+
+Here's [a gist that demonstrates some code](https://gist.github.com/dannguyen/828a491f6aef459a30eaf3f130d80257).

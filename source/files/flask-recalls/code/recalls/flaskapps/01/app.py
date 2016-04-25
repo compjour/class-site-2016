@@ -1,12 +1,5 @@
-from flask import Flask
-from flask import render_template
-from datetime import datetime
-app = Flask(__name__)
+<% content_card do %>
 
-@app.route("/")
-def homepage():
-    tname = 'hello.html'
-    return render_template(tname, the_date=datetime.now(), numbers=list(range(1,11)))
+The code for this <%=link_to "lesson can be found here on the site Github repo", page_mymeta.github_folder %>.
 
-if __name__ == '__main__':
-    app.run(use_reloader=True, debug=True)
+<% end %>

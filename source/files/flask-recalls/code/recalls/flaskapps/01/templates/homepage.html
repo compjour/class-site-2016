@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+   <h1>Hello world!</h1>
+
+   <p>Today is <strong>{{ the_date }}</strong> and it is a great day!</p>
+    <h2>Let's count!</h2>
+
+    {% for n in numbers %}
+        {% if n % 2 == 0 %}
+          <div>{{ n }} is an even number of bottles of soy.</div>
+        {% else %}
+          <div>{{ n }} is an odd number of bottles of soy.</div>
+        {% endif %}
+    {% endfor %}
+
+    <p>Done counting!</p>
+</body>
+</html>

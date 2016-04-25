@@ -1,6 +1,6 @@
 ---
 title: Introduction to Jinja2 Templating (2/6)
-description: TK
+description: The Jinja2 templating library provides a much saner way of programmatically generating HTML.
 objectives:
   - Learn how to generate a URL for a `static` directory of assets.
   - Learn how to write CSS and include it as a separate file.
@@ -9,7 +9,7 @@ objectives:
   - Learn Jinja2 block syntax for control flow, e.g. `if` and `for` statements
 sequence:
   landing: /lessons/flask-recalls
-  next: /lessons/flask-recalls/formatting-recall-data-with-jinja2
+# next: /lessons/flask-recalls/formatting-recall-data-with-jinja2
   previous: /lessons/flask-recalls/bringing-in-recall-data
 mymeta:
   github_folder: https://github.com/compjour/class-site-2016/tree/master/source/files/flask-recalls/code/recalls/flaskapps/01
@@ -21,3 +21,476 @@ mymeta:
 The code for this <%=link_to "lesson can be found here on the site Github repo", page_mymeta.github_folder %>.
 
 <% end %>
+
+
+# What is Jinja2?
+
+
+[Jinja2 is the default templating engine for Flask](http://flask.pocoo.org/docs/0.10/templating/). If you are using the __Anaconda installer__, jinja2 is already installed. If not, you'll have to run this from the command line to install it:
+
+~~~sh
+$ pip install jinja2
+~~~
+
+
+So what is a __templating engine__? Remember how we used [__string.Template__ in past lessons](/lessons/flask-single-page/multiple-dynamic-routes-in-flask)?
+
+~~~py
+from string import Template
+my_template = Template("Hello, ${person_name}, how are you?")
+for name in ['Jane', 'Bob', 'Dan']:
+    s = my_template.substitute(person_name=name)
+    print(s)
+# Hello, Jane, how are you?
+# Hello, Bob, how are you?
+# Hello, Dan, how are you?
+~~~
+
+Or, when we're in a rush, the __format()__ function that comes with every Python string?
+
+~~~py
+xs = 'Hello, {name}, do you like {something}?'
+s = xs.format(name='Booboo', something="honey")
+print(s)
+# Hello, Booboo, do you like honey?
+~~~
+
+The [jinja2 template engine](http://jinja.pocoo.org/docs/dev/) gives us more power and flexibility at the cost of having to learn a new syntax:
+
+Here's a standalone (i.e., without Flask) [basic usage of its API](http://jinja.pocoo.org/docs/dev/intro/#basic-api-usage):
+
+
+~~~py
+from jinja2 import Template
+template = Template('Hello {{ name }}, do you like {{something}}?')
+s = template.render(name='Jane Doe', something='radio')
+print(s)
+# Hello Jane Doe, do you like radio?
+~~~
+
+
+
+Except for a difference in naming conventions, doesn't look much different than `string.Template` or `format()`, right? 
+
+Well, first be aware that there's a whole different syntax for marking variable names: double-curly-braces instead of single:
+
+~~~py
+Template('Hello {{ name }}')
+~~~
+
+
+# Simplified template logic
+
+So where jinja2 gets fun is how it let's us include a little bit of logic into our templates. 
+
+Consider counting to 5 and writing it as a HTML string (each number in its own paragraph tag). Here's the old-fashioned way of doing it:
+
+~~~py
+mystring = ''
+for i in range(1, 6):
+    mystring += "<p>{num}</p>".format(num=i)
+print(mystring)
+# <p>1</p><p>2</p><p>3</p><p>4</p><p>5</p>
+~~~
+
+And here's how to embed a for-loop into a jinja2 template:
+
+~~~py
+from jinja2 import Template
+mytemplate = Template(""" 
+{% for num in numbers %}
+<p>{{ num }}</p>
+{% endfor %}""")
+
+print(mytemplate.render(numbers=range(1,6)))
+
+# <p>1</p>
+# 
+# <p>2</p>
+# 
+# <p>3</p>
+# 
+# <p>4</p>
+# 
+# <p>5</p>
+~~~
+
+Well, they aren't exactly equivalent. And now we have to learn jinja2's wonky syntax, e.g. `{% for x in stuff %}` and `{% endfor %}` -- but jinja2 helps us write cleaner programatically-generated-HTML. 
+
+
+# Let's make a pretty HTML app
+
+Create a new boilerplate __app.py__. But let's have it print some proper, nice looking HTML, with some CSS styling:
+
+
+~~~py
+from flask import Flask
+app = Flask(__name__)
+
+HTML_TEMPLATE = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World</title>
+  <style>
+    body{
+      width: 90%;
+      margin: auto;
+      font-family: "Helvetica Neue";
+    }
+  </style>
+</head>
+<body>
+   <h1>Hello world!</h1>
+   <p>Today is <strong>SOMEDATE</strong> and it is a great day!</p>
+</body>
+</html>
+"""
+
+@app.route("/")
+def homepage():
+    return HTML_TEMPLATE
+
+if __name__ == '__main__':
+    app.run(use_reloader=True, debug=True)
+~~~
+
+We'll fill out `SOMEDATE` later; create the __app.py__ and get it running. It should look like this:
+
+![image hello-great-day.png](/files/flask-recalls/hello-great-day.png)
+
+It's a pretty HTML page, but it is an _ugly_ __app.py__. So let's use jinja2 to move the HTML code out of __app.py__.
+
+
+
+# Using flask's `render_template()`
+
+Flask knows how to connect to jinja2. So we just need to include this import statement to have access to `render_template()`:
+
+
+~~~py
+from flask import render_template
+~~~
+
+What does the __render_template()__ function do? It takes a string value that represents a __filename__ containing a string template. In other words, the file that contains the value of `HTML_TEMPLATE`.
+
+## The `/templates` convention
+
+But here's the catch: Flask expects there to be a directory relative to `app.py` named: __templates__. So if we were to make this call:
+
+~~~py
+render_template('homepage.html')
+~~~
+
+We would need to create the path, `templates/homepage.html`
+
+And the contents of that file, for our purposes, is the raw HTML and any templating code -- note the use of `{{ the date }}`:
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World</title>
+  <style>
+    body{
+      width: 90%;
+      margin: auto;
+      font-family: "Helvetica Neue";
+    }
+  </style>
+</head>
+<body>
+   <h1>Hello world!</h1>
+   <p>Today is <strong>{{ the_date }}</strong> and it is a great day!</p>
+</body>
+</html>
+~~~
+
+
+So, give it a try:
+
+- Create the `templates` subdirectory
+- Create `templates/homepage.html`
+
+Then, modify (i.e. slim it down) __app.py__ like so:
+
+~~~py
+from flask import Flask
+from flask import render_template
+app = Flask(__name__)
+
+@app.route("/")
+def homepage():
+    htmltxt = render_template('homepage.html')
+    return htmltxt
+
+if __name__ == '__main__':
+    app.run(use_reloader=True, debug=True)
+~~~
+
+
+![image hello-great-day-nodate.png](/files/flask-recalls/hello-great-day-nodate.png)
+
+Note that there seems to be a missing word where we expected `{{ the_date }}`; because we didn't pass arguments into `render_template()` specifying what `{{ the_date }}` is supposed to be, it simply leaves it blank.
+
+## Passing in template variables
+
+The variables that you want to render can simply be passed in as extra arguments to `render_template()`:
+
+
+~~~py
+@app.route("/")
+def homepage():
+    htmltxt = render_template('homepage.html', the_date="TODAY")
+    return htmltxt
+~~~
+
+
+Or, if you prefer sending in the real date as your machine discerns it:
+
+~~~py
+from flask import Flask
+from flask import render_template
+from datetime import datetime
+app = Flask(__name__)
+
+@app.route("/")
+def homepage():
+    htmltxt = render_template('homepage.html', the_date=datetime.now())
+    return htmltxt
+
+if __name__ == '__main__':
+    app.run(use_reloader=True, debug=True)
+~~~
+
+
+![image hello-great-day-withdate.png](/files/flask-recalls/hello-great-day-withdate.png)
+
+
+# Let's do a for-loop statement
+
+OK, let's do something more fun. Let's add the counting of numbers to our template file, `homepage.html`.
+
+You can read up on the for-loop syntax here:
+
+<%=url_alone 'http://jinja.pocoo.org/docs/dev/templates/#for' %>
+
+And here it is in `homepage.html`:
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World</title>
+  <style>
+    body{
+      width: 90%;
+      margin: auto;
+      font-family: "Helvetica Neue";
+    }
+  </style>
+</head>
+<body>
+   <h1>Hello world!</h1>
+   <p>Today is <strong>{{ the_date }}</strong> and it is a great day!</p>
+
+    <h2>Let's count!</h2>
+    
+    {% for n in numbers %}
+        <div>{{ n }} bottles of soy.</div>
+    {% endfor %}
+
+    <p>Done counting!</p>
+</body>
+</html>
+~~~
+
+
+If you attempt to visit the homepage _without_ providing the `numbers` variable...you won't see any numbers:
+
+![image hello-great-day-numbers.png](/files/flask-recalls/hello-great-day-numbers.png)
+
+So let's pass in a set of numbers (or any sequence) in the `homepage()` view function:
+
+~~~py
+from flask import Flask
+from flask import render_template
+from datetime import datetime
+app = Flask(__name__)
+
+@app.route("/")
+def homepage():
+    somenumbers = range(1, 8)
+    htmltxt = render_template('homepage.html', 
+                              the_date=datetime.now(),
+                              numbers=somenumbers)
+    return htmltxt
+
+if __name__ == '__main__':
+    app.run(use_reloader=True, debug=True)
+~~~
+
+
+![image hello-great-day-withdate-andnumbers.png](/files/flask-recalls/hello-great-day-withdate-andnumbers.png)
+
+
+
+
+
+
+
+
+# Trying out if-statements
+
+
+
+# Let's do a if-statement
+
+Jinja has conditional-branching too, with its kind-of-familiar-but-not-quite-the-same syntax:
+
+You can read up on the if-loop syntax here:
+
+<%=url_alone 'http://jinja.pocoo.org/docs/dev/templates/#if' %>
+
+And here it is in `homepage.html`, if we want to print `"even"` and `"odd"` after each number -- remember that the percentage sign in Python performs the __modulo__ operation (look it up yourself if you don't remember it from arithmeti class):
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World</title>
+  <style>
+    body{
+      width: 90%;
+      margin: auto;
+      font-family: "Helvetica Neue";
+    }
+  </style>
+</head>
+<body>
+   <h1>Hello world!</h1>
+   <p>Today is <strong>{{ the_date }}</strong> and it is a great day!</p>
+
+    <h2>Let's count!</h2>
+    
+    {% for n in numbers %}
+        {% if n % 2 == 0 %}
+          <div>{{ n }} is an even number of bottles of soy.</div>
+        {% else %}
+          <div>{{ n }} is an odd number of bottles of soy.</div>
+        {% endif %}
+    {% endfor %}
+
+    <p>Done counting!</p>
+</body>
+</html>
+~~~
+
+We don't need to make any changes to __app.py__ -- the logic is all in the template:
+
+
+![image hello-great-day-withdate-andevenoddnumbers.png](/files/flask-recalls/hello-great-day-withdate-andevenoddnumbers.png)
+
+
+
+
+
+# Moving out into static/styles.css
+
+This following step is not particularly related to jinja2 templating, but it is standard web dev practice.
+
+The CSS style code that we've thrown into `templates/homepage.html` should be in its own file. By convention, these files are saved with a `.css` extension and are referred to as __external stylesheets__.
+
+Why external stylesheets? Because it just doesn't work out, in the long run, to keep style code in the HTML templates.
+
+So first, go into `templates/homepage.html` and __cut__ the following code that is between the `<style>` tags (and you can delete the `<style>` tags:
+
+~~~py
+body{
+  width: 90%;
+  margin: auto;
+  font-family: "Helvetica Neue";
+}
+~~~
+
+Make a new directory _relative_ to __app.py__ named `static`. Then create a new file named `static/styles.css` and paste in the CSS code that we cut out of `homepage.html`.
+
+## Flask's `url_for()` templating method
+
+Flask has a nifty `url_for()` method that lets us delegate the work of creating internal URLs for the Flask app. In this case, we need to generate the local path to `static/styles.css`
+
+This is the `url_for()` call to do it:
+
+~~~py
+url_for('static', filename='style.css')
+~~~
+
+However, `url_for()` only has power within a Flask template. Which means, we don't put this in __app.py__. We put it into __homepage.html__.
+
+Let's just throw it in as plaintext. You can put this anywhere inside the body tags, e.g.:
+
+~~~html
+
+<h1>Hello World</h1>
+
+<p>{{ url_for('static', filename='style.css') }}</p>
+~~~
+
+The rendered URL should look like this:
+
+
+~~~
+      /static/style.css
+~~~
+
+Except we don't want it there. We want to link this stylesheet to our template. Here's the HTML convention for that:
+
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World</title>
+  <link rel="stylesheet" href="some/url">
+</head>
+~~~
+
+And here it is with our appropriate call to `url_for()` -- mind those braces and the quotation-marks:
+
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Hello World</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+~~~
+
+
+# All together
+
+Now we're getting into multi-file web-apps. It's getting difficult to show all of the code at once. But this is what your file tree should look like:
+
+
+~~~
+├── app.py
+├── static
+│   └── styles.css
+└── templates
+    └── homepage.html
+~~~
+
+
+<% content_card do %>
+
+The code for this <%=link_to "lesson can be found here on the site Github repo", page_mymeta.github_folder %>.
+
+<% end %>
+

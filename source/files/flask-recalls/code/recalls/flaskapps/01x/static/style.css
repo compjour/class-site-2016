@@ -1,0 +1,17 @@
+body{
+  width: 90%;
+  margin: auto;
+  font-family: "Helvetica Neue";
+}
+
+
+.even{
+  color: #00DD00;
+  font-size: 1.5em;
+}
+
+.odd{
+  background-color: hotpink;
+  color: yellow;
+  font-weight:bold;
+}
