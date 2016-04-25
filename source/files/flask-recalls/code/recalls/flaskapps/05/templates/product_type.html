@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>2016 Recalls {{product_id}}</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+
+</head>
+<body>
+
+  <h1>2016 Recall data for {{product_id}}-type products </h1>
+  <p>There are <strong>{{ recalls_count }}</strong> {{product_id}}-type products recalls in 2016.</p>
+
+  <table>
+    {% for recall in recalls_list %}
+      {% if recall['has_injuries'] %}
+          <tr class="has_injuries">
+      {% else %}
+          <tr>
+      {% endif %}
+        <td>
+          <a class="product-image" href="{{recall['url']}}"><img src="{{recall['image_url']}}"></a>
+        </td>
+        <td>
+          <p class="recall-date">{{recall['recall_date']}}</p>
+          <a class="recall-title" href="{{recall['url']}}">{{recall['title']}}</a>
+          <p class="injuries">
+            <strong>Injuries:</strong> {{recall['injuries']}}
+          </p>
+        </td>
+       </tr>
+    {% endfor %}
+  </table>
+</body>
+

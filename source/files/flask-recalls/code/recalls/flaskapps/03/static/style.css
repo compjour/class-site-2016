@@ -1,0 +1,30 @@
+
+body{
+  width: 90%;
+  margin: auto;
+  font-family: "Helvetica Neue";
+}
+
+table{
+   border-collapse: collapse;
+}
+table td{
+  padding: 10px 5px;
+  border: 1px solid #EEE;
+}
+
+
+
+.recall-title{
+  color: black;
+}
+
+
+.product-image img{
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.injuries{
+  font-size: 0.8em;
+}
