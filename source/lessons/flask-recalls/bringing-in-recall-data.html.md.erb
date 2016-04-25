@@ -19,4 +19,429 @@ The code for this <%=link_to "lesson can be found here on the site Github repo",
 <% end %>
 
 
+# Structure of the API
+
+Check out the [homepage for the CPSC Recalls Application Program Interface (API)](http://www.cpsc.gov/en/Recalls/CPSC-Recalls-Application-Program-Interface-API-Information/) to see the full documentation. But here's the main takeaway:
+
+The base endpoint is this:
+
+      http://www.saferproducts.gov/RestWebServices/Recall
+
+
+To request the data in JSON format, we supply a query string of `format=json`. The following URL will retrieve all of the available recall data in JSON format:
+
+<%=url_alone 'http://www.saferproducts.gov/RestWebServices/Recall?format=json' %>
+
+
+## Filtering by RecallDateStart
+
+__However__, that's a pretty big file. The API ([see the PDF manual for the complete info](http://www.cpsc.gov/Global/info/Recall/CPSC-Recalls-Retrieval-Web-Services-Programmers-Guide_3-25-2015.pdf)) allows us to do simple text filtering on various fields.
+
+The field most relevant to us is `RecallDateStart`; to request only the recalls that began in 2016 in JSON format:
+
+<%=url_alone 'http://www.saferproducts.gov/RestWebServices/Recall?format=json&RecallDateStart=2016' %>
+
+However, I don't think there's a way to do more sophisticated date filtering, such as recalls that started between two given dates. [Consult the manual if you wish](http://www.cpsc.gov/Global/info/Recall/CPSC-Recalls-Retrieval-Web-Services-Programmers-Guide_3-25-2015.pdf), but year-by-year filtering is good enough for now.
+
+
+## Using canned data
+
+For the purposes of this exercise, feel free to use the following URL, which contains data as I've downloaded and stashed on my own server:
+
+<%=url_alone 'http://stash.compjour.org/samples/cpsc/recalls201604.json' %>
+
+This lesson isn't really an exercise in interacting with a live API. But if you want to, you can hit up the live API for fun:
+
+<%=url_alone 'http://www.saferproducts.gov/RestWebServices/Recall?format=json&RecallDateStart=2016' %>
+
+
+# Downloading the data with requests
+
+You know how this works:
+
+~~~py
+import requests
+URL = 'http://stash.compjour.org/samples/cpsc/recalls201604.json'
+resp = requests.get(URL)
+txt = resp.text
+~~~
+
+Note: if you are hitting up the live API, make sure to generate the query string using the `requests.get()` params argument:
+
+~~~py
+import requests
+ENDPOINT = 'http://www.saferproducts.gov/RestWebServices/Recall'
+resp = requests.get(ENDPOINT, 
+                    params={'format':'json', 'RecallDateStart': 2016})
+txt = resp.text
+~~~
+
+
+# Deserializing JSON
+
+Either way, `txt` is a big giant character string. 
+
+~~~py
+type(txt)
+# str
+len(txt)  # i.e. number of characters
+# 298351
+~~~
+
+
+But we want to turn `txt` into a data object. Here's how to do it:
+
+
+~~~py
+import json
+datarows = json.loads(txt)
+type(datarows)
+# list
+len(datarows) # number of members
+# 99
+~~~
+
+I'll leave it to you to inspect each data object:
+
+~~~py
+row = datarows[0]
+type(row)
+# dict
+~~~
+
+## The structure of each recall record
+
+`datarows` ends up being a bad label. We aren't dealing with rows, as in spreadsheet rows, but data that is structured as a dictionary. Inspect any of the members of `datarows`:
+
+~~~py
+datarows[7]
+{'ConsumerContact': 'Fisher-Price at 800-432-5437 from 9 a.m. to 6 p.m. ET Monday through Friday, or online at www.service.mattel.com and click on Recalls & Safety Alerts for more information. ',
+ 'Description': "This recall includes three models of the Fisher-Price cradle swings: CHM84 Soothing Savanna Cradle 'n Swing, CMR40 Sweet Surroundings Cradle 'n Swing, and CMR43 Sweet Surroundings Butterfly Friends Cradle 'n Swing. The swings have two different swinging motions - rocking side-to-side, or swinging head-to-toe, and six different swing speeds from low to high. The product number is located on the seat under the pad. ",
+ 'Hazards': [{'HazardTypeID': '67521',
+   'Name': 'When the seat peg is not fully engaged the seat can fall unexpectedly, posing a risk of injury to the child.'}],
+ 'Images': [{'URL': 'http://www.cpsc.gov/Global/Images/Recall/2016/16143/FPCHM84PR2Z.jpg'},
+  {'URL': 'http://www.cpsc.gov/Global/Images/Recall/2016/16143/FPCMR40PR3Z.jpg'},
+  {'URL': 'http://www.cpsc.gov/Global/Images/Recall/2016/16143/FPCMR43PR3Z.jpg'},
+  {'URL': 'http://www.cpsc.gov/Global/Images/Recall/2016/16143/Inset1.jpg'},
+  {'URL': 'http://www.cpsc.gov/Global/Images/Recall/2016/16143/Inset2.jpg'}],
+ 'Inconjunctions': [],
+ 'Injuries': [{'Name': 'Fisher-Price has received two reports of a seat peg coming out from the seat, causing the seat to fall. No injuries have been reported.'}],
+ 'LastPublishDate': '2016-04-14T00:00:00',
+ 'ManufacturerCountries': [{'Country': 'Mexico'}],
+ 'Manufacturers': [],
+ 'ProductUPCs': [],
+ 'Products': [{'CategoryID': '67570',
+   'Description': '',
+   'Model': '',
+   'Name': 'Cradle ‘n Swings',
+   'NumberOfUnits': 'About 34,000',
+   'Type': 'Portable Baby Swings'}],
+ 'RecallDate': '2016-04-14T00:00:00',
+ 'RecallID': 6705,
+ 'RecallNumber': '16143',
+ 'Remedies': [{'Name': 'Consumers should immediately stop using the recalled cradle swing and contact Fisher-Price for revised assembly instructions.'}],
+ 'Retailers': [{'CompanyID': '0',
+   'Name': 'buybuyBaby, Target and other stores nationwide and online at Amazon.com and other websites from November 2015 through March 2016 for about $170.'}],
+ 'Title': 'Fisher-Price Recalls Infant Cradle Swings Due to Fall Hazard',
+ 'URL': 'http://www.cpsc.gov/en/Recalls/2016/Fisher-Price-Recalls-Infant-Cradle-Swings/'}
+~~~
+
+
+I'll leave it to you to inspect the different elements in the dictionary:
+
+~~~py
+row = datarows[7]
+row['Title']
+# 'Fisher-Price Recalls Infant Cradle Swings Due to Fall Hazard'
+row['RecallDate']
+# '2016-04-14T00:00:00'
+images = row['Images']
+type(images)
+# list
+len(images)
+# 5
+type(images[0])
+# dict
+images[0]
+# {'URL': 'http://www.cpsc.gov/Global/Images/Recall/2016/16143/FPCHM84PR2Z.jpg'}
+images[0]['URL']
+# 'http://www.cpsc.gov/Global/Images/Recall/2016/16143/FPCHM84PR2Z.jpg'
+~~~
+
+
+## More about JSON
+
+The JSON data format is not much different than any other data format we've worked with; it follows a specification, and thus, people have written libraries to make it easy to turn JSON-formatted text into data objects, and vice versa.
+
+The Python [standard library includes a module named json](https://docs.python.org/3/library/json.html).
+
+Here's a quick tutorial from last year: [An introduction to data serialization and Python Requests](http://www.compjour.org/tutorials/intro-to-python-requests-and-json/). And [here's a quiz](http://www.compjour.org/homework/json-quiz-part-1/).
+
+Basically, JSON is a nice way to serialize nested dictionaries and lists into text, something that can't easily be done in CSV. If you understand how to get around lists and dictionaries, you'll be fine.
+
+(Here's review material for [lists](http://www.compciv.org/guides/python/fundamentals/lists-mutability/) and for [dictionaries](http://www.compciv.org/guides/python/fundamentals/dictionaries-overview/))
+
+
+
+# Creating a Flask app
+
+Remember how to make a <%=link_cro '/lessons/flask-single-page', :title => 'simple Flask app?' %>. Review the previous lessons, then see if you can create __app.py__ from memory:
+
+~~~py
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def homepage():
+    htmlstr = "<h1>Hello world!</h1>"
+    return htmlstr
+
+
+if __name__ == '__main__':
+    app.run(use_reloader=True, debug=True)
+~~~
+
+Throw that __app.py__ into some new directory for now. Then run it, as we've done before:
+
+<%= asciinema_player '/files/flask-single-page/asciinema/starting-localhost.json', '$ python app.py', height: 10 %>
+
+
+
+
+
+## Downloading data into our Flask app
+
+OK, making a Flask app is easy enough, but how do we download the CPSC recalls data for its use? Basically, just put the download code right into __app.py__ -- preferably before writing the __view functions__ (i.e. `homepage()`). To make things a little nicer, we'll wrap up our download code into its own function -- __get_data()__:
+
+~~~py
+def get_data():
+    resp = requests.get(URL)
+    datarows = json.loads(resp.text)
+    return datarows
+~~~
+
+
+## Printing the number of downloaded records
+
+And then inside the __homepage()__ view function, we'll call `get_data()` and use it to print the number of recall records:
+
+
+~~~py
+@app.route("/")
+def homepage():
+    datarows = get_data()
+    htmlstr = "<h1>Hello world!</h1>"
+    htmlstr += "<p>There have been {num} recalls</p>".format(num=len(datarows))
+    return htmlstr
+~~~
+
+This is what that simple page looks like:
+
+![image hello-99-recalls.png](/files/flask-recalls/hello-99-recalls.png)
+
+
+## Printing each record
+
+But printing the number of records isn't very exciting. Let's try to print out each record. For now, let's just print each record as plaintext -- because that's how the data came to us.
+
+This is just a for loop:
+
+~~~py
+@app.route("/")
+def homepage():
+    datarows = get_data()
+    htmlstr = "<h1>Hello world!</h1>"
+    htmlstr += "<p>There have been {num} recalls</p>".format(num=len(datarows))
+    for d in datarows:
+        htmlstr += "<p>{record}</p>".format(record=d)
+    return htmlstr
+~~~
+
+And this is why we don't print out raw data as plain text -- it's basically incomprehensible:
+
+![image hello-99-recalls-eachone.png](/files/flask-recalls/hello-99-recalls-eachone.png)
+
+
+## Selectively printing attributes from each record
+
+We saw earlier that each record is a __dictionary__. So let's just print out things we want to see from each dictionary, not each _entire_ dictionary:
+
+~~~py
+@app.route("/")
+def homepage():
+    datarows = get_data()
+    htmlstr = "<h1>Hello world!</h1>"
+    htmlstr += "<p>There have been {num} recalls</p>".format(num=len(datarows))
+    for d in datarows:
+        htmlstr += "<p>{title} -- {url}</p>".format(title=d['Title'], url=d['URL'])
+    return htmlstr
+~~~
+
+That looks better:
+
+![image hello-99-recalls-eachone-title.png](/files/flask-recalls/hello-99-recalls-eachone-title.png)
+
+
+## Making hyperlinks
+
+And of course, with HTML, we generally want the URLs to be clickable hyperlinks. One more iteration on our simple app:
+
+~~~py
+@app.route("/")
+def homepage():
+    datarows = get_data()
+    htmlstr = "<h1>Hello world!</h1>"
+    htmlstr += "<p>There have been {num} recalls</p>".format(num=len(datarows))
+    for d in datarows:
+        htmlstr += """<p><a href="{url}">{title}</a></p>""".format(title=d['Title'], url=d['URL'])
+    return htmlstr
+~~~
+
+That's much more Web-ish:
+
+![image hello-99-recalls-eachone-hyperlinked.png](/files/flask-recalls/hello-99-recalls-eachone-hyperlinked.png)
+
+
+
+## All together
+
+Here's what the code for the entire app looks like:
+
+~~~py
+from flask import Flask
+import json
+import requests
+URL = 'http://stash.compjour.org/samples/cpsc/recalls201604.json'
+
+def get_data():
+    resp = requests.get(URL)
+    datarows = json.loads(resp.text)
+    return datarows
+
+app = Flask(__name__)
+
+@app.route("/")
+def homepage():
+    datarows = get_data()
+    htmlstr = "<h1>Hello world!</h1>"
+    htmlstr += "<p>There have been {num} recalls</p>".format(num=len(datarows))
+    for d in datarows:
+        htmlstr += """<p><a href="{url}">{title}</a></p>""".format(title=d['Title'], url=d['URL'])
+    return htmlstr
+
+if __name__ == '__main__':
+    app.run(use_reloader=True, debug=True)
+~~~
+
+
+
+# Separating the app and data code
+
+We're almost done here. But before moving on, it's worth doing some logistical cleanup. 
+
+Our __app.py__ is getting messy looking. For starters, those HTML strings clutter up the view function -- but we'll deal with that in the next lesson on Jinja templates. 
+
+Let's deal with the fact that our data-fetching code is intermingled with our web-app code.
+
+Here's the code that defines the data-fetching function:
+
+~~~py
+import json
+import requests
+URL = 'http://stash.compjour.org/samples/cpsc/recalls201604.json'
+
+def get_data():
+    resp = requests.get(URL)
+    datarows = json.loads(resp.text)
+    return datarows
+~~~
+
+
+Any reason that needs to be inside of __app.py__? Nope. So let's move it to its own file.
+
+
+## Creating datafoo.py
+
+In the same directory as __app.py__, create a new file named __datafoo.py__. It should contain the data-fetching code as defined above:
+
+~~~py
+import json
+import requests
+URL = 'http://stash.compjour.org/samples/cpsc/recalls201604.json'
+
+def get_data():
+    resp = requests.get(URL)
+    datarows = json.loads(resp.text)
+    return datarows
+~~~
+
+Then trim __app.py__ to look like this -- and take note of the second `from/import` statement:
+
+
+~~~py
+from flask import Flask
+from datafoo import get_data
+
+app = Flask(__name__)
+datarows = get_data()
+
+@app.route("/")
+def homepage():
+    htmlstr = "<h1>Hello world!</h1>"
+    htmlstr += "<p>There have been {num} recalls</p>".format(num=len(datarows))
+    for d in datarows:
+        htmlstr += """<p><a href="{url}">{title}</a></p>""".format(title=d['Title'], url=d['URL'])
+    return htmlstr
+
+if __name__ == '__main__':
+    app.run(use_reloader=True, debug=True)
+~~~
+
+One more subtlety: I've put the following line:
+
+~~~py
+datarows = get_data()
+~~~
+
+&ndash; in the _global_ scope -- as opposed to just within the scope of the `homepage` function:
+
+~~~py
+@app.route("/")
+def homepage():
+  datarows = get_data()
+~~~
+
+This means it's only run once the app is started. This means, for development purposes, `get_data()` doesn't do its slow downloading process each time we refresh the homepage, just when we restart the app.
+
+Shut down the localhost webserver, then re-start it. Even with the code separated, everything should work the same.
+
+
+# Conclusion
+
+This lesson was meant as a quick review of how to make a Flask app, a quick introduction to JSON (basically, dictionaries and lists, in string format), and a demonstration of a key software engineering concept: separation of concerns -- in this case, the data-fetching code from the web-app code.
+
+Our web apps will no longer be just __app.py__. In subsequent lessons, we'll focus on separating out the messy HTML-generating view code from __app.py__
+
+<% content_card do %>
+
+The code for this <%=link_to "lesson can be found here on the site Github repo", page_mymeta.github_folder %>.
+
+<% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
 

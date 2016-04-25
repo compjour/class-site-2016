@@ -1,24 +1,15 @@
 from flask import Flask
-from os import makedirs
-import requests
-import json
-SOURCE_URL = 'http://stash.compjour.org/samples/cpsc/recalls201604.json'
-
-def get_data():
-    resp = requests.get(SOURCE_URL)
-    txt = resp.text
-    datarows = json.loads(txt)
-    return datarows
-
+from datafoo import get_data
 
 app = Flask(__name__)
-recalls_data = get_data()
+datarows = get_data()
 
 @app.route("/")
 def homepage():
-    htmlstr = "<p>The data includes {num} things<p>".format(num=len(recalls_data))
-    for row in recalls_data:
-        htmlstr += "<p><strong>{title}</strong>: {url}</p>".format(title=row['Title'], url=row['URL'])
+    htmlstr = "<h1>Hello world!</h1>"
+    htmlstr += "<p>There have been {num} recalls</p>".format(num=len(datarows))
+    for d in datarows:
+        htmlstr += """<p><a href="{url}">{title}</a></p>""".format(title=d['Title'], url=d['URL'])
     return htmlstr
 
 if __name__ == '__main__':
