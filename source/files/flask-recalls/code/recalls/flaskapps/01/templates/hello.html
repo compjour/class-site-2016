@@ -12,6 +12,16 @@
 
   <p>The date is: {{ the_date }}</p>
 
+
+  <p>I will now count from {{numbers[0]}} to {{numbers[-1]}}</p>
+
+  {% for i in numbers %}
+    {% if i % 2 == 0 %}
+      <p class="even">{{i}}</p>
+    {% else %}
+      <p class="odd">{{i}}</p>
+    {% endif %}
+  {% endfor %}
 </body>
 </html>
 

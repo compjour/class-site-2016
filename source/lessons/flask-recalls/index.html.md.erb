@@ -1,0 +1,27 @@
+---
+title: Introduction to Simple News Apps based on Recall Data
+description: |
+  A series on learning how to make a news app
+
+
+
+hide_toc: true
+mymeta:
+  articles:
+    - /lessons/flask-recalls/bringing-in-recall-data
+    - /lessons/flask-recalls/intro-to-jinja2-templating
+    - /lessons/flask-recalls/formatting-recall-data-with-jinja2
+    - /lessons/flask-recalls/wrangling-recall-data-for-flask
+    - /lessons/flask-recalls/layingout-recall-data-for-flask
+    - /lessons/flask-recalls/product-categorize-recall-data-flask
+---
+
+
+
+# The articles 
+
+<section class="uniform-content-resource-listing">
+  <% page_mymeta.articles.each do |slug| %>
+    <%= content_resource_element slug %>
+  <% end %>
+</section>

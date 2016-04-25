@@ -1,0 +1,23 @@
+---
+title: Introduction to Jinja2 Templating (2/6)
+description: TK
+objectives:
+  - Learn how to generate a URL for a `static` directory of assets.
+  - Learn how to write CSS and include it as a separate file.
+  - Learn how to store HTML template files in a separate templates directory.
+  - Learn Jinja2 syntax for interpolating values into string templates.
+  - Learn Jinja2 block syntax for control flow, e.g. `if` and `for` statements
+sequence:
+  landing: /lessons/flask-recalls
+  next: /lessons/flask-recalls/formatting-recall-data-with-jinja2
+  previous: /lessons/flask-recalls/bringing-in-recall-data
+mymeta:
+  github_folder: https://github.com/compjour/class-site-2016/tree/master/source/files/flask-recalls/code/recalls/flaskapps/01
+---
+
+
+<% content_card do %>
+
+The code for this <%=link_to "lesson can be found here on the site Github repo", page_mymeta.github_folder %>.
+
+<% end %>
