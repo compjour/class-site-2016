@@ -1,6 +1,7 @@
 ---
 title: Using Jinja2 to format the CSPC Recalls data (3/6)
-description: TK
+description: |
+  Throwing recalls data and Jinja2 into the same app.
 objectives:
   - Practice using Jinja2 templating to create simple web views of the recalls data.
 sequence:
@@ -10,3 +11,207 @@ mymeta:
   github_folder: https://github.com/compjour/class-site-2016/tree/master/source/files/flask-recalls/code/recalls/flaskapps/02
 ---
 
+
+
+# Creating app.py
+
+Let's start by creating a boilerplate app that uses a template (`templates/homepage.html`)
+
+
+~~~py
+from flask import Flask
+from flask import render_template
+from datafoo import get_data
+app = Flask(__name__)
+recalls_data = get_data()
+@app.route("/")
+def homepage():
+    return render_template('homepage.html',
+            recalls_count=len(recalls_data))
+
+if __name__ == '__main__':
+    app.run(use_reloader=True, debug=True)
+~~~
+
+
+## Create templates/homepage.html
+
+Note the reference to `static/styles.css`, which we'll create in the next step.
+
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Recalls</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+</head>
+<body>
+  <h1>Recalls data</h1>
+  <p>This list includes {{recalls_count}} recalls.</p>
+</body>
+~~~
+
+## Create static/styles.css
+
+Create the `static` subfolder; throw in whatever styles you want for now:
+
+~~~css
+
+body{
+  width: 85%;
+  margin: auto;
+  font-family: "Helvetica Neue";
+  background: #FFEEFF;
+}
+
+~~~
+
+
+# Bring in the data with `datafoo.py`
+
+Create `datafoo.py` with the `get_data()` function that fetches and parses the JSON:
+
+~~~py
+import json
+import requests
+SOURCE_URL = 'http://stash.compjour.org/samples/cpsc/recalls201604.json'
+
+def get_data():
+    resp = requests.get(SOURCE_URL)
+    return json.loads(resp.text)
+~~~
+
+
+This is what the structure of your app should look like:
+
+
+~~~
+├── app.py
+├── datafoo.py
+├── static
+│   └── styles.css
+└── templates
+    └── homepage.html
+~~~
+
+
+
+# Class exercises
+
+
+## Task: make a list of links
+
+Let's start off with something easy: simply print out the list of titles as hyperlinks to the official URLs.
+
+
+#### In app.py
+
+Assuming that the `homepage.html` template will have a for-loop that iterates through a collection of recalls, we'll have to pass the list of recall data to the `render_template` function
+
+
+~~~py
+def homepage():
+    return render_template('homepage.html',
+            recalls=recalls_data,
+            recalls_count=len(recalls_data))
+~~~
+
+
+#### In templates/homepage.html
+
+Here's a hint:
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Recalls</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
+</head>
+<body>
+  <h1>Recalls data</h1>
+  <p>This list includes {{recalls_count}} recalls.</p>
+
+  {% for r in recalls %}
+    (do something here)
+  {% endfor %}
+</body>
+~~~
+
+
+
+
+## Task: make a 3 column table
+
+Instead of a list, let's make a HTML table. Here's a basic 3 column by 2 rows HTML table -- `<tr>` tags constitute rows, `<td>` tags constitute columns:
+
+~~~html
+<table>
+  <tr>
+      <td>Bob</td>
+      <td>Smith</td>
+      <td>12</td>
+  </tr>
+  <tr>
+      <td>Jane</td>
+      <td>Joe</td>
+      <td>59</td>
+  </tr>
+  <tr>
+      <td>Liza</td>
+      <td>Elly</td>
+      <td>23</td>
+  </tr>
+</table>
+~~~
+
+
+We don't have to change up __app.py__, just __templates/homepage.html__:
+
+Here's some HTML to start with, but I'll let you pick what should go into each table:
+
+
+~~~html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Recalls</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
+</head>
+<body>
+  <h1>Recalls data</h1>
+  <p>This list includes {{recalls_count}} recalls.</p>
+  <table>
+      {% for r in recalls %}
+        <tr>
+          <td>(do something here)</td>
+          <td>(do another thing here)</td>
+          <td>(do last thing here)</td>
+        </tr>        
+      {% endfor %}    
+  </table>
+</body>
+~~~
+
+
+
+<a id="mark-add-images-homework"></a>
+
+
+## Task: Add an image
+
+The recalls data comes with product images, though not all recall entries have an image. Make the image __clickable__, so that clicking the photo goes to the official URL.
+
+
+Here's what I got:
+
+![image recall-withtable-photos.jpg](/files/flask-recalls/recall-withtable-photos.jpg)
+
+
+
+
+(That's enough tasks for now -- I'll flesh out this lesson later)
