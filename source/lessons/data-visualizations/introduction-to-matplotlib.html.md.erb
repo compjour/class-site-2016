@@ -1,0 +1,69 @@
+- [Matplotlib homepage](http://matplotlib.org/)
+  + [Examples index](http://matplotlib.org/examples/index.html)
+
+
+[Matplotlib tutorial - by Nicolas P. Rougier](http://www.labri.fr/perso/nrougier/teaching/matplotlib/matplotlib.html)
+
+
+
+~~~py
+%matplotlib
+import matplotlib.pyplot as plt
+plt.bar((1, 2), (10, 20))
+plt.plot((0, 1, 2, 3), (5, 22, 42, 8))
+plt.savefig('/tmp/hey.png')
+~~~
+
+https://github.com/fivethirtyeight/data/tree/master/drug-use-by-age
+
+
+~~~py
+import pandas as pd
+import matplotlib.pyplot as plt
+url = 'https://raw.githubusercontent.com/fivethirtyeight/data/master/drug-use-by-age/drug-use-by-age.csv'
+df = pd.read_csv(url)
+fig, ax = plt.subplots()
+ax.barh(range(df.shape[0]), df['marijuana-use'])
+ax.set_xticklabels( df['age'])
+
+val = 3+10*rand(5)    # the bar lengths
+pos = arange(5)+.5    # the bar centers on the y axis
+
+figure(1)
+barh(pos,val, align='center')
+yticks(pos, ('Tom', 'Dick', 'Harry', 'Slim', 'Jim'))
+xlabel('Performance')
+title('How fast do you want to go today?')
+grid(True)
+
+figure(2)
+barh(pos,val, xerr=rand(5), ecolor='r', align='center')
+yticks(pos, ('Tom', 'Dick', 'Harry', 'Slim', 'Jim'))
+xlabel('Performance')
+
+show()
+~~~
+
+
+
+# Seaborn 
+
+~~~py
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+url = 'https://raw.githubusercontent.com/fivethirtyeight/data/master/drug-use-by-age/drug-use-by-age.csv'
+df = pd.read_csv(url)
+# just keep the use columns
+# df = df[[c for c in df.columns if '-use' in c]]
+df = df[['age', 'alcohol-use', 'marijuana-use']]
+# http://stackoverflow.com/questions/27764378/how-to-reverse-a-2-dimension-table-into-1-dimension-list-in-pandas-python
+mdf = pd.melt(df, id_vars='age', value_vars=['alcohol-use', 'marijuana-use'], 
+              var_name="drug-type", value_name='percentage')
+
+
+mdf['age'] = mdf['age'].astype('category')
+# https://stanford.edu/~mwaskom/software/seaborn/examples/faceted_histogram.html
+sns.factorplot(x='age', y='percentage', col='drug-type', 
+               data=mdf, kind='bar')
+~~~

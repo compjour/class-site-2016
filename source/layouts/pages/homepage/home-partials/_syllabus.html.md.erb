@@ -1,0 +1,178 @@
+
+
+
+
+# Syllabus
+
+### Week 1 
+
+#### March 28 
+
+- Get your development environment set up. Read the instructions here and make sure you have the following done:
+  + Python 3.5 (Anaconda recommended) installed
+  + A Github account
+  + A Github repository named `cj2016`, i.e. you should have a Github URL that looks like:
+   
+        https://github.com/whatevyourname/cj-2016
+
+
+  + A text editor, such as Sublime Text 3 or Atom.
+
+
+##### Homework
+
+Due on __Monday__, via today's lesson plan: 
+
+[Practice examining NYPD Stop and Frisk Data using interactive Python.](/lessons/static/where-is-nypd-stop-and-frisks)
+
+
+
+### Week 2 - Text and Visualizing Text
+
+#### April 4 / April 6
+
+[April 4 Lecture and Homework](/lessons/lectures/2016-04-04--spreadsheets-and-documents)
+
+
+We'll continue reviewing the Python programming fundamentals, in the service of deserializing text into data structures, and, when necessary, turning data structures into text files, particularly formatted as CSV and JSON.
+
+- We'll also create our first static charts using [matplotlib](http://www.labri.fr/perso/nrougier/teaching/matplotlib/matplotlib.html).
+- And we'll create our very first news app, courtesy of [NICAR's First News App tutorial](http://first-news-app.readthedocs.org/en/latest/). 
+
+
+### Week 3 - Filtering noise / Web scraping
+
+#### April 11 / April 13
+
+Our problem is not lack of information. It's lack of attention span. Data is not much good to us if we can't sort it the way we need it to be sorted. Hence, the need to scrape webpages and PDFs.
+
+We'll use <a href="https://projects.propublica.org/docdollars/">ProPublica's Dollars for Docs as a case study</a>.
+
+By now, we'll have written a fair amount of HTML. Web-scraping generally involves learning one more kind of text parser, such as lxml or BeautifulSoup, and writing the automated logic to navigate a website.
+
+
+
+### Week 4 - APIs
+
+#### April 18 / April 20
+
+[David Yanofsky of Quartz](http://qz.com/author/davidyanofskyquartz/) will talk about his entrepreneurial work in data visualization and investigations.
+
+Building a better Recalls site: studying the Recalls dataset.
+
+<p><%= link_cro '/lessons/lectures/2016-04-20-basic-scrape' %></p>
+
+<p><%=link_cro '/lessons/flask-recalls' %></p>
+
+<p>
+  <strong>Homework:</strong> Build out the Recalls app as far as <a href="/lessons/flask-recalls/formatting-recall-data-with-jinja2#mark-add-images-homework">making it a table and adding product images</a>.
+</p>
+
+### Week 5 - Intermediate Flask App construction
+
+
+#### April 25 / April 27
+
+
+[Building multi-page Flask apps](https://github.com/datademofun/); Examples:
+
+<ul>
+  <li><a href="https://github.com/datademofun/spotify-flask">Spotify browser</a></li>
+  <li><a href="https://github.com/datademofun/congress-flask">Congress Legislator data</a></li>
+  <li><a href="https://github.com/datademofun/deathpenalty-tracker">Death Penalty tracker</a>...actually, you probably won't find this one much fun.</li>
+</ul>
+
+
+### Week 6 - Data Visualization
+
+#### May 2 / May 4
+
+Studying both the technique and theory of effective data visualization, and how to use Python's matplotlib to efficiently produce charts.
+
+#### Readings
+
+- [Word clouds considered harmful](http://www.niemanlab.org/2011/10/word-clouds-considered-harmful/)
+- [Introduction to Data Visualization: Visualization Types](http://guides.library.duke.edu/datavis/vis_types)
+- [Design Principles for News Apps & Graphics](https://www.propublica.org/nerds/item/design-principles-for-news-apps-graphics)
+- [Infographics in the Time of Cholera](https://www.propublica.org/nerds/item/infographics-in-the-time-of-cholera)
+- [A big article about wee things](https://www.propublica.org/nerds/item/a-big-article-about-wee-things)
+- [Using small multiples to get to "Aha!"](https://signalvnoise.com/posts/266-using-small-multiples-to-get-to-aha)
+
+#### Homework
+
+
+------------------
+
+
+### Week 7 - Congressional Data
+
+#### May 9 / May 11
+
+Study APIs and datasets focused on U.S. Congress, including:
+
+- [ProPublica's Congress API](https://propublica.github.io/congress-api-docs/) ([Related reading](https://www.propublica.org/nerds/item/a-new-way-to-keep-an-eye-on-who-represents-you-in-congress))
+- [GovTrack](https://www.govtrack.us/developers/api)
+- [OpenFEC](https://api.open.fec.gov/developers/) 
+
+
+#### Readings
+
+[The Itemizer (thescoop.org)](http://thescoop.org/archives/2013/04/24/the-itemizer/) by Derek Willis:
+
+Why he made it: 
+
+> There’s one thing that has always bugged me about how we reference campaign finance data online: the best that most of us can do when we link to a campaign filing is to link to a particular page, whether that’s a list of contributors or a summary page. Yet often we’re referencing a single transaction or line-item.
+
+
+
+via Derek Willis: [The Data-Driven Congressional Reporter (thescoop.org)](http://thescoop.org/archives/2012/12/26/the-data-driven-congressional-reporter/) 
+
+> Maybe you don’t have time to read the Record every day; wouldn’t it be great if you could set some simple rules for things of interest and have a computer do it for you? Wouldn’t it make sense that a computer could find the exception to the rule among a series of House votes that occurred while you were out interviewing people?
+
+Here are some screenshots from the NYT's internal Congress app that give an idea of the "views" into Congressional voting data that is interesting to New York Times political reporters:
+
+- Narrow margins
+- Late night votes (kind of like [Friday news dumps](http://fridaynewsdump.com/what-is-a-friday-news-dump))
+- Lone 'no' voters
+- Vote missers
+
+![img](/files/congressdata/images/nyt_admin_house_info.png)
+
+![img](/files/congressdata/images/nyt_admin_house_votes.png)
+
+![img](/files/congressdata/images/nyt_admin_senate_lone_no.png)
+
+
+
+---------------------------
+
+### Week 8 - News application critiques, Application Deployment
+
+#### May 16 / May 18
+
+Contrast/compare examples of real-world news applications and data portals, including [ProPublica's Represent](https://projects.propublica.org/represent/bills/category/finance-and-financial-sector) and [Socrata](https://opendata.socrata.com/).
+
+Learn how to deploy a [basic app to Heroku](https://devcenter.heroku.com/articles/getting-started-with-python-o) (and maybe AWS). 
+
+Steps:
+
+- Making your own [requirements.txt](https://github.com/dannguyen/flask-firerain/blob/master/requirements.txt) (a list of third-party libraries that you import)
+- [Creating a runtime.txt](https://github.com/dannguyen/flask-firerain/blob/master/runtime.txt) that specifies Python 3.5.1
+
+
+#### Homework
+
+- Deploy basic app to Heroku (May 18)
+- Project proposal due (May 18)
+
+
+### Week 9 - News application critique and deployment (continued)
+
+#### May 23 / May 25
+
+
+### Week 10 - Project work week
+
+#### May 30 / June 1
+
+In-class time to work on and share projects.
