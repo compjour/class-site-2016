@@ -8,10 +8,42 @@ page_class: home
 <% content_card 'Agenda' do %>
 
   <h2>Today, May 2</h2>
+  <h4>Visualization with matplotlib; data wrangling with pandas</h4>
   <p>
-    <a href="https://github.com/datademofun/matplotlibsampler">Visualization with Matplotlib</a>
+
+    Clone the repo here: <%=url_alone 'https://github.com/datademofun/matplotlibsampler'%> and work your way through the lessons.
   </p>
 
+  <h3>Homework (due May 4): "3-charts"</h3>
+  <p>In your <strong>cj-2016</strong> repo, create a folder named <strong>3-charts</strong></p>
+  <p>It should contain three charts:</p>
+
+- A line chart comparing the stock performance of various tech companies (see the <strong>data/stocks</strong> directory in the [matplotlibsampler repo](https://github.com/datademofun/matplotlibsampler)
+
+- A scatterplot showing the relationship between two independent variables (check out the data/schools or data/congress directory.
+- A stacked bar chart with categorical variables (any of the data files will work, but data/congress might be easiest). An example: Number of twitter followers by congressional party and gender
+
+<p>Your <strong>cj-2016/3-charts</strong> folder should contained saved images of the charts (i.e. .png files) and the code to generate those files.</p>
+
+
+
+<% content_card do %>
+
+<h4>Readings</h4>
+
+<p>Also, please read:</p>
+
+- [Tidy Data](http://vita.had.co.nz/papers/tidy-data.pdf) - This will seem like an overly dense file...but _not_ reading it will make the next lesson on data-wrangling (which includes the concepts of pivoting and "melting") data somewhat difficult for you.
+- [Word clouds considered harmful](http://www.niemanlab.org/2011/10/word-clouds-considered-harmful/)
+- [Introduction to Data Visualization: Visualization Types](http://guides.library.duke.edu/datavis/vis_types)
+- [Design Principles for News Apps & Graphics](https://www.propublica.org/nerds/item/design-principles-for-news-apps-graphics)
+
+
+<% end %>
+
+
+
+  <hr>
 
 
   <h2>Last Week, April 27</h2>
