@@ -7,10 +7,78 @@ page_class: home
 
 <% content_card 'Agenda' do %>
 
-  <h2>Today, May 2</h2>
+
+## Today, May 9
+
+## Deploying a web application on Heroku
+
+### Lessons
+
+- Start [out by creating a Heroku account, installing the Heroku toolbelt, and deploying the most basic of Heroku Flask applications](https://github.com/datademofun/heroku-basic-flask).
+- Then, try creating a Flask app that uses USGS earthquake data. You can [start from this model repo](https://github.com/datademofun/heroku-flask-quakes-simple). Get it deployed onto Heroku, and make it polished looking, [like this polished version](https://github.com/datademofun/heroku-flask-quakes-lesssimple).
+
+
+### Homework due Wednesday, May 11
+
+
+
+#### Readings
+
+- [The Design and Structure of a News Application](https://github.com/propublica/guides/blob/master/design-structure.md)
+- [How to Build a News App, Part 1](http://datajournalismhandbook.org/1.0/en/delivering_data_1.html)
+- [News Apps at ProPublica](http://datajournalismhandbook.org/1.0/en/delivering_data_2.html)
+
+#### Deploy your own Flask news app
+
+Send me two deliverables:
+
+- a URL to your live app on Heroku
+- Create a __new Github repo__ (do not put it in cj-2016) named __myfirstnewsapp__ that contains the code to your Flask app.
+
+
+Build a Flask app similar to the news app described in [NICAR's First News App tutorial](http://first-news-app.readthedocs.io/en/latest/). Deploy it to Heroku.
+
+Warning: the [First News App tutorial](http://first-news-app.readthedocs.io/en/latest/) contains a number of unnecessary steps that you don't need to follow. It also does not contain any of the steps needed to get on to Heroku.
+
+- You should be able to skip most of the installation instructions.
+- Skip the instructions involving __virtualenv__ and/or __git__ -- we don't need the former, and you already know how to do the latter from the other tutorials.
+- Skip [Act 5: Hello Internet](http://first-news-app.readthedocs.io/en/latest/), because it describes an alternate way of deploying to the Internet.
+
+
+You don't have to use the LA Riots data, but I want you to be able to create an app that has at least these components:
+
+- A homepage route/view that lists all of the data records and a "broad view" of those records. [Here's the homepage from the First News App example](http://ireapps.github.io/first-news-app/build/index.html).
+- A route/view for _each record_ that shows more detail of the individual record. Here's an [detailed record view from the First News App example](http://ireapps.github.io/first-news-app/build/2/).
+
+
+Note: while we haven't covered JavaScript explicitly, you should be able to create an [interactive JavaScript map by following the tutorial and making adjustments as needed](http://first-news-app.readthedocs.io/en/latest/#act-4-hello-javascript).
+
+
+FWIW, <a href="https://blooming-wave-56993.herokuapp.com/">here's my hot take on the First News App</a>. The main change is that I use the Google Street View API to display a picture of the incident address.
+
+
+
+
+
+<hr>
+
+
+
+
+  <h3>Last week, May 4</h3>
+  <h4>Continuing with the wrangling and visualization with pandas and matplotlib</h4>
+
+Relevant repos:
+
+- [tweepy-congress-collector](https://github.com/datademofun/tweepy-congress-collector) - a repo containing code to fetch data from the Twitter API and use pandas to join and analyze the data. Also contains all the actual data fetched (300MB)
+- [python-notebooks-data-wrangling](https://github.com/dannguyen/python-notebooks-data-wrangling) - this dataset contains several notebooks and several hundreds of MB of data. You can follow the lessons on how to fetch the data yourself, or clone the repo and access the data locally. Some lessons:
+  - [Practice with subplots using earthquake data and pandas](https://github.com/dannguyen/python-notebooks-data-wrangling/blob/master/Visualization--Multiples-with-Standard-Subplots.ipynb)
+  - [Partial lesson using financial data](https://github.com/dannguyen/python-notebooks-data-wrangling/blob/master/Visualization--Multiples-Variety.ipynb)
+
+
+  <h3>Last week, May 2</h3>
   <h4>Visualization with matplotlib; data wrangling with pandas</h4>
   <p>
-
     Clone the repo here: <%=url_alone 'https://github.com/datademofun/matplotlibsampler'%> and work your way through the lessons.
   </p>
 
@@ -19,8 +87,7 @@ page_class: home
   <p>It should contain three charts:</p>
 
 - A line chart comparing the stock performance of various tech companies (see the <strong>data/stocks</strong> directory in the [matplotlibsampler repo](https://github.com/datademofun/matplotlibsampler)
-
-- A scatterplot showing the relationship between two independent variables (check out the data/schools or data/congress directory.
+- A scatterplot showing the relationship between two independent variables. Check out the data/schools or data/congress directory. Easiest example is: are high SAT reading scores related to high SAT math scores? (duh) You don't have to join two different datasets.
 - A stacked bar chart with categorical variables (any of the data files will work, but data/congress might be easiest). An example: Number of twitter followers by congressional party and gender
 
 <p>Your <strong>cj-2016/3-charts</strong> folder should contained saved images of the charts (i.e. .png files) and the code to generate those files.</p>
