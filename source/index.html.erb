@@ -7,8 +7,90 @@ page_class: home
 
 <% content_card 'Agenda' do %>
 
+# Final Project
 
-## Today, May 9
+### [Final requirements and deadlines](/assignments/projects/final-project/requirements)
+
+
+
+
+
+##### Last week, May 18, More Congressional data
+
+Data and some lessons here: [congress-data-taster](https://github.com/datademofun/congress-data-taster)
+
+Here's something you should be able to do with the APIs: Find the least partisan congressmembers by voting record.
+
+
+
+##### May 16: Congressional data
+
+- Readme: [https://github.com/datademofun/fec-catalog](https://github.com/datademofun/fec-catalog)
+- Lesson: [Exploring FEC Expenditures](https://github.com/datademofun/fec-catalog/blob/master/LESSON_EXPLORE_FEC_EXPENDITURES.md)
+
+In class, consider how money spent is a proxy for competitive races.
+
+Explore [the FEC Expenditures with Python](https://github.com/datademofun/fec-catalog/blob/master/LESSON_EXPLORE_FEC_EXPENDITURES.md) and answer these questions:
+
+- How much independent expenditure money was spent on Trump vs opposing Trump? How about Clinton?
+- Which candidates had the most oppo money spent against them?
+- How much money was spent on Facebook advertising in 2014 vs 2010?
+
+
+Then, apply the same process to candidate disbursement data. Pay particular attention to how different the fields are for independent expenditures.
+
+
+For Wednesday: We'll build an app in class. Sign up for the following APIs:
+
+
+- [ProPublica Represent](https://propublica.github.io/congress-api-docs/)
+- [Sunlight Foundation Congress](https://sunlightlabs.github.io/congress/)
+- [FEC API](https://api.open.fec.gov/developers/)
+- [GovTrack (no signup needed)](https://www.govtrack.us/developers/api)
+
+### Homework
+
+And __before__ class (i.e. Tuesday night), __email me__ with 10 interesting mashups of Congress data.
+
+
+
+
+
+
+
+
+
+
+
+## Last week, May 9
+
+Homework: (due next Monday and Wednesday) - <%=link_cro '/assignments/projects/flask-filter-app' %>
+
+
+### Topic: The work of ranking and filtering data
+
+
+Compare how the different organizations rank and filter data, and the pros and minuses:
+
+#### College ranking sites
+
+[College Score Card](https://collegescorecard.ed.gov/)
+
+- [Deconstructing and reconstructing the College Scorecard](http://www.brookings.edu/research/papers/2015/10/15-deconstructing-reconstructing-college-scorecard-whitehurst-chingos)
+- [Obama's New College Scorecard Flips the Focus of Rankings](http://www.theatlantic.com/education/archive/2015/09/obamas-new-college-scorecard-flips-the-focus-of-rankings/405379/)
+
+
+[US News Best Colleges](http://colleges.usnews.rankingsandreviews.com/best-colleges)
+
+- [The problem with the U.S. News college rankings](https://www.washingtonpost.com/blogs/answer-sheet/post/the-problem-with-the-us-news-college-rankings/2011/09/13/gIQAY5zPQK_blog.html)
+- [Our Annual Reminder to Ignore the U.S. News & World Report College Rankings](http://www.theatlantic.com/education/archive/2013/09/your-annual-reminder-to-ignore-the-em-us-news-world-report-em-college-rankings/279103/)
+
+
+--------------
+
+
+
+## Last time, May 9
 
 ## Deploying a web application on Heroku
 
@@ -55,6 +137,26 @@ Note: while we haven't covered JavaScript explicitly, you should be able to crea
 
 
 FWIW, <a href="https://blooming-wave-56993.herokuapp.com/">here's my hot take on the First News App</a>. The main change is that I use the Google Street View API to display a picture of the incident address.
+
+
+#### A note about including external files
+
+When you get to the [Hello, JavaScript section of the First News App tutorial](http://first-news-app.readthedocs.io/en/latest/#act-4-hello-javascript), it will have some example HTML for including the external JavaScript and style files for its Leaflet interactive maps:
+
+~~~html
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+  <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+~~~
+
+__Don't copy that code__ -- it will be non-functional on a Heroku site, because Heroku uses `https` and browsers, such as Chrome, will not allow the importing of files from `http` (non-secure) URLs.
+
+Instead, include this HTML snippet -- it will import the same Leaflet code, but will actually work on Heroku:
+
+
+~~~html
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+~~~
 
 
 

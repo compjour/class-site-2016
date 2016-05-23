@@ -1,0 +1,180 @@
+---
+title: Final Project requirements
+---
+
+
+# Final project
+
+
+The project is due on __Tuesday, June 7__. It is worth 35 percent of your grade. You are allowed to work with one partner.
+
+Your project must follow all of the requirements listed in the [Requirements section](#mark-requirements) and document your work in your project repo's README.md.
+
+## Intro
+
+This final project requires you to tell a compelling story based on data you've researched, wrangled, and analyzed. You will also be expected to create and deploy your work as a public-facing web appplication.
+
+By now, you've written enough Flask app boilerplate to be able to go through the motions for creating and deploying a web app that reads a data file and outputs a basic list/table of the data.
+
+For this final project, I want you to take the time to come up with a _thoughtful_ story, important enough for you to want to tell, and based off of data that is interesting for you to explore. You don't have much time to overcome technical obstacles. But you do have time to do research on a limited-scope topic and then to think about how you can build a data app that better informs the world.
+
+
+### Setup
+
+Create a new Github repo for this final project; name it as you see fit for your project.
+
+
+
+###  Due dates 
+
+- May 25, Wednesday
+  - Complete __TEST_README.md__ - Document someone _else's_ project, such as [as the Chicago Tribune's Crime Mapper](http://crime.chicagotribune.com/), as if you had created the app yourself.
+- May 30, Monday
+  -  Fill out __README.md__ - tentatively document the features of your own project, even if you haven't written all of the app code.
+- June 7, Tuesday, 11:59PM 
+  - Complete, upload, and deploy final project. The app must be running online by the due date; having technical issues Tuesday night without having contacted me in advanced is not an excuse. 
+
+
+<a id="mark-requirements"></a>
+
+# Following the requirements; Writing README.md
+
+This section explains what your app __must__ have to be considered complete.
+
+And as part of the project, your final project repo must contain a README.md file that contains how you've fulfilled the requirements. For the section that pertains to the __Deployment__ requirements, the text can be as short as:
+
+> I decided to use Frozen Flask to deploy my app as static HTML to Github Pages, because it was easy enough to render and cache all of the possible pages and routes.
+
+
+## Concept and documentation 
+
++ **Repo should contain a README.md file written in Markdown syntax.**
++ **The app must have a name/title/headline** that catches the attention while concisely explaining the app's mission.
+  * Bad: An interactive map of vehicular accidents involving bicycles, according to CHP data in 2014
+  * Good: [BikeCrashMapper](http://classwork.compjour.org/2015/jeffbarrera/bikecrashmapper/incident/6498961/)
+  * Bad: The School SAT and Poverty Explorer
+  * Better: Poor Students == Poor Performance on the SAT
++ **README.md must contain a 2-paragraph "elevator pitch"** explaining why you built your app and why people should use it.
++ **README.md should contain a heading of "Inspirations and Prior work"**
+  - List __no fewer than 5__ URLs of articles and other web applications that share common goals and features with your app. 
+    - And for each of the 5 listed inspirations from above, write at least two bullet point items comparing and contrasting your app with the given inspiration. 
+
+
+## Data
+
++ **Data must come have 2 or more independent sources** 
+    - Bad: School enrollment and school geospatial (lat/lng) location from the Department of Education.
+    - Good: Income per capita data and geographic shapes from the Census, and test score results and school geospatial location from the Department of Education.
++ **The app should run off a data file with a size of no more than 25,000 records**
+    - Bad: Download and have your app read[10 million crime incident reports from 10 years of SFPD data](https://data.sfgov.org/Public-Safety/Map-Crime-Incidents-from-1-Jan-2003/gxxq-x39z).
+    - Good: _Filter_ the dataset to include only interesting categories of crimes, such assaults or auto thefts.
+    - Good: Summarize the individual reports by _month-year_; have the app look at monthly rather than daily totals.
+
+
+
++ __Must contain at least one join__
+
+    The records in your multiple datasets should be _related_ some how, either by an exact shared key, or a combination of fields..
+
+    |                              purpose                              |                         table_a                         |                        table_b                         |
+    |-------------------------------------------------------------------|---------------------------------------------------------|--------------------------------------------------------|
+    | Match person to votes                                             | Congressmember biographies; bioguide_id                 | Voting record; bioguide_id                             |
+    | Calculate SAT scores by poverty rate                              | School SAT scores, school_ID; school_ID                 | School free lunch eligibility ratio; school ID         |
+    | Correlate constituent wealth and rep. party                       | Census per-capita income; state_abbrev + house_district | Elected congressmembers; state_abbrev + house_district |
+    | Correlate location of business with types of health violations    | Restaurant licenses (with locations); license_id        | Restaurant health violations; restuarant_license_id    |
+    | Link medical industry payments to doctors employed by med schools | OpenPayments; employer name                             | CollegeScoreCard; school_name                                                       |
+
+
+
+
++ __Must create at least one new categorical variable__
+
+  __Catgegorical__ refers to a variable that, in a nutshell, does _not_ have a numerical value.
+
+  An example: adding a field called, `'lifephase'` to the Congressmembers dataset, which is set to `"old"` if the
+  Congressmember is 60 years or older; `'middleage'` if the member is 40 to 60, and ; `'youngin'` otherwise.
+
+  Not a very useful category in this case, but you get the idea... 
+
+
+
+  |                        Good                        |                           Bad                           |
+  |----------------------------------------------------|---------------------------------------------------------|
+  | Congressmember's state of birth                    | Congressmember's state represented                      |
+  | Categorize crime report date as Weekend or Weekday | Categorize crime report date as day of month, e.g. 1-31 |
+  | Categorize crime report date by Morning/Evening    | Categorize crime report by hour                         |
+  | Categorize Congressmember's alma mater             | Categorize Congressmember as "old" or "young"           |
+
+
+
++  __Must create at least one new continuous variable__
+
+    A continuous variable is typically numeric and can include datetimestamps.
+
+    In the previous example, I explained how to turn a `birthdate` field into a categorical variable.
+
+    The birthdate, when it's just a string `'1960-12-12'`, is technically categorical. Turning it into a timestamp would make it continuous. Or, it could be turned into an integer: number of days between today and `birthdate`.
+
+    |                            Good                            |                         Bad                         |
+    |------------------------------------------------------------|-----------------------------------------------------|
+    | Age when first elected into Congress                       | Number of character's in Congressmember's last name |
+    | Number of days served in Congress                          | Number of seconds lived                             |
+    | Average amount of campaign contributions received by cycle | Total campaign contributions receivedd              |
+    | Rate of change of  population from 2015 to 2010            | Absolute population change from 2010 to 2015        |
+
+
+
++  __Must contain at least one summarization__
+
+
+    |                     subject                     |      summarization       |           group by          |
+    |-------------------------------------------------|--------------------------|-----------------------------|
+    | Congressmembers, number of terms elected        | record count             | bioguide_id                 |
+    | Congressmembers, average age by state and party | average(birthdate-today) | state, party                |
+    | stop and frisks                                 | record count             | race, year, police_district |
+    | average score of restaurant inspection results  | average, sum(score)      | restaurant_id               |
+
+
+
+## Filtering options
+
++ **Allow user to search or filter by at least two different attributes**
+  * Good: Partial text search of last name
+  * Bad: Partial text search for county name (a known quantity)
+  * Good: Dropdown select list of county names
+  * Good: Checkboxes for attributes in which more than one value might be desired, e.g. filter Congressmembers by multiple party values, such as `R` _and `I`, or just `D`.
++ **Allow user to sort by two different attributes, in both ascending and descending order**
+  * Bad: Sort Congressmembers by `bioguide_id`
+  * Better: Sort Congressmembers by `last_name`
+  * Good: Sort Congressmembers by full name, in the format of `<last_name>, <first_name>`
+  * Good: Sort by youngest to oldest and vice versa with `birthdate`
+  * Bad: Sort by party -- pointless, because there's only 3 values 
+
+
+## Views and Routes
+
+The URL paths and rendered webpages that your app must contain.
+
++ __Must have a compelling front page:__ This should not only contain the title of your app and the search box, but visual design and text that conveys the story of your app.
++ __Must have a search results view__ - whatever your searchbox allows the user to do, there should be route that renders a tabular view of the matching records.
++ __Must have a view that renders a table of aggregate data__ - e.g. the [counties/ route](http://classwork.compjour.org/2015/jeffbarrera/bikecrashmapper/counties) in the BikeCrashMapper app.
++ Must have a view that renders detailed information about an individual record or aggregate, e.g. the  [counties/sacramento](http://classwork.compjour.org/2015/jeffbarrera/bikecrashmapper/counties/sacramento)  or [incident/6498961/](http://classwork.compjour.org/2015/jeffbarrera/bikecrashmapper/incident/6498961/) route in BikeCrashMApper.
+
+
+## Visualizations
+
++ __Lists of data results should be rendered in multi-column tables__
+    - Bad:  `| Jane Smith |`
+    - Meh:  `| Rep. | Jane Smith | R | Iowa |`
+    - Good: `| Rep. | Jane Smith | R | Iowa | $952,000 |`
++ __Include at least one chart or map__:
+    - You have too many options here: matplotlib, plotly, and highcharts (JS) for charts, matplotlib, Google Static Maps API, Google JavaScript Maps API, and Leaflet (JS) for maps.
+
+## Deployment
+
++ __The app must be proofread for mistakes and edited__ as if the entire world were going to visit it via the Web and critique it.
++ __The app must live online__; two possible options
+  * a Heroku app (which means you have to keep it lightweight unless you want to pay)
+  * A [static HTML app generated via the Frozen-Flask library](http://websites-for-reporters.readthedocs.io/en/latest/#act-5-hello-internet) (we can talk about this in the final week).
+
+

@@ -1,0 +1,86 @@
+---
+title: "Mini-Project: A Flask App That Filters"
+---
+
+In this mini-project assignment, you will build a web-browser interface for a dataset. That is, your web application will:
+
+- Take in user input about how to filter/search the dataset
+- Pass in those user inputs (which are serialized as a dictionary) to Python functions that do the work of reading data files, sorting, filtering, and returning the results.
+- Pass the results into an HTML template page.
+
+Lessons can be found here: [https://github.com/datademofun/flask-data-querystrings](https://github.com/datademofun/flask-data-querystrings/)
+
+
+
+# Example dataset and app
+
+Check out the College Scoreboard app, as presented by the U.S. government:
+
+[https://collegescorecard.ed.gov/](https://collegescorecard.ed.gov/)
+
+Here's the source data: [https://collegescorecard.ed.gov/data/](https://collegescorecard.ed.gov/data/)
+
+Instead of downloading the entire ZIP file of data, pull in these two CSVs:
+
+- [Scorecard data](https://collegescorecard.ed.gov/downloads/Most-Recent-Cohorts-Scorecard-Elements.csv)
+- [Post-school earnings](https://collegescorecard.ed.gov/downloads/Most-Recent-Cohorts-Treasury-Elements.csv)
+
+
+Your own school app should allow the user to search, filter, and rank in a way different than what the [College Scorecard provides](https://collegescorecard.ed.gov/). You may even want to __simplify__ the approach.
+
+The two data tables allow you to find post-school earnings by given school (if you join the appropriate fields). Don't think of showing all the information, just the most interesting information.
+
+If you do a data join while creating the listing view, you could give the user the option to rank schools by post-earnings salary, among other things.
+
+
+You can pick your own dataset, but it has to be something in which the number of data fields is numerous and interesting enough that there would be a reason to have a separate listing and detail view.
+
+For example, New York restaurant health inspections:
+
+The [raw dataset is on Socrata as a flat table](https://nycopendata.socrata.com/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/xx67-kt59) (instead of separate tables for inspections and restaurants, it's all one table with redundant data).
+
+
+- Check out [NYC's official website for the data](http://a816-restaurantinspection.nyc.gov/RestaurantInspection/SearchBrowse.do).
+- And then check out the [New York Times's riff on that data](http://www.nytimes.com/interactive/dining/new-york-health-department-restaurant-ratings-map.html)
+- You can google around for other uses of the data by citizen data journalists.
+
+
+# Functional requirements
+
+Build a data web application that takes in user input for:
+
+- an attribute to filter by, e.g. (`row['gender'] == 'F'` or `'Dan' in row['name']`)
+- an attribute to sort by, e.g., sort by the `'birthdate'` attribute of each `row`, in either ascending or descending order.
+
+The main view of the app should include a web form that has these filters.
+
+The results view should show a web-friendly listing of the source dataset, and each list item should include an _internal_ link to a `details` viewpoint (a la the [`detail.html` template in the First News App tutorial](http://first-news-app.readthedocs.io/en/latest/#act-3-hello-html)).
+
+The __detail__ view should include more detailed data about the selected data row, including data that you did not deem fit to include in the listing view.
+
+
+
+
+# Deliverables
+
+## For Monday, May 16
+
+- A Github repo named `flask-filter-app` that contains (or will eventually contain) the data and code to run and deploy your app. It should be separate from cj-2016, i.e. at `github.com/yourname/flask-filter-app`, __not__ `github.com/yourname/flask-filter-app`
+- A README.md file at the root of your `flask-filter-app` folder. Using [Markdown syntax](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+  + Describe the two (or more, if you choose) views of your app:
+    * What is shown on the main listing page
+    * What is shown on the details page
+  + Describe the filter options -- e.g. full text search of name, sort by a date field, a checkbox for `'M'` or `'F'`, you will make available to the user.
+  + List three actual live data applications (such as ones produced by the government, or by news sites) that inspired you.
+- Have a more-or-less complete `foo.py` file
+  + You aren't required to have an actual complete web application, or even one that works at all. However, you do need to have the __functions that work with the data__ in a separate `foo.py` file.
+  + At the very least, I should be able to download your repo, run `ipython` and call `foo.print_record_count()` and get an answer. In this particular app example, look at how [app.py calls in foo.py](https://github.com/datademofun/flask-data-querystrings/tree/master/examples/03-congress-locale)
+
+
+## For Wednesday, May 18
+
+- a URL on which your Heroku-deployed app lives
+- An app in which all of the endpoints actually work
+
+
+
