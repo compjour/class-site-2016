@@ -1,0 +1,94 @@
+---
+title: "Your (weird) household; who did it better: The New York Times or Bret Victor?"
+description: |
+  Famous designer/developer Bret Victor builds a data visualization to criticize a New York Times data visualization about American households and families.
+---
+
+
+Back in 2011, the New York Times asked,["How Many Households Are Like Yours?"](http://www.nytimes.com/interactive/2011/06/19/nyregion/how-many-households-are-like-yours.html), and then invited its readers to find out, interactively, [just how many other American families](http://www.nytimes.com/interactive/2011/06/19/nyregion/how-many-households-are-like-yours.html), based on the U.S. Census 2010 data, also consist of a husband, wife, mother-in-law, and 3 boarders, and an "Other non-relative".
+
+(Related story: [Baby Makes Four, and Complications](http://www.nytimes.com/2011/06/19/nyregion/an-american-family-mom-sperm-donor-lover-child.html))
+
+Here's the raw dataset they used, just to show how dense and non-user-friendly the Census data can be:
+
+[http://www.nytimes.com/packages/text/newsgraphics/2011/06/19-households/chart_data6.txt](http://www.nytimes.com/packages/text/newsgraphics/2011/06/19-households/chart_data6.txt))
+
+Play around with the NYT app. What did it tell you about your household that you already knew, or didn't know? What did you learn about other families? What was not answered or not clear to you? 
+
+If you thought the app was great, that's great -- the NYT was at the top of the data viz game in 2011 as they are now. If you thought the app was lacking -- then you can be happy that there's a well-known and highly-respected designer (formerly at Apple), who apparently was so piqued at what he saw as a user-hostile experience that he not only wrote a well-reasoned harsh critique, he rebuilt the app in his own vision using the NYT's data and assets:
+
+> To switch out the number shown through this peephole, the reader must interact. In this case, through a particularly convoluted navigation scheme, with no clear information hierarchy, peek-a-boo menus that appear and disappear, and "actions at a distance" — clicking the menu causes a far-away image to change, and clicking the image causes the menu to change.
+
+> But the confused navigation scheme is not the primary problem. The problem is that significant navigation is required at all. The reader must interact constantly. The reader must beg the graphic for every scrap of information.
+
+Try Victor's app for yourself: [http://worrydream.com/HowManyHouseholds#howManyHouseholds](http://worrydream.com/HowManyHouseholds#howManyHouseholds)
+
+Look up what you looked-up on the NYT's version. It's the same data, same look, different interface...has anything of note really changed? Victor claims that his version tells stories that are basically impossible to get from the NYT's app (and he's presumably done a lot less reporting/research on it than the NYT crew). What are those stories, or, what are the ones that stick out to you?
+
+Here are the two competing visualizations:
+
+- [The New York Times](http://www.nytimes.com/interactive/2011/06/19/nyregion/how-many-households-are-like-yours.html)
+- [Bret Victor](http://worrydream.com/HowManyHouseholds/)
+
+
+ and 
+
+was a
+
+But there's always a different -- and often, _better --_ way to tell a data story, and Bret Victor decided to speak out and criticize the NYT's "peephole" of a graphic that burdened its readers with "a particularly convoluted navigation scheme". The NYT graphic's major sin, Victor wrote, was how it forced readers to "interact constantly...The reader must beg the graphic for every scrap of information."
+
+Victor is so [well-regarded](http://worrydream.com/#!2/LadderOfAbstraction) in the design field that being called a "Design theory wizard" by [Edward Tufte](https://www.edwardtufte.com/) is a mere bullet point in [his CV](http://worrydream.com/#!/cv). He could've just tweeted, _"the NYT sux"_, and most people would have nodded. But he not only took the time to _write_ a clear enumeration of his principles, he decided to one-up the NYT using its own data, assets, even typography. Lesser designers would have settled for making static screenshots in which the best parts of a redesigned visual are trumpeted to show how dumb the stodgy newspaper designers are -- while conveniently leaving out the real-world difficulty in creating a cohesive interactive experience. This can be seen in the [various](https://www.behance.net/gallery/27123823/NYTimes-Design-Concept) [attempts](https://dribbble.com/shots/2184393-NYTimes-com-Redesign) by outsiders to tell the NYT what it could/should look like, in that oh-so realistic world in which newspapers websites have unlimited photo budgets while not needing to show a single display ad.
+
+While there's no doubt that Victor, if he really wanted to, could build his own interactive feature from scratch, using his own design aesthetic -- take a [look at his portfolio if you want to be simultaneously enlightened and humbled](http://worrydream.com/#) -- he delivers his critique under the same aesthetics, data, physical constraints, and (in my opinion) journalistic requirements that the New York Times developers operate. So it's not just an armchair design spat about typography and whitespace, but a full-throated appeal (and live demonstration) for responsible design and display of data.
+
+
+Here are the two competing visualizations:
+
+- [The New York Times](http://www.nytimes.com/interactive/2011/06/19/nyregion/how-many-households-are-like-yours.html)
+- [Bret Victor](http://worrydream.com/HowManyHouseholds/)
+
+Click through them yourself. See if Victor lives up to his rant -- what are the questions his interactive addresses that the New York Times's version obscures -- even though they both use the same data? What tradeoffs does Victor make in the pursuit of a layout and interactive experience that?
+ 
+
+## My verdict
+
+For those too lazy to click-through and explore the competing apps, I've made some screenshots and GIFs to illustrate the key features and differences.
+
+First, let's evaluate the user experience from page-load-to-insight. Here's what it looks like clicking through the NYT's app: the user is asked to choose the primary resident -- in the case below, a happily married couple. A new layout rolls into view, with a couple of submenus, and the user then can manually select additional member for the household, such as a child and a 18+ young adult (sex of the non-primary household is not tracked).
+
+So with just a few clicks, the app delivers an abstract, idealized digital representation of the user's household, along with two prominent data points to address the user's most compelling questions:
+
+_How many other people have a family (or not) like mine?_ And, of course: _is my family as weird and unusual as I think it is? Because really, we are so not like your average Apple-pie-eating American family in the suburbs...__
+
+![image nyt-household-avg-family.png](/files/final-project/images/nyt-household-avg-family.png)
+
+I don't really know if _"How many other families in America are like my family?"_ is the universal question for all users. I only know that the NYT's presentation is so clean and satisfying that I feel that I got all the answers that mattered. Sure, 1.2% seems like a low estimation of the married-heterosexual-couple-with-2-kids, but "everyone knows" America is changing, and so I'm already clicking through all the other options just to see how damn weird American families can get while still being above the 1,000 minimum threshold. 
+
+Meet Erin, a hard-working divorcee who was just about to Airbnb her Crown Heights brownstone to tour Europe by moped, only to be interrupted by her estranged son Blake showing up at her doorstep and desperate to make amends and also to find a roof for his 3-year-old daughter Dakota, who is wise beyond her years. But it's too late to cancel the Airbnb RSVP, so Erin will have to  just find a way to squeeze in a quiet man who prefers to go by "Bob", even though that's not what his Airbnb account says. 
+
+It's a story that as many as 2,400 other American families deal with, according to the Census estimates:
+
+![image nyt-household-bill.png](/files/final-project/images/nyt-household-bill.png)
+
+But if I had to guess, Victor has strong opinions about the use-case I just described:
+
+> The essence of data graphics is visual comparisons. In the graphic above, the data is not visual, and can't be compared...The data can't be compared because, of the millions of numbers in this dataset, only one is displayed at any given time.
+
+Yep, the NYT app offers no route for me to compare the frequency of the classic nuclear family with all other possible combinations.
+
+> To switch out the number shown through this peephole, the reader must interact. In this case, through a particularly convoluted navigation scheme, with no clear information hierarchy, peek-a-boo menus that appear and disappear, and "actions at a distance"
+
+I don't know if it's _totally_ convoluted, but the double-stacked menu does make things less clear, even if you instinctively start clicking on additional household members.
+
+>  The reader must interact constantly. The reader must beg the graphic for every scrap of information... An excellent interactive graphic offers opportunities to explore the data space more precisely, to slice and filter the data, to see the data from specific perspectives. Interactivity should not be used as a barrier to information.
+
+Wow, sounds like heady stuff that no one could disagree with, in theory...but what is Victor actually talking about?
+
+Let's perform the same route through his app and see how revolutionary it is:
+
+
+![image nyt-household-bill.png](/files/final-project/images/bretvictor-how-many-households-are-like-yours.gif)
+
+
+
+
